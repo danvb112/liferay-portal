@@ -227,8 +227,8 @@ definition {
 		NavItem.gotoStructures();
 
 		WebContentStructures.addCP(
-			structureDescription = "Structure Description Test",
-			structureName = "Structure Name Test");
+			structureDescription = "Structure Description",
+			structureName = "Structure Name");
 
 		DataEngine.addField(
 			fieldFieldLabel = "Text",
@@ -251,10 +251,10 @@ definition {
 
 		NavItem.click(navItem = "Web Content");
 
-		WebContentNavigator.gotoAddWithStructureCP(structureName = "Structure Name Test");
+		WebContentNavigator.gotoAddWithStructureCP(structureName = "Structure Name");
 
 		WebContent.addWithStructureCP(
-			webContentText = "Content test",
+			webContentText = "Content Text",
 			webContentTitle = "WC Title");
 
 		PortletEntry.changeLocale(locale = "zh-CN");
