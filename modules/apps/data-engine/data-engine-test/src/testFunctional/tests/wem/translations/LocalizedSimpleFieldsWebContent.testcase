@@ -304,7 +304,7 @@ definition {
 	test DefaultLanguageIsFirstShownTitlePersistsAndValuesDisplayedForAnotherLocaleAndNonTranslatedWebContent {
 		NavItem.gotoStructures();
 
-		WebContentStructures.addCP(structureName = "WC Structure Name");
+		WebContentStructures.addCP(structureName = "Structure Name");
 
 		DataEngine.addField(
 			fieldFieldLabel = "Text",
@@ -320,7 +320,7 @@ definition {
 
 		NavItem.click(navItem = "Web Content");
 
-		WebContentNavigator.gotoAddWithStructureCP(structureName = "WC Structure Name");
+		WebContentNavigator.gotoAddWithStructureCP(structureName = "Structure Name");
 
 		PortletEntry.viewLocale(
 			locale = "en-US",
@@ -525,5 +525,5 @@ definition {
 			locator1 = "WCEditWebContent#TEXT_INPUT",
 			value1 = "Este é um campo de texto");
 	}
-	
+
 }
