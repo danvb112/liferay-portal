@@ -254,8 +254,8 @@ definition {
 		WebContentNavigator.gotoAddWithStructureCP(structureName = "Structure Name Test");
 
 		WebContent.addWithStructureCP(
-			webContentText = "Test",
-			webContentTitle = "Test");
+			webContentText = "Content test",
+			webContentTitle = "WC Title");
 
 		PortletEntry.changeLocale(locale = "zh-CN");
 
@@ -266,7 +266,7 @@ definition {
 
 		PortletEntry.publish();
 
-		WebContentNavigator.gotoEditCP(webContentTitle = "Test");
+		WebContentNavigator.gotoEditCP(webContentTitle = "WC Title");
 
 		PortletEntry.changeLocale(locale = "zh-CN");
 
