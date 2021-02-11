@@ -57,7 +57,7 @@ definition {
 
 		DataEngine.editFieldLabel(
 			fieldFieldLabel = "Numeric",
-			fieldFieldLabelEdit = "Numérica");
+			fieldFieldLabelEdit = "Numérico");
 
 		WebContentStructures.saveCP();
 
@@ -65,7 +65,7 @@ definition {
 
 		WebContentNavigator.gotoAddWithStructureCP(structureName = "WC Structure Name");
 
-		WebContent.addCP(webContentTitle = "WC WebContent Title");
+		WebContent.addCP(webContentTitle = "WC Title");
 
 		PortletEntry.changeLocale(locale = "pt-BR");
 
@@ -73,7 +73,7 @@ definition {
 
 		PortletEntry.publish();
 
-		WebContentNavigator.gotoEditCP(webContentTitle = "WC WebContent Title");
+		WebContentNavigator.gotoEditCP(webContentTitle = "WC Title");
 
 		for (var n : list "1,2") {
 			for (var label : list "Fields Group,Text,Numeric") {
@@ -97,7 +97,7 @@ definition {
 		PortletEntry.changeLocale(locale = "pt-BR");
 
 		for (var n : list "1,2") {
-			for (var label : list "Grupo de Campos,Texto,Numérica") {
+			for (var label : list "Grupo de Campos,Texto,Numérico") {
 				AssertVisible(
 					key_fieldFieldLabel = "${label}",
 					key_index = "${n}",
