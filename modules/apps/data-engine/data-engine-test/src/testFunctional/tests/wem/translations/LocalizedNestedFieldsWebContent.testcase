@@ -11,6 +11,8 @@ definition {
 		User.firstLoginPG();
 
 		JSONGroup.addGroup(groupName = "Test Site Name");
+
+		WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
 	}
 
 	tearDown {
@@ -27,7 +29,6 @@ definition {
 	@description = "This is a test for LPS-123537. As Content Creator, I want to leverage the structures’ translations with nested field when creating a new Web Content"
 	@priority = "5"
 	test CheckDuplicatedRepeatableStructureOnWebContent {
-		WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
 
 		NavItem.gotoStructures();
 
@@ -137,7 +138,6 @@ definition {
 	@description = "This is a test for LPS-123537. As Content Creator, I want to leverage the structures’ translations with nested field when creating a new Web Content"
 	@priority = "5"
 	test CheckStructureTranslationsOnWebContent {
-		WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
 
 		NavItem.gotoStructures();
 
@@ -201,7 +201,6 @@ definition {
 	@description = "This is a test for LPS-123537. As Content Creator, I want to leverage the structures’ translations with nested field when creating a new Web Content"
 	@priority = "4"
 	test DefaultTitlePersistsAfterTranslatingForAnotherLocale {
-		WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
 
 		NavItem.gotoStructures();
 
@@ -245,7 +244,6 @@ definition {
 	@description = "This is a test for LPS-123537. As Content Creator, I want to leverage the structures’ translations with nested field when creating a new Web Content"
 	@priority = "4"
 	test DefaultTitlePersistsUponFirstlyTranslatingForAnotherLocale {
-		WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
 
 		NavItem.gotoStructures();
 
@@ -308,7 +306,6 @@ definition {
 	@description = "This is a test for LPS-123537. As Content Creator, I want to leverage the structures’ translations with nested field when creating a new Web Content"
 	@priority = "4"
 	test DefaultValuesDisplayedForNonTranslatedWebContent {
-		WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
 
 		NavItem.gotoStructures();
 
@@ -380,7 +377,6 @@ definition {
 	@description = "This is a test for LPS-123537. As Content Creator, I want to leverage the structures’ translations with nested field when creating a new Web Content"
 	@priority = "5"
 	test TranslateWebContentFromStructureWithNLevelNestedFields {
-		WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
 
 		NavItem.gotoStructures();
 
@@ -496,7 +492,6 @@ definition {
 	@description = "This is a test for LPS-123537. As Content Creator, I want to leverage the structures’ translations with nested field when creating a new Web Content"
 	@priority = "5"
 	test TranslateWebContentToNLanguages {
-		WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
 
 		NavItem.gotoStructures();
 
