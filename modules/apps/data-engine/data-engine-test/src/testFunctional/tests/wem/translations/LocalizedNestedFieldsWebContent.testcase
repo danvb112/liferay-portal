@@ -166,7 +166,7 @@ definition {
 
 		DataEngine.editFieldLabel(
 			fieldFieldLabel = "Date",
-			fieldFieldLabelEdit = "Encontro");
+			fieldFieldLabelEdit = "Data");
 
 		WebContentStructures.saveCP();
 
@@ -182,7 +182,7 @@ definition {
 
 		PortletEntry.changeLocale(locale = "pt-BR");
 
-		for (var label : list "Grupo de Campos,Texto,Encontro") {
+		for (var label : list "Grupo de Campos,Texto,Data") {
 			AssertVisible(
 				key_fieldFieldLabel = "${label}",
 				locator1 = "DDMEditStructure#FORM_FIELD_CONTAINER_LABEL");
