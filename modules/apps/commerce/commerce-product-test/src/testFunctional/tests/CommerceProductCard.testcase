@@ -37,12 +37,45 @@ definition {
 	}
 
 	@description = "COMMERCE-5859. As a buyer, I want to view the product price with the default channel currency"
-	@ignore = "true"
 	@priority = "3"
 	test AssertDefaultChannelCurrencyIsAppliedToProductCard {
 		property portal.acceptance = "false";
+		property test.name.skip.portal.instance = "CommerceProductCard#AssertDefaultChannelCurrencyIsAppliedToProductCard";
 
-		// TODO COMMERCE-5859 AssertDefaultChannelCurrencyIsAppliedToProductCard pending implementation
+		var currencyName = "US Dollar";
+
+		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
+
+		CommerceNavigator.gotoPortlet(
+			category = "Store Management",
+			portlet = "Channels");
+
+		CommerceNavigator.gotoEntry(entryName = "Minium Portal");
+
+		AssertSelectedLabel(
+			key_title = "Currency",
+			locator1 = "CommerceEntry#CATALOGS_FORM",
+			value1 = "${currencyName}");
+
+		Button.clickSave();
+
+		CommerceNavigator.gotoPortlet(
+			category = "Product Management",
+			portlet = "Catalogs");
+
+		CommerceNavigator.gotoEntry(entryName = "Minium");
+
+		AssertSelectedLabel(
+			key_title = "Currency",
+			locator1 = "CommerceEntry#CATALOGS_FORM",
+			value1 = "${currencyName}");
+
+		ApplicationsMenu.gotoSite(site = "Minium");
+
+		AssertTextEquals.assertPartialText(
+			card_name = "U-Joint",
+			locator1 = "CommerceEntry#PRODUCT_CARD_NAME_AND_PRICE",
+			value1 = "€ 20.32");
 	}
 
 	@description = "COMMERCE-5907. As a buyer, I want to be unable to add multiple SKU product to the cart directly, I want to be unable to select the quantity of the product directly and I want to be unable to check the availability of the product directly"
@@ -91,12 +124,39 @@ definition {
 	}
 
 	@description = "COMMERCE-5860. As a buyer, I want to change the channel currency and view the product price with the changed currency"
-	@ignore = "true"
 	@priority = "3"
 	test AssertProductCardCurrencyAfterChannelCurrencyChanged {
 		property portal.acceptance = "false";
+		property test.name.skip.portal.instance = "CommerceProductCard#AssertProductCardCurrencyAfterChannelCurrencyChanged";
 
-		// TODO COMMERCE-5860 AssertProductCardCurrencyAfterChannelCurrencyChanged pending implementation
+		var currencyName = "Euro";
+
+		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
+
+		CommerceNavigator.gotoPortlet(
+			category = "Store Management",
+			portlet = "Channels");
+
+		CommerceNavigator.gotoEntry(entryName = "Minium Portal");
+
+		Select(
+			key_title = "Currency",
+			locator1 = "CommerceEntry#CATALOGS_FORM",
+			value1 = "${currencyName}");
+
+		Button.clickSave();
+
+		AssertSelectedLabel(
+			key_title = "Currency",
+			locator1 = "CommerceEntry#CATALOGS_FORM",
+			value1 = "${currencyName}");
+
+		ApplicationsMenu.gotoSite(site = "Minium");
+
+		AssertTextEquals.assertPartialText(
+			card_name = "U-Joint",
+			locator1 = "CommerceEntry#PRODUCT_CARD_NAME_AND_PRICE",
+			value1 = "€ 20.32");
 	}
 
 	@description = "COMMERCE-5856. As a buyer, I want to view the product image container in the top area and I want to be able to click on the product image to navigate to the product detail page"
@@ -226,12 +286,19 @@ definition {
 	}
 
 	@description = "COMMERCE-5864. As a buyer, I want to view the product price"
-	@ignore = "true"
 	@priority = "3"
 	test ViewProductCardPrice {
 		property portal.acceptance = "false";
+		property test.name.skip.portal.instance = "CommerceProductCard#ViewProductCardPrice";
 
-		// TODO COMMERCE-5864 ViewProductCardPrice pending implementation
+		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
+
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/minium");
+
+		AssertTextEquals.assertPartialText(
+			card_name = "U-Joint",
+			locator1 = "CommerceEntry#PRODUCT_CARD_NAME_AND_PRICE",
+			value1 = "$ 24.00");
 	}
 
 	@description = "COMMERCE-6158. As a buyer, I want to see the barred list price and a discount price of a product, if set"
@@ -262,12 +329,21 @@ definition {
 	}
 
 	@description = "COMMERCE-5862. As a buyer, I want to view the product SKU, if set(single SKU)"
-	@ignore = "true"
 	@priority = "3"
 	test ViewProductCardSKU {
 		property portal.acceptance = "false";
+		property test.name.skip.portal.instance = "CommerceProductCard#ViewProductCardSKU";
 
-		// TODO COMMERCE-5862 ViewProductCardSKU pending implementation
+		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
+		ApplicationsMenu.gotoSite(site = "Minium");
+
+		Click(
+			key_productName = "U-Joint",
+			locator1 = "CommerceAccelerators#PRODUCT_CARD_NAME");
+
+		AssertTextEquals(
+			locator1 = "CommerceFrontStore#FS_PRODUCT_SKU",
+			value1 = "MIN55861");
 	}
 
 	@description = "COMMERCE-5865. As a buyer, I want to view starting price on product card when product has different SKUs with different prices"

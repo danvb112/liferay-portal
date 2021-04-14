@@ -314,6 +314,109 @@ definition {
 			value1 = "Amortiguador");
 	}
 
+	@description = "COMMERCE-5802. Use a filter always check that the results are correct"
+	@ignore = "true"
+	@priority = "3"
+	test UseFilters {
+		property portal.acceptance = "false";
+
+		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
+
+		CommerceNavigator.gotoPortlet(
+			category = "Product Management",
+			portlet = "Products");
+
+		Click(locator1 = "CommerceEntry#FILTER_DROPDOWN_MENU");
+
+		Click(
+			key_categoryFilter = "Category",
+			locator1 = "CommerceEntry#FILTER_SELECT_CATEGORY");
+
+		Check.checkNotVisible(
+			checkboxName = "Brake System",
+			locator1 = "Checkbox#ANY_CHECKBOX");
+
+		Click(
+			key_menuItem = "Add Filter",
+			locator1 = "CommerceEntry#ANY_MENU_ITEM");
+
+		Click(locator1 = "CommerceEntry#FILTER_DROPDOWN_MENU");
+
+		AssertElementPresent(
+			key_entryName = "Premium Brake Fluid",
+			locator1 = "CommerceEntry#TABLE_LIST_TITLE");
+
+		Button.click(button = "Reset Filters");
+
+		Click(locator1 = "CommerceEntry#FILTER_DROPDOWN_MENU");
+
+		Click(locator1 = "CommerceEntry#FILTER_BACK_ARROW");
+
+		Click(
+			key_categoryFilter = "Catalog",
+			locator1 = "CommerceEntry#FILTER_SELECT_CATEGORY");
+
+		Click(
+			key_fieldType = "Master",
+			locator1 = "FormViewBuilder#FIELD_LABEL_MULTIPLE_SELECTION");
+
+		Click(
+			key_menuItem = "Add Filter",
+			locator1 = "CommerceEntry#ANY_MENU_ITEM");
+
+		AssertElementNotPresent(
+			key_entryName = "Hoses",
+			locator1 = "CommerceEntry#TABLE_LIST_TITLE");
+
+		Button.click(button = "Reset Filters");
+
+		Click(locator1 = "CommerceEntry#FILTER_DROPDOWN_MENU");
+
+		Click(locator1 = "CommerceEntry#FILTER_BACK_ARROW");
+
+		Click(
+			key_categoryFilter = "Channel",
+			locator1 = "CommerceEntry#FILTER_SELECT_CATEGORY");
+
+		Check.checkNotVisible(
+			checkboxName = "Test Channel",
+			locator1 = "Checkbox#ANY_CHECKBOX");
+
+		Click(
+			key_menuItem = "Add Filter",
+			locator1 = "CommerceEntry#ANY_MENU_ITEM");
+
+		AssertElementPresent(locator1 = "CommerceNavigation#EMPTY_SEARCH_CONTAINER");
+
+		Button.click(button = "Reset Filters");
+
+		Click(locator1 = "CommerceEntry#FILTER_DROPDOWN_MENU");
+
+		Click(locator1 = "CommerceEntry#FILTER_BACK_ARROW");
+
+		Click(
+			key_categoryFilter = "Product Type",
+			locator1 = "CommerceEntry#FILTER_SELECT_CATEGORY");
+
+		Click(
+			key_fieldType = "Virtual",
+			locator1 = "FormViewBuilder#FIELD_LABEL_MULTIPLE_SELECTION");
+
+		Click(
+			key_menuItem = "Add Filter",
+			locator1 = "CommerceEntry#ANY_MENU_ITEM");
+
+		AssertElementPresent(locator1 = "CommerceNavigation#EMPTY_SEARCH_CONTAINER");
+
+		Button.click(button = "Reset Filters");
+
+		Click(locator1 = "CommerceEntry#FILTER_DROPDOWN_MENU");
+
+		Click(locator1 = "CommerceEntry#FILTER_BACK_ARROW");
+
+		Click(locator1 = "CommerceEntry#FILTER_DROPDOWN_MENU");
+	}
+
 	@description = "This is a test for COMMERCE-6304. UseFriendlyURL"
 	@ignore = "true"
 	@priority = "3"
@@ -333,12 +436,36 @@ definition {
 	}
 
 	@description = "This is a test for COMMERCE-5805. UseSearchBarAndPagination"
-	@ignore = "true"
 	@priority = "3"
 	test UseSearchBarAndPagination {
 		property portal.acceptance = "false";
+		property test.name.skip.portal.instance = "CPCommerceProducts#UseSearchBarAndPagination";
 
-		// TODO COMMERCE-5805 UseSearchBarAndPagination
+		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
+
+		CommerceNavigator.gotoPortlet(
+			category = "Product Management",
+			portlet = "Products");
+
+		Click(locator1 = "Pagination#NEXT_LINK");
+
+		AssertTextEquals(
+			locator1 = "Pagination#PAGINATION_ITEMS_PER_PAGE",
+			value1 = "10 items");
+
+		AssertTextEquals(
+			locator1 = "Pagination#RESULTS_2",
+			value1 = "Showing 11 to 20 of 50");
+
+		CommerceProducts.searchProduct(search = "U-Joint");
+
+		AssertElementPresent(locator1 = "//a[contains(text(),'Ball Joints')]");
+
+		AssertElementPresent(locator1 = "//a[contains(text(),'U-Joint')]");
+
+		AssertTextEquals(
+			locator1 = "Pagination#RESULTS_2",
+			value1 = "Showing 1 to 2 of 2");
 	}
 
 	@description = "This is a test for COMMERCE-5801. UseSkuSearchBarAndPagination"
