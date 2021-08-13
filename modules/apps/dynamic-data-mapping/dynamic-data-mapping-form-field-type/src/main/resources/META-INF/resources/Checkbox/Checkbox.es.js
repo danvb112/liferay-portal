@@ -19,6 +19,23 @@ import React, {useEffect, useState} from 'react';
 import {FieldBase} from '../FieldBase/ReactFieldBase.es';
 import {useSyncValue} from '../hooks/useSyncValue.es';
 
+const toBoolean = (value) => {
+	const valueType = typeof value;
+	let booleanValue, newValue;
+
+	switch (valueType) {
+		case 'object':
+			[newValue] = value;
+			booleanValue = newValue === 'true';
+			break;
+
+		default:
+			return value;
+	}
+
+	return booleanValue;
+};
+
 const Switcher = ({
 	checked: initialChecked,
 	disabled,
@@ -128,7 +145,7 @@ const Main = ({
 	label,
 	name,
 	onChange,
-	predefinedValue = true,
+	predefinedValue: predefinedValueProp,
 	readOnly,
 	required,
 	showAsSwitcher = true,
@@ -141,6 +158,7 @@ const Main = ({
 	...otherProps
 }) => {
 	const Toggle = showAsSwitcher ? Switcher : Checkbox;
+	const predefinedValue = toBoolean(predefinedValueProp);
 
 	return (
 		<FieldBase
@@ -150,7 +168,7 @@ const Main = ({
 			{...otherProps}
 		>
 			<Toggle
-				checked={value !== undefined ? value : predefinedValue}
+				checked={!!(value ?? predefinedValue)}
 				disabled={readOnly}
 				label={label}
 				name={name}
