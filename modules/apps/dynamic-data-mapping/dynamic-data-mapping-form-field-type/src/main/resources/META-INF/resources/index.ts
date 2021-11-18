@@ -46,11 +46,13 @@ declare global {
 
 	type LocalizedTextKey =
 		| 'choose-an-option'
+		| 'date-fields'
 		| 'decimal-places'
 		| 'decimal-separator'
 		| 'input-mask-append-placeholder'
 		| 'prefix'
 		| 'prefix-or-suffix'
+		| 'quantity'
 		| 'suffix'
 		| 'the-maximum-length-is-10-characters'
 		| 'thousands-separator'
