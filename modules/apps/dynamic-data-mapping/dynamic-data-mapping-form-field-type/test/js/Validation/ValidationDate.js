@@ -19,6 +19,8 @@ import React from 'react';
 
 import ValidationDate from '../../../src/main/resources/META-INF/resources/Validation/ValidationDate';
 
+import mockPages from '../__mocks__/mock_Pages'
+
 const globalLanguageDirection = Liferay.Language.direction;
 
 const validations = [
@@ -48,18 +50,23 @@ const validations = [
 	},
 ];
 
+const state = {
+		editingLanguageId: 'en_US',
+		builderPages: mockPages,
+	};
+
 const generateParameter = () => ({
 	en_US: {
 		endsOn: {
 			date: 'responseDate',
-			dateFieldName: 'Date1234',
+			dateFieldName: 'Date12345',
 			quantity: 1,
 			type: 'customDate',
 			unit: 'days',
 		},
 		startsFrom: {
 			date: 'responseDate',
-			dateFieldName: 'Date1234',
+			dateFieldName: 'Date12345',
 			quantity: 1,
 			type: 'customDate',
 			unit: 'days',
@@ -72,8 +79,11 @@ const parameters = generateParameter();
 
 const localizedValue = jest.fn(() => parameters['en_US']);
 
-const ValidationDateProvider = ({builderPages = [], ...props}) => (
-	<FormProvider initialState={{builderPages}}>
+const ValidationDateProvider = ({builderPages = [], state, ...props}) => (
+	<FormProvider 
+		initialState={{builderPages}}
+		value={state}
+	>
 		<ValidationDate {...props} />
 	</FormProvider>
 );
@@ -246,4 +256,46 @@ describe('ValidationDate', () => {
 		expect(quantity).toHaveValue(1);
 		expect(unit).toHaveValue('days');
 	});
+
+	it('', () => {
+		const parameter = {
+			en_US: {
+				endsOn: {
+					date: 'responseDate',
+					dateFieldName: 'Date12345853',
+					quantity: -1,
+					type: 'dateField',
+					unit: 'days',
+				},
+			},
+		};
+
+		const localizedValue = jest.fn(() => parameter['en_US']);
+
+		const {getAllByRole} = render(
+			<ValidationDateProvider
+				state={state}
+				defaultLanguageId="en_US"
+				editingLanguageId="en_US"
+				localizedValue={localizedValue}
+				name="validationDate"
+				onChange={() => {}}
+				parameter={parameter}
+				selectedValidation={{
+					label: '',
+					name: 'pastDates',
+					parameterMessage: '',
+					template: 'pastDates({name}, "{parameter}")',
+				}}
+				validations={validations}
+				visible={true}
+			/>
+		);
+
+		const test = getAllByRole('input');
+
+		expect(acceptedDate).toHaveValue('pastDates');
+
+	})
+
 });
