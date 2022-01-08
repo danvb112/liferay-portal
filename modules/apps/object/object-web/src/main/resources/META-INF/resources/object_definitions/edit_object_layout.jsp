@@ -25,12 +25,12 @@ ObjectLayout objectLayout = (ObjectLayout)request.getAttribute(ObjectWebKeys.OBJ
 	title='<%= LanguageUtil.get(request, "layout") %>'
 >
 	<react:component
-		module="js/components/layout/index"
+		module="js/components/custom-view/index"
 		props='<%=
 			HashMapBuilder.<String, Object>put(
 				"isViewOnly", !objectDefinitionsLayoutsDisplayContext.hasUpdateObjectDefinitionPermission()
 			).put(
-				"objectLayoutId", objectLayout.getObjectLayoutId()
+				"objectViewId", objectLayout.getObjectLayoutId()
 			).build()
 		%>'
 	/>
