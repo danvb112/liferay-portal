@@ -17,9 +17,13 @@ import ClayForm, {ClayCheckbox, ClayInput} from '@clayui/form';
 import ClayList from '@clayui/list';
 import ClayManagementToolbar from '@clayui/management-toolbar';
 import ClayModal from '@clayui/modal';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
+
+import {normalizeLanguageId} from '../../utils/string';
+import ViewContext from './context';
 
 import './ModalAddColumnsObjectCustomView.scss';
+import {TYPES} from './context';
 
 interface IProps extends React.HTMLAttributes<HTMLElement> {
 	observer: any;
@@ -33,6 +37,18 @@ type TInitialValues = {
 	required: boolean;
 	type: string;
 };
+
+type TName = {
+	[key: string]: string;
+};
+
+interface TObjectViewColumn {
+	label: TName;
+	checked: boolean;
+	filtered: boolean;
+}
+
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
 const ModalAddColumnsObjectCustomView: React.FC<IProps> = ({
 	observer,
@@ -50,6 +66,7 @@ const ModalAddColumnsObjectCustomView: React.FC<IProps> = ({
 	const [allFieldsChecked, setAllFieldsChecked] = useState(false);
 	const [query, setQuery] = useState('');
 
+	
 	useEffect(() => {
 		if (
 			fieldsChecked &&
@@ -126,19 +143,30 @@ const ModalAddColumnsObjectCustomView: React.FC<IProps> = ({
 		);
 	};
 
-	const handleFieldChecked = (label: String) => {
-		setFilteredItems(
-			filteredItems.map((field) => {
-				if (field.label === label) {
-					return {
-						...field,
-						checked: !field.checked,
-					};
-				}
+	const handleFieldChecked = (name: String) => {
+		const newfiltredItems = filteredItems.map((field) => {
+			if (field.name === name) {
+				return {
+					...field,
+					checked: !field.checked,
+				};
+			}
 
-				return field;
-			})
-		);
+			return field;
+		});
+
+		setFilteredItems(newfiltredItems);
+	};
+
+	const onSubmit = () => {
+		dispatch({
+			payload: {
+				filteredItems,
+			},
+			type: TYPES.ADD_OBJECT_VIEW_COLUMN,
+		});
+
+		onClose();
 	};
 
 	return (
@@ -147,7 +175,7 @@ const ModalAddColumnsObjectCustomView: React.FC<IProps> = ({
 				className="object-web__modal-add-columns"
 				observer={observer}
 			>
-				<ClayForm>
+				<ClayForm onSubmit={onSubmit}>
 					<ClayModal.Header>
 						{Liferay.Language.get('add-columns')}
 					</ClayModal.Header>
@@ -184,6 +212,7 @@ const ModalAddColumnsObjectCustomView: React.FC<IProps> = ({
 											onChange={({target}) =>
 												setQuery(target.value)
 											}
+											placeholder="Search"
 											type="text"
 										/>
 
@@ -236,7 +265,7 @@ const ModalAddColumnsObjectCustomView: React.FC<IProps> = ({
 							<ClayButton.Group key={1} spaced>
 								<ClayButton
 									displayType="secondary"
-									onClick={() => onClose()}
+									onClick={onClose}
 								>
 									{Liferay.Language.get('cancel')}
 								</ClayButton>
