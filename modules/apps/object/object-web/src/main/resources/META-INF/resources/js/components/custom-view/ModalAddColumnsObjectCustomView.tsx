@@ -17,7 +17,7 @@ import ClayForm, {ClayCheckbox, ClayInput} from '@clayui/form';
 import ClayList from '@clayui/list';
 import ClayManagementToolbar from '@clayui/management-toolbar';
 import ClayModal from '@clayui/modal';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {FormEvent, useContext, useEffect, useState} from 'react';
 
 import {normalizeLanguageId} from '../../utils/string';
 import ViewContext from './context';
@@ -66,7 +66,6 @@ const ModalAddColumnsObjectCustomView: React.FC<IProps> = ({
 	const [allFieldsChecked, setAllFieldsChecked] = useState(false);
 	const [query, setQuery] = useState('');
 
-	
 	useEffect(() => {
 		if (
 			fieldsChecked &&
@@ -158,7 +157,9 @@ const ModalAddColumnsObjectCustomView: React.FC<IProps> = ({
 		setFilteredItems(newfiltredItems);
 	};
 
-	const onSubmit = () => {
+	const onSubmit = (e: FormEvent) => {
+		e.preventDefault();
+
 		dispatch({
 			payload: {
 				filteredItems,
@@ -175,7 +176,7 @@ const ModalAddColumnsObjectCustomView: React.FC<IProps> = ({
 				className="object-web__modal-add-columns"
 				observer={observer}
 			>
-				<ClayForm onSubmit={onSubmit}>
+				<ClayForm onSubmit={(e) => onSubmit(e)}>
 					<ClayModal.Header>
 						{Liferay.Language.get('add-columns')}
 					</ClayModal.Header>
