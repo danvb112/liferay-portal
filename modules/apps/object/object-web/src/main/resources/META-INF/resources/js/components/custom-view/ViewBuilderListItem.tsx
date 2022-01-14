@@ -1,0 +1,121 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import {ClayButtonWithIcon} from '@clayui/button';
+import ClayList from '@clayui/list';
+import classNames from 'classnames';
+import React, {useContext, useRef} from 'react';
+import {useDrag, useDrop} from 'react-dnd';
+
+import ViewContext, {TObjectViewColumn, TYPES} from './context';
+
+import './ViewBuilderListItem.scss';
+
+interface Iprops {
+	index: number;
+	objectViewColumn: TObjectViewColumn;
+}
+
+const ViewBuilderListItem: React.FC<Iprops> = ({index, objectViewColumn}) => {
+	const [, dispatch] = useContext(ViewContext);
+
+	const {objectFieldName, priority} = objectViewColumn;
+
+	const ref = useRef<any>();
+
+	function move(from: any, to: any) {
+		console.log(from, to);
+	}
+
+	const [{isDragging}, dragRef] = useDrag({
+		item: {type: 'FIELD', index, objectFieldName},
+		collect: (monitor) => ({
+			isDragging: monitor.isDragging(),
+		}),
+	});
+
+	const [, dropRef] = useDrop({
+		accept: 'FIELD',
+		hover(item: any, monitor) {
+			const draggedIndex = item.index;
+			const targetIndex: any = index;
+
+			if (draggedIndex === targetIndex) {
+				return;
+			}
+
+			const targetSize = ref.current.getBoundingClientRect();
+			const targetCenter = (targetSize.bottom - targetSize.top) / 2;
+
+			const draggedOffset: any = monitor.getClientOffset();
+			const draggedTop = draggedOffset?.y - targetSize.top;
+
+			if (draggedIndex < targetIndex && draggedTop < targetCenter) {
+				return;
+			}
+
+			if (draggedIndex > targetIndex && draggedTop > targetCenter) {
+				return;
+			}
+
+			dispatch({
+				payload: {draggedIndex, targetIndex},
+				type: TYPES.CHANGE_OBJECT_VIEW_COLUMN_ORDER,
+			});
+
+			// move(draggedIndex, targetIndex);
+
+			item.index = targetIndex;
+		},
+	});
+
+	const handleDeleteColumn = (objectFieldName: string) => {
+		dispatch({
+			payload: {objectFieldName},
+			type: TYPES.DELETE_OBJECT_VIEW_COLUMN,
+		});
+	};
+
+	dragRef(dropRef(ref));
+
+	return (
+		<div ref={ref}>
+			<ClayList.Item
+				className={`object-custom-view-builder-item ${classNames({
+					dragging: isDragging,
+				})}`}
+				flex
+			>
+				<ClayList.ItemField>
+					<ClayButtonWithIcon displayType={null} symbol="drag" />
+				</ClayList.ItemField>
+
+				<ClayList.ItemField expand>
+					<ClayList.ItemTitle>{objectFieldName}</ClayList.ItemTitle>
+				</ClayList.ItemField>
+
+				<ClayList.ItemField>
+					<ClayList.QuickActionMenu>
+						<ClayList.QuickActionMenu.Item
+							onClick={() => handleDeleteColumn(objectFieldName)}
+							symbol="times"
+						/>
+					</ClayList.QuickActionMenu>
+				</ClayList.ItemField>
+			</ClayList.Item>
+		</div>
+	);
+};
+
+export default ViewBuilderListItem;

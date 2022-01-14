@@ -17,7 +17,13 @@ import ClayForm, {ClayCheckbox, ClayInput} from '@clayui/form';
 import ClayList from '@clayui/list';
 import ClayManagementToolbar from '@clayui/management-toolbar';
 import ClayModal from '@clayui/modal';
-import React, {FormEvent, useContext, useEffect, useState} from 'react';
+import React, {
+	ChangeEventHandler,
+	FormEvent,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 
 import {normalizeLanguageId} from '../../utils/string';
 import ViewContext, {TObjectField} from './context';
