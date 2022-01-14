@@ -20,7 +20,7 @@ import ClayModal from '@clayui/modal';
 import React, {FormEvent, useContext, useEffect, useState} from 'react';
 
 import {normalizeLanguageId} from '../../utils/string';
-import ViewContext from './context';
+import ViewContext, {TObjectField} from './context';
 
 import './ModalAddColumnsObjectCustomView.scss';
 import {TYPES} from './context';
