@@ -196,7 +196,7 @@ const ViewBuilderScreen = () => {
 									'add-columns-to-start-creating-a-view'
 								)}
 								title={Liferay.Language.get(
-									'no-columns-added-yet'
+									'no-columns-have-been-added-yet'
 								)}
 							>
 								<ClayButton
