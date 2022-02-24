@@ -17,8 +17,9 @@ import ClayTabs from '@clayui/tabs';
 import React, {useContext, useEffect, useState} from 'react';
 
 import SidePanelContent from '../SidePanelContent';
-import BasicInfoScreen from './BasicInfoScreen';
-import ViewBuilderScreen from './ViewBuilderScreen';
+import BasicInfoScreen from './BasicInfoScreen/BasicInfoScreen';
+import {DefaultSortScreen} from './DefaultSortScreen/DefaultSortScreem';
+import ViewBuilderScreen from './ViewBuilderScreen/ViewBuilderScreen';
 import ViewContext, {TYPES, ViewContextProvider} from './context';
 import {TObjectField, TObjectView} from './types';
 
@@ -30,6 +31,10 @@ const TABS = [
 	{
 		Component: ViewBuilderScreen,
 		label: Liferay.Language.get('view-builder'),
+	},
+	{
+		Component: DefaultSortScreen,
+		label: Liferay.Language.get('default-sort'),
 	},
 ];
 
@@ -67,6 +72,7 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 				name,
 				objectDefinitionId,
 				objectViewColumns,
+				objectViewSortColumns,
 			} = await objectViewResponse.json();
 
 			const objectFieldsResponse = await Liferay.Util.fetch(
@@ -77,11 +83,30 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 				}
 			);
 
+			// const objectViewSortColumns = [
+			// 	{
+			// 		objectFieldName: 'creator',
+			// 		priority: 0,
+			// 		sortOrder: 'asc',
+			// 	},
+			// 	{
+			// 		objectFieldName: 'dateCreated',
+			// 		priority: 1,
+			// 		sortOrder: 'desc',
+			// 	},
+			// 	{
+			// 		objectFieldName: 'dateModified',
+			// 		priority: 2,
+			// 		sortOrder: 'desc',
+			// 	},
+			// ];
+
 			const objectView = {
 				defaultObjectView,
 				name,
 				objectDefinitionId,
 				objectViewColumns,
+				objectViewSortColumns,
 			};
 
 			dispatch({
@@ -109,8 +134,10 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 		makeFetch();
 	}, [objectViewId, dispatch]);
 
-	const removeLabelFromObjectView = (objectView: TObjectView) => {
-		const {objectViewColumns} = objectView;
+	const removeUnnecessaryPropertiesFromObjectView = (
+		objectView: TObjectView
+	) => {
+		const {objectViewColumns, objectViewSortColumns} = objectView;
 
 		const newObjectViewColumns = objectViewColumns.map((viewColumn) => {
 			return {
@@ -119,16 +146,29 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 			};
 		});
 
+		const newObjectViewSortColumns = objectViewSortColumns.map(
+			(sortColumn) => {
+				return {
+					objectFieldName: sortColumn.objectFieldName,
+					priority: sortColumn.priority,
+					sortOrder: sortColumn.sortOrder,
+				};
+			}
+		);
+
 		const newObjectView = {
 			...objectView,
 			objectViewColumns: newObjectViewColumns,
+			objectViewSortColumns: newObjectViewSortColumns,
 		};
 
 		return newObjectView;
 	};
 
 	const handleSaveObjectView = async () => {
-		const newObjectView = removeLabelFromObjectView(objectView);
+		const newObjectView = removeUnnecessaryPropertiesFromObjectView(
+			objectView
+		);
 
 		const response = await Liferay.Util.fetch(
 			`/o/object-admin/v1.0/object-views/${objectViewId}`,
