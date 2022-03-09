@@ -18,6 +18,7 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import SidePanelContent from '../SidePanelContent';
 import BasicInfoScreen from './BasicInfoScreen/BasicInfoScreen';
+import {DefaultFilterScreen} from './DefaultFilterScreen/DefaultFilterScreen';
 import {DefaultSortScreen} from './DefaultSortScreen/DefaultSortScreen';
 import ViewBuilderScreen from './ViewBuilderScreen/ViewBuilderScreen';
 import ViewContext, {TYPES, ViewContextProvider} from './context';
@@ -31,6 +32,10 @@ const TABS = [
 	{
 		Component: ViewBuilderScreen,
 		label: Liferay.Language.get('view-builder'),
+	},
+	{
+		Component: DefaultFilterScreen,
+		label: Liferay.Language.get('default-filter'),
 	},
 ];
 
