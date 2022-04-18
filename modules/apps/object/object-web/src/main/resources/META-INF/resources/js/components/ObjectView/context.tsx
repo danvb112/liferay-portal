@@ -34,6 +34,7 @@ const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
 const METADATAS = [
 	{
+		businessType: 'Author',
 		checked: false,
 		filtered: true,
 		id: 1,
@@ -47,6 +48,7 @@ const METADATAS = [
 		type: 'metadata',
 	},
 	{
+		businessType: 'Creation Date',
 		checked: false,
 		filtered: true,
 		id: 2,
@@ -60,6 +62,7 @@ const METADATAS = [
 		type: 'metadata',
 	},
 	{
+		businessType: 'Modified Date',
 		checked: false,
 		filtered: true,
 		id: 3,
@@ -73,6 +76,7 @@ const METADATAS = [
 		type: 'metadata',
 	},
 	{
+		businessType: 'Workflow Status',
 		checked: false,
 		filtered: true,
 		id: 4,
@@ -90,6 +94,7 @@ const METADATAS = [
 		type: 'metadata',
 	},
 	{
+		businessType: 'Id',
 		checked: false,
 		filtered: true,
 		id: 5,

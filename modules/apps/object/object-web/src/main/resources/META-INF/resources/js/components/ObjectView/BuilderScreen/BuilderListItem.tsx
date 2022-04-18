@@ -153,7 +153,7 @@ const BuilderListItem: React.FC<Iprops> = ({
 				}
 			)}
 			flex
-			ref={ref}
+			ref={null}
 		>
 			<ClayList.ItemField>
 				<ClayButtonWithIcon displayType={null} symbol="drag" />

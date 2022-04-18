@@ -15,6 +15,8 @@
 import React, {useContext, useState} from 'react';
 
 import {BuilderScreen} from '../BuilderScreen/BuilderScreen';
+import {ModalAddDefaultFilterColumn} from '../ModalAddDefaultFilterColumn/ModalAddDefaultFilterColumn';
+import {useModal} from '@clayui/modal';
 import ViewContext from '../context';
 
 export function DefaultFilterScreen() {
@@ -22,21 +24,36 @@ export function DefaultFilterScreen() {
 
 	const {objectViewFilterColumns} = objectView;
 
-	const [_, setVisibleModal] = useState(false);
+	const [visibleModal, setVisibleModal] = useState(false);
+
+	const {observer, onClose} = useModal({
+		onClose: () => setVisibleModal(false),
+	});
 
 	return (
-		<BuilderScreen
-			emptyState={{
-				buttonText: Liferay.Language.get('new-default-filter'),
-				description: Liferay.Language.get(
-					'start-creating-a-filter-to-dipslay-a-specifc-data'
-				),
-				title: Liferay.Language.get('no-filters-created-yet'),
-			}}
-			objectColumns={objectViewFilterColumns ?? []}
-			onVisibleEditModal={setVisibleModal}
-			onVisibleModal={setVisibleModal}
-			title={Liferay.Language.get('default-filters')}
-		/>
+		<>
+			<BuilderScreen
+				emptyState={{
+					buttonText: Liferay.Language.get('new-default-filter'),
+					description: Liferay.Language.get(
+						'start-creating-a-filter-to-dipslay-a-specifc-data'
+					),
+					title: Liferay.Language.get('no-filters-created-yet'),
+				}}
+				objectColumns={objectViewFilterColumns ?? []}
+				onVisibleEditModal={setVisibleModal}
+				onVisibleModal={setVisibleModal}
+				title={Liferay.Language.get('default-filters')}
+			/>
+
+			{visibleModal && (
+				<ModalAddDefaultFilterColumn 
+					header={Liferay.Language.get('New Default Filter')}
+					observer={observer}
+					onClose={onClose}
+				/>
+			)}
+
+		</>
 	);
 }

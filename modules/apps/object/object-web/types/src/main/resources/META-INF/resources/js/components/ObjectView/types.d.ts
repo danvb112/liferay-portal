@@ -17,6 +17,7 @@ export declare type TName = {
 	[key: string]: string;
 };
 export declare type TObjectField = {
+	businessType: string;
 	checked: boolean;
 	filtered?: boolean | undefined;
 	id: number;

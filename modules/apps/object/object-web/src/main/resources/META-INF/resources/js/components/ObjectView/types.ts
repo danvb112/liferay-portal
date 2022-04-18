@@ -19,6 +19,7 @@ export type TName = {
 };
 
 export type TObjectField = {
+	businessType: string;
 	checked: boolean;
 	filtered?: boolean | undefined;
 	id: number;
