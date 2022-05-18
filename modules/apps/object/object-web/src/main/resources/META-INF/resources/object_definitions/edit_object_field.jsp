@@ -1,3 +1,4 @@
+
 <%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
@@ -16,31 +17,10 @@
 
 <%@ include file="/init.jsp" %>
 
-<%
-ObjectDefinition objectDefinition = (ObjectDefinition)request.getAttribute(ObjectWebKeys.OBJECT_DEFINITION);
-ObjectDefinitionsFieldsDisplayContext objectDefinitionsFieldsDisplayContext = (ObjectDefinitionsFieldsDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
-ObjectField objectField = (ObjectField)request.getAttribute(ObjectWebKeys.OBJECT_FIELD);
-%>
-
-<react:component
-	module="js/components/EditObjectField"
-	props='<%=
-		HashMapBuilder.<String, Object>put(
-			"forbiddenChars", PropsUtil.getArray(PropsKeys.DL_CHAR_BLACKLIST)
-		).put(
-			"forbiddenLastChars", objectDefinitionsFieldsDisplayContext.getForbiddenLastCharacters()
-		).put(
-			"forbiddenNames", PropsUtil.getArray(PropsKeys.DL_NAME_BLACKLIST)
-		).put(
-			"isApproved", objectDefinition.isApproved()
-		).put(
-			"objectField", objectDefinitionsFieldsDisplayContext.getObjectFieldJSONObject(objectField)
-		).put(
-			"objectFieldTypes", objectDefinitionsFieldsDisplayContext.getObjectFieldBusinessTypeMaps(Validator.isNotNull(objectField.getRelationshipType()), locale)
-		).put(
-			"objectName", objectDefinition.getShortName()
-		).put(
-			"readOnly", !objectDefinitionsFieldsDisplayContext.hasUpdateObjectDefinitionPermission()
-		).build()
-	%>'
-/>
+<liferay-frontend:side-panel-content
+	title="New Notification Templates"
+>
+	<react:component
+		module="js/components/EditNotificationTemplate"
+	/>
+</liferay-frontend:side-panel-content>

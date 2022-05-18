@@ -18,6 +18,7 @@ export {default as compose} from './utils/compose.es';
 export {getDDMFormFieldSettingsContext} from './utils/dataConverter';
 export * as DRAG_TYPES from './utils/dragTypes';
 export {convertToFormData, makeFetch} from './utils/fetch.es';
+export {onActionDropdownItemClick} from './utils/fdsUtil';
 export {getFields, normalizeFieldName} from './utils/fields.es';
 export * as FieldSetUtil from './utils/fieldSets';
 export * as FieldSupport from './utils/fieldSupport';

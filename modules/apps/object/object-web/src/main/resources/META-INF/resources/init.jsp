@@ -30,16 +30,11 @@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
 <%@ page import="com.liferay.list.type.model.ListTypeDefinition" %><%@
 page import="com.liferay.list.type.model.ListTypeEntry" %><%@
-page import="com.liferay.object.exception.ObjectDefinitionActiveException" %><%@
-page import="com.liferay.object.exception.ObjectDefinitionLabelException" %><%@
 page import="com.liferay.object.exception.ObjectDefinitionNameException" %><%@
-page import="com.liferay.object.exception.ObjectDefinitionPluralLabelException" %><%@
-page import="com.liferay.object.exception.ObjectDefinitionScopeException" %><%@
-page import="com.liferay.object.exception.ObjectDefinitionStatusException" %><%@
-page import="com.liferay.object.exception.RequiredObjectFieldException" %><%@
 page import="com.liferay.object.model.ObjectAction" %><%@
 page import="com.liferay.object.model.ObjectDefinition" %><%@
 page import="com.liferay.object.model.ObjectField" %><%@
+page import="com.liferay.object.model.ObjectEntry" %><%@
 page import="com.liferay.object.model.ObjectLayout" %><%@
 page import="com.liferay.object.model.ObjectLayoutTab" %><%@
 page import="com.liferay.object.model.ObjectRelationship" %><%@
@@ -71,15 +66,12 @@ page import="com.liferay.portal.kernel.model.ModelHintsConstants" %><%@
 page import="com.liferay.portal.kernel.util.Constants" %><%@
 page import="com.liferay.portal.kernel.util.GetterUtil" %><%@
 page import="com.liferay.portal.kernel.util.HashMapBuilder" %><%@
-page import="com.liferay.portal.kernel.util.KeyValuePair" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
 page import="com.liferay.portal.kernel.util.PropsKeys" %><%@
 page import="com.liferay.portal.kernel.util.PropsUtil" %><%@
-page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.portal.kernel.util.WebKeys" %>
 
-<%@ page import="java.util.List" %><%@
-page import="java.util.Objects" %>
+<%@ page import="java.util.Objects" %>
 
 <liferay-frontend:defineObjects />
 

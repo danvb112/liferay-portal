@@ -57,6 +57,30 @@ interface ObjectField {
 	state: boolean;
 }
 
+interface ObjectDefinition {
+	active: boolean;
+	dateCreated: string;
+	dateModified: string;
+	id: number;
+	label: LocalizedValue<string>;
+	name: string;
+	objectActions: [];
+	objectFields: ObjectField[];
+	objectLayouts: [];
+	objectViews: [];
+	panelCategoryKey: string;
+	pluralLabel: LocalizedValue<string>;
+	portlet: boolean;
+	scope: string;
+	status: {
+		code: number;
+		label: string;
+		label_i18n: string;
+	};
+	system: boolean;
+	titleObjectFieldId: number;
+}
+
 interface ObjectFieldSetting {
 	name: ObjectFieldSettingName;
 	value: string | number | boolean;

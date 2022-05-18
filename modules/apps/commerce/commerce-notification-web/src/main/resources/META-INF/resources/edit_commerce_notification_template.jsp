@@ -50,122 +50,81 @@ if (commerceNotificationTemplate != null) {
 >
 	<portlet:actionURL name="/commerce_channels/edit_commerce_notification_template" var="editCommerceNotificationTemplateActionURL" />
 
-	<aui:form action="<%= editCommerceNotificationTemplateActionURL %>" method="post" name="fm">
-		<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= (commerceNotificationTemplate == null) ? Constants.ADD : Constants.UPDATE %>" />
-		<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
-		<aui:input name="commerceChannelId" type="hidden" value="<%= commerceNotificationTemplatesDisplayContext.getCommerceChannelId() %>" />
-		<aui:input name="commerceNotificationTemplateId" type="hidden" value="<%= (commerceNotificationTemplate == null) ? 0 : commerceNotificationTemplate.getCommerceNotificationTemplateId() %>" />
+	<aui:form action="" method="post" name="fm">
+		<aui:input name="<%= Constants.CMD %>" type="hidden" value="" />
+		<aui:input name="redirect" type="hidden" value="" />
+		<aui:input name="commerceChannelId" type="hidden" value="" />
+		<aui:input name="commerceNotificationTemplateId" type="hidden" value="" />
 
-		<liferay-ui:error exception="<%= CommerceNotificationTemplateFromException.class %>" message="please-enter-a-valid-email-address" />
-		<liferay-ui:error exception="<%= CommerceNotificationTemplateNameException.class %>" message="please-enter-a-valid-name" />
-		<liferay-ui:error exception="<%= CommerceNotificationTemplateTypeException.class %>" message="please-select-a-valid-type" />
 
-		<aui:model-context bean="<%= commerceNotificationTemplate %>" model="<%= CommerceNotificationTemplate.class %>" />
+		<div class="row">
+			<div class="col-lg-6">
+				<commerce-ui:panel
+					title='<%= LanguageUtil.get(request, "basic-info") %>'
+				>
+					<aui:input required="<%= true %>" name="name" value="" />
 
-		<commerce-ui:panel
-			title='<%= LanguageUtil.get(request, "details") %>'
-		>
-			<div class="row">
-				<div class="col-12">
-					<aui:input name="name" value="<%= name %>" />
+					<aui:input name="description" value=""  type="textarea"/>
 
-					<aui:input name="description" value="<%= description %>" />
-				</div>
+					<aui:select disabled="<%= true %>" name="type" value="Email">
 
-				<div class="col-6">
-					<aui:select name="type" onChange='<%= liferayPortletResponse.getNamespace() + "selectType();" %>' showEmptyOption="<%= true %>">
-
-						<%
-						for (CommerceNotificationType curCommerceNotificationType : commerceNotificationTemplatesDisplayContext.getCommerceNotificationTypes()) {
-							String commerceNotificationTypeKey = curCommerceNotificationType.getKey();
-						%>
-
-							<aui:option label="<%= curCommerceNotificationType.getLabel(locale) %>" selected="<%= (commerceNotificationType != null) && commerceNotificationTypeKey.equals(type) %>" value="<%= commerceNotificationTypeKey %>" />
-
-						<%
-						}
-						%>
+						<aui:option label="Email" selected="<%= true %>" value="email" />
 
 					</aui:select>
-				</div>
 
-				<div class="col-6">
-					<aui:input checked="<%= (commerceNotificationTemplate == null) ? false : commerceNotificationTemplate.getEnabled() %>" name="enabled" type="toggle-switch" />
-				</div>
+					<aui:input label="enable-notifications" checked="" name="enable-notifications" type="toggle-switch" />
+				</commerce-ui:panel>
 			</div>
-		</commerce-ui:panel>
 
-		<commerce-ui:panel
-			title='<%= LanguageUtil.get(resourceBundle, "email-settings") %>'
-		>
-			<div class="row">
-				<div class="col-12">
+			<div class="col-lg-6">
+				<commerce-ui:panel
+					title='<%= LanguageUtil.get(resourceBundle, "settings") %>'
+				>
 					<label for="<portlet:namespace />toFieldWrapper"><%= LanguageUtil.get(resourceBundle, "to") %></label>
 
 					<aui:field-wrapper label="" name="toFieldWrapper">
 						<liferay-ui:input-localized
 							name="to"
-							xml="<%= (commerceNotificationTemplate == null) ? StringPool.BLANK : commerceNotificationTemplate.getTo() %>"
+							xml=""
 						/>
 					</aui:field-wrapper>
-				</div>
 
-				<div class="col-6">
-					<aui:input name="cc" value="<%= cc %>" />
+					<div class="row">
+						<div class="col-lg-6">
+							<aui:input name="cc" value="" />
 
-					<aui:input label="from-address" name="from" value="<%= from %>" />
-				</div>
+							<liferay-ui:input-localized
+								required="<%= true %>"
+								label="from-address"
+								name="from"
+								value=""
+								xml=""
+							/>
 
-				<div class="col-6">
-					<aui:input name="bcc" value="<%= bcc %>" />
+						</div>
 
-					<aui:input name="fromName" value="<%= fromName %>" />
-				</div>
+						<div class="col-lg-6">
+							<aui:input name="bcc" value="" />
 
-				<c:if test="<%= (definitionTerms != null) && !definitionTerms.isEmpty() %>">
-					<div class="col-12">
-						<aui:fieldset collapsed="<%= true %>" collapsible="<%= true %>" label="definition-of-terms" markupView="lexicon">
-							<dl>
-
-								<%
-								for (Map.Entry<String, String> entry : definitionTerms.entrySet()) {
-								%>
-
-									<dt>
-										<%= HtmlUtil.escape(entry.getKey()) %>
-									</dt>
-									<dd>
-										<%= HtmlUtil.escape(entry.getValue()) %>
-									</dd>
-
-								<%
-								}
-								%>
-
-							</dl>
-						</aui:fieldset>
+							<aui:input required="<%= true %>" name="fromName" value="" />
+						</div>
 					</div>
-				</c:if>
+
+				</commerce-ui:panel>
 			</div>
-		</commerce-ui:panel>
+		</div>
 
 		<commerce-ui:panel
-			title='<%= LanguageUtil.get(resourceBundle, "email-content") %>'
+			title='<%= LanguageUtil.get(resourceBundle, "content") %>'
 		>
 			<label for="<portlet:namespace />subjectFieldWrapper"><%= LanguageUtil.get(resourceBundle, "subject") %></label>
 
 			<aui:field-wrapper label="" name="subjectFieldWrapper">
 				<liferay-ui:input-localized
 					name="subject"
-					xml="<%= (commerceNotificationTemplate == null) ? StringPool.BLANK : commerceNotificationTemplate.getSubject() %>"
+					xml=""
 				/>
 			</aui:field-wrapper>
-
-			<%
-			if (commerceNotificationType != null) {
-				definitionTerms = commerceNotificationTemplatesDisplayContext.getDefinitionTerms(CommerceDefinitionTermConstants.BODY_AND_SUBJECT_DEFINITION_TERMS_CONTRIBUTOR, commerceNotificationType.getKey(), locale);
-			}
-			%>
 
 			<label for="<portlet:namespace />bodyFieldWrapper"><%= LanguageUtil.get(resourceBundle, "body") %></label>
 
@@ -175,37 +134,19 @@ if (commerceNotificationTemplate != null) {
 					name="body"
 					toolbarSet="email"
 					type="editor"
-					xml="<%= (commerceNotificationTemplate == null) ? StringPool.BLANK : commerceNotificationTemplate.getBody() %>"
+					xml=""
 				/>
 			</aui:field-wrapper>
 
-			<c:if test="<%= (definitionTerms != null) && !definitionTerms.isEmpty() %>">
-				<aui:fieldset collapsed="<%= true %>" collapsible="<%= true %>" label="definition-of-terms" markupView="lexicon">
-					<dl>
-
-						<%
-						for (Map.Entry<String, String> entry : definitionTerms.entrySet()) {
-						%>
-
-							<dt>
-								<%= HtmlUtil.escape(entry.getKey()) %>
-							</dt>
-							<dd>
-								<%= HtmlUtil.escape(entry.getValue()) %>
-							</dd>
-
-						<%
-						}
-						%>
-
-					</dl>
-				</aui:fieldset>
-			</c:if>
+			<div>
+				<react:component
+					module="js/components/DefinitionOfTerms"
+				/>
+			</div>
 		</commerce-ui:panel>
 
-		<aui:button-row>
-			<aui:button cssClass="btn-lg" type="submit" />
-		</aui:button-row>
+		<aui:button cssClass="btn-lg" type="submit" />
+
 	</aui:form>
 </liferay-frontend:side-panel-content>
 
