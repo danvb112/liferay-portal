@@ -26,7 +26,7 @@ import {fetch} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
 import {defaultLanguageId} from '../utils/locale';
-import AutoComplete from './Form/AutoComplete';
+import {AutoComplete} from '@liferay/object-js-components-web';
 
 const HEADERS = new Headers({
 	'Accept': 'application/json',

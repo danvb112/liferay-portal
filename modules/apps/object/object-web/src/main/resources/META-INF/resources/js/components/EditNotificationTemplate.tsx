@@ -22,13 +22,11 @@ import {
 	defaultLanguageId,
 	defaultLocale,
 } from '../utils/locale';
-import Card from './Card/Card';
 import DefinitionOfTerms from './DefinitionOfTerms';
-import CustomSelect from './Form/CustomSelect/CustomSelect';
-import Input from './Form/Input';
-import InputLocalized from './Form/InputLocalized/InputLocalized';
-import {RichTextLocalized} from './Form/RichTextLocalized/RichTextLocalized';
-import {openToast} from './SidePanelContent';
+import {Card, FormCustomSelect, Input, InputLocalized, RichTextLocalized, openToast} from '@liferay/object-js-components-web';
+
+const editorConfig =
+	'{"toolbar_text_advanced":[["Undo","Redo"],["Styles"],["FontColor","BGColor"],["Bold","Italic","Underline","Strikethrough"],["RemoveFormat"],["NumberedList","BulletedList"],["IncreaseIndent","DecreaseIndent"],["IncreaseIndent","DecreaseIndent"],["Link","Unlink"],["Source","Expand"]],"allowedContent":true,"filebrowserVideoBrowseLinkUrl":"http://localhost:8080/group/guest/~/control_panel/manage/-/select/video%2Curl/selectItem?_com_liferay_item_selector_web_portlet_ItemSelectorPortlet_0_json=%7B%22desiredItemSelectorReturnTypes%22%3A%22videoembeddablehtml%22%2C%22mimeTypeRestriction%22%3A%22video%22%7D&_com_liferay_item_selector_web_portlet_ItemSelectorPortlet_1_json=%7B%22desiredItemSelectorReturnTypes%22%3A%22videoembeddablehtml%22%7D&p_p_auth=wrmfXysy","stylesSet":[{"name":"Normal","element":"p"},{"name":"Heading 1","element":"h1"},{"name":"Heading 2","element":"h2"},{"name":"Heading 3","element":"h3"},{"name":"Heading 4","element":"h4"},{"name":"Preformatted Text","element":"pre"},{"name":"Cited Work","element":"cite"},{"name":"Computer Code","element":"code"},{"name":"Info Message","attributes":{"class":"overflow-auto portlet-msg-info"},"element":"div"},{"name":"Alert Message","attributes":{"class":"overflow-auto portlet-msg-alert"},"element":"div"},{"name":"Error Message","attributes":{"class":"overflow-auto portlet-msg-error"},"element":"div"}],"language":"en-US","contentsLangDirection":"ltr","extraPlugins":"addimages,autogrow,autolink,colordialog,filebrowser,itemselector,lfrpopup,media,stylescombo,videoembed","embedProviders":[],"title":false,"filebrowserImageBrowseLinkUrl":"http://localhost:8080/group/guest/~/control_panel/manage/-/select/image%2Curl/selectItem?_com_liferay_item_selector_web_portlet_ItemSelectorPortlet_0_json=%7B%22desiredItemSelectorReturnTypes%22%3A%22com.liferay.item.selector.criteria.URLItemSelectorReturnType%22%2C%22mimeTypeRestriction%22%3A%22image%22%7D&_com_liferay_item_selector_web_portlet_ItemSelectorPortlet_1_json=%7B%22desiredItemSelectorReturnTypes%22%3A%22com.liferay.item.selector.criteria.URLItemSelectorReturnType%22%7D&p_p_auth=wrmfXysy","contentsCss":["http://localhost:8080/o/admin-theme/css/clay.css?browserId=chrome&amp;themeId=admin_WAR_admintheme&amp;minifierType=css&amp;languageId=en_US&amp;t=1652446632000","http://localhost:8080/o/admin-theme/css/main.css?browserId=chrome&amp;themeId=admin_WAR_admintheme&amp;minifierType=css&amp;languageId=en_US&amp;t=1652446632000","/o/frontend-editor-ckeditor-web/ckeditor/skins/moono-lexicon/editor.css?browserId=chrome&amp;themeId=admin_WAR_admintheme&amp;minifierType=css&amp;languageId=en_US&amp;t=1652446632000","/o/frontend-editor-ckeditor-web/ckeditor/skins/moono-lexicon/dialog.css?browserId=chrome&amp;themeId=admin_WAR_admintheme&amp;minifierType=css&amp;languageId=en_US&amp;t=1652446632000"],"toolbar_text_simple":[["Undo","Redo"],["Styles","Bold","Italic","Underline"],["NumberedList","BulletedList"],["Link","Unlink"],["Source","Expand"]],"pasteFromWordRemoveStyles":false,"removePlugins":"elementspath","contentsLanguage":"en-US","bodyClass":"cke_editable html-editor","resize_enabled":false,"toolbar_editInPlace":[["Undo","Redo"],["Styles","Bold","Italic","Underline"],["NumberedList","BulletedList"],["Link","Unlink"],["Table","ImageSelector","VideoSelector"],["Source","Expand"]],"autoSaveTimeout":3000,"closeNoticeTimeout":8000,"height":265,"filebrowserBrowseUrl":"http://localhost:8080/group/guest/~/control_panel/manage/-/select/file%2Clayout/selectItem?_com_liferay_item_selector_web_portlet_ItemSelectorPortlet_0_json=%7B%22desiredItemSelectorReturnTypes%22%3A%22com.liferay.item.selector.criteria.URLItemSelectorReturnType%22%7D&_com_liferay_item_selector_web_portlet_ItemSelectorPortlet_1_json=%7B%22checkDisplayPage%22%3Afalse%2C%22desiredItemSelectorReturnTypes%22%3A%22com.liferay.item.selector.criteria.URLItemSelectorReturnType%22%2C%22enableCurrentPage%22%3Afalse%2C%22followURLOnTitleClick%22%3Afalse%2C%22multiSelection%22%3Afalse%2C%22showActionsMenu%22%3Afalse%2C%22showBreadcrumb%22%3Atrue%2C%22showDraftPages%22%3Afalse%2C%22showHiddenPages%22%3Atrue%2C%22showPrivatePages%22%3Atrue%2C%22showPublicPages%22%3Atrue%7D&p_p_auth=wrmfXysy","toolbar_tablet":[["Undo","Redo"],["Styles","Bold","Italic","Underline"],["NumberedList","BulletedList"],["Link","Unlink"],["Table","ImageSelector","VideoSelector"],["Source","Expand"]],"toolbar_phone":[["Undo","Redo"],["Styles","Bold","Italic","Underline"],["NumberedList","BulletedList"],["Link","Unlink"],["Table","ImageSelector","VideoSelector"],["Source","Expand"]],"filebrowserImageBrowseUrl":"http://localhost:8080/group/guest/~/control_panel/manage/-/select/image%2Curl/selectItem?_com_liferay_item_selector_web_portlet_ItemSelectorPortlet_0_json=%7B%22desiredItemSelectorReturnTypes%22%3A%22com.liferay.item.selector.criteria.URLItemSelectorReturnType%22%2C%22mimeTypeRestriction%22%3A%22image%22%7D&_com_liferay_item_selector_web_portlet_ItemSelectorPortlet_1_json=%7B%22desiredItemSelectorReturnTypes%22%3A%22com.liferay.item.selector.criteria.URLItemSelectorReturnType%22%7D&p_p_auth=wrmfXysy","toolbar_email":[["Undo","Redo"],["Styles","Bold","Italic","Underline"],["NumberedList","BulletedList"],["Link","Unlink"],["Table","ImageSelector","VideoSelector"],["Source","Expand"]],"filebrowserVideoBrowseUrl":"http://localhost:8080/group/guest/~/control_panel/manage/-/select/video%2Curl/selectItem?_com_liferay_item_selector_web_portlet_ItemSelectorPortlet_0_json=%7B%22desiredItemSelectorReturnTypes%22%3A%22videoembeddablehtml%22%2C%22mimeTypeRestriction%22%3A%22video%22%7D&_com_liferay_item_selector_web_portlet_ItemSelectorPortlet_1_json=%7B%22desiredItemSelectorReturnTypes%22%3A%22videoembeddablehtml%22%7D&p_p_auth=wrmfXysy","toolbar_liferayArticle":[["Undo","Redo"],["Styles","Bold","Italic","Underline"],["NumberedList","BulletedList"],["Link","Unlink"],["Table","ImageSelector","VideoSelector"],["Source","Expand"]],"filebrowserWindowFeatures":"title=Browse","entities":false,"toolbar_liferay":[["Undo","Redo"],["Styles","Bold","Italic","Underline"],["NumberedList","BulletedList"],["Link","Unlink"],["Table","ImageSelector","VideoSelector"],["Source","Expand"]],"toolbar_simple":[["Undo","Redo"],["Styles","Bold","Italic","Underline"],["NumberedList","BulletedList"],["Link","Unlink"],["Table","ImageSelector","VideoSelector"],["Source","Expand"]],"pasteFromWordRemoveFontStyles":false}';
 
 import './EditNotificationTemplate.scss';
 
@@ -233,7 +231,7 @@ export default function EditNotificationTemplate({
 								value={values.description}
 							/>
 
-							<CustomSelect
+							<FormCustomSelect
 								disabled
 								label={Liferay.Language.get('type')}
 								options={[]}
@@ -245,6 +243,7 @@ export default function EditNotificationTemplate({
 					<div className="col-lg-6">
 						<Card title={Liferay.Language.get('settings')}>
 							<InputLocalized
+								defaultLanguageId={defaultLanguageId}
 								label={Liferay.Language.get('to')}
 								locales={availableLocales}
 								name="to"
@@ -310,6 +309,7 @@ export default function EditNotificationTemplate({
 
 								<div className="col-lg-6">
 									<InputLocalized
+										defaultLanguageId={defaultLanguageId}
 										error={errors.fromName}
 										label={Liferay.Language.get(
 											'from-name'
@@ -337,6 +337,7 @@ export default function EditNotificationTemplate({
 
 				<Card title={Liferay.Language.get('content')}>
 					<InputLocalized
+						defaultLanguageId={defaultLanguageId}
 						label={Liferay.Language.get('subject')}
 						locales={availableLocales}
 						name="subject"
@@ -352,6 +353,7 @@ export default function EditNotificationTemplate({
 					/>
 
 					<RichTextLocalized
+						editorConfig={editorConfig}
 						label={Liferay.Language.get('body')}
 						locales={availableLocales}
 						name="body"
