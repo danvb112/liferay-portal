@@ -12,5 +12,13 @@
  * details.
  */
 
-type Locale = Liferay.Language.Locale;
-type LocalizedValue<T> = Liferay.Language.LocalizedValue<T>;
+export declare const availableLocales: TLocale[];
+export declare const defaultLanguageId: Liferay.Language.Locale;
+export declare const defaultLocale: TLocale | undefined;
+export declare const languageId: Liferay.Language.Locale;
+export declare const locale: TLocale | undefined;
+declare type TLocale = {
+	label: string;
+	symbol: string;
+};
+export {};

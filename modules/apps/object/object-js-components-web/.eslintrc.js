@@ -12,5 +12,6 @@
  * details.
  */
 
-type Locale = Liferay.Language.Locale;
-type LocalizedValue<T> = Liferay.Language.LocalizedValue<T>;
+module.exports = {
+	ignorePatterns: ['types/**/*.d.ts'],
+};

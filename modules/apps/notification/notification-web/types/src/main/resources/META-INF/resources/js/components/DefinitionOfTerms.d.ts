@@ -12,5 +12,6 @@
  * details.
  */
 
-type Locale = Liferay.Language.Locale;
-type LocalizedValue<T> = Liferay.Language.LocalizedValue<T>;
+/// <reference types="react" />
+
+export default function DefinitionOfTerms(): JSX.Element;

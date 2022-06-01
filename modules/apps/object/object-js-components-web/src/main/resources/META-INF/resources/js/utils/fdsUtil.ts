@@ -12,5 +12,19 @@
  * details.
  */
 
-type Locale = Liferay.Language.Locale;
-type LocalizedValue<T> = Liferay.Language.LocalizedValue<T>;
+export function onActionDropdownItemClick<T>({
+	action,
+	itemData,
+}: {
+	action: FDSAction;
+	itemData: T;
+}) {
+	if (action.target === 'event') {
+		Liferay.fire(action.id, {itemData});
+	}
+}
+
+interface FDSAction {
+	id: string;
+	target: 'event' | 'async';
+}

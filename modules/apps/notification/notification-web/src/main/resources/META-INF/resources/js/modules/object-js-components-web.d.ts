@@ -12,5 +12,6 @@
  * details.
  */
 
-type Locale = Liferay.Language.Locale;
-type LocalizedValue<T> = Liferay.Language.LocalizedValue<T>;
+declare module '@liferay/object-js-components-web' {
+	export * from '@liferay/object-js-components-web/src/main/resources/META-INF/resources/js/index';
+}
