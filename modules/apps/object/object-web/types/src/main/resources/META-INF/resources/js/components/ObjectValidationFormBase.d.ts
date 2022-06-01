@@ -12,7 +12,9 @@
  * details.
  */
 
-import {FormError} from '../hooks/useForm';
+/// <reference types="react" />
+
+import {FormError} from '@liferay/object-js-components-web';
 export declare function useObjectValidationForm({
 	initialValues,
 	onSubmit,

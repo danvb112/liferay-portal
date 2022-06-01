@@ -25,6 +25,7 @@ export {Input} from './components/Input';
 export {InputLocalized} from './components/InputLocalized';
 export {RichTextLocalized} from './components/RichTextLocalized';
 export {Select} from './components/Select';
+export {useForm, invalidateRequired, FormError} from './hooks/useForm';
 export {
 	closeSidePanel,
 	openToast,
