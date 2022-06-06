@@ -1,3 +1,5 @@
+<%@ page import="com.liferay.portal.kernel.util.HashMapBuilder" %>
+
 <%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
@@ -21,16 +23,20 @@ ViewNotificationTemplatesDisplayContext viewNotificationTemplatesDisplayContext 
 
 NotificationTemplate notificationTemplate = viewNotificationTemplatesDisplayContext.getNotificationTemplate();
 
-portletDisplay.setShowBackIcon(true);
+long editingNotificationTemplateId = 0;
 
-if (Validator.isNull(redirect)) {
-	portletDisplay.setURLBack(String.valueOf(renderResponse.createRenderURL()));
+if (notificationTemplate != null) {
+	editingNotificationTemplateId = notificationTemplate.getNotificationTemplateId();
 }
-else {
-	portletDisplay.setURLBack(redirect);
-}
+
+portletDisplay.setShowBackIcon(true);
 %>
 
-TODO
-
-<%= notificationTemplate.getName() %>
+<react:component
+	module="js/components/EditNotificationTemplate"
+	props='<%=
+		HashMapBuilder.<String, Object>put(
+			"editingNotificationTemplateId", editingNotificationTemplateId
+		).build()
+	%>'
+/>
