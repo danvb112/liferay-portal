@@ -17,13 +17,20 @@
 <%@ taglib uri="http://liferay.com/tld/frontend" prefix="liferay-frontend" %><%@
 taglib uri="http://liferay.com/tld/frontend-data-set" prefix="frontend-data-set" %><%@
 taglib uri="http://liferay.com/tld/react" prefix="react" %><%@
-taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
+taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
+taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %>
 
 <%@ page import="com.liferay.notification.model.NotificationTemplate" %><%@
 page import="com.liferay.notification.web.internal.constants.NotificationFDSNames" %><%@
 page import="com.liferay.notification.web.internal.display.context.ViewNotificationTemplatesDisplayContext" %><%@
-page import="com.liferay.portal.kernel.util.WebKeys" %>
+page import="com.liferay.portal.kernel.util.WebKeys" %><%@
+page import="com.liferay.portal.kernel.util.HashMapBuilder" %>
+<%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 
 <liferay-frontend:defineObjects />
 
 <liferay-theme:defineObjects />
+
+<%
+	String redirect = ParamUtil.getString(request, "redirect");
+%>

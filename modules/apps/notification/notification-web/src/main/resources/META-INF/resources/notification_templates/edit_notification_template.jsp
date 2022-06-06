@@ -1,5 +1,3 @@
-<%@ page import="com.liferay.portal.kernel.util.HashMapBuilder" %>
-
 <%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
@@ -30,7 +28,10 @@ if (notificationTemplate != null) {
 }
 
 portletDisplay.setShowBackIcon(true);
+portletDisplay.setURLBack(redirect);
 %>
+
+<%--<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" var="baseResourceURL" />--%>
 
 <react:component
 	module="js/components/EditNotificationTemplate"
