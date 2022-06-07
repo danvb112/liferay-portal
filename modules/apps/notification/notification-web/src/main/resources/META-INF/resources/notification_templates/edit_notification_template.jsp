@@ -38,6 +38,8 @@ portletDisplay.setURLBack(redirect);
 	props='<%=
 		HashMapBuilder.<String, Object>put(
 			"editingNotificationTemplateId", editingNotificationTemplateId
+		).put(
+			"editorConfig", viewNotificationTemplatesDisplayContext.getEditorConfig("rich_text")
 		).build()
 	%>'
 />

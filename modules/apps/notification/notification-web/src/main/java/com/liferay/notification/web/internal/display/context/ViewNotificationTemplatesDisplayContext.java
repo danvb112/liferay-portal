@@ -22,16 +22,23 @@ import com.liferay.notification.model.NotificationTemplate;
 import com.liferay.notification.web.internal.constants.NotificationWebKeys;
 import com.liferay.notification.web.internal.display.context.helper.NotificationRequestHelper;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
+import com.liferay.portal.kernel.editor.configuration.EditorConfiguration;
+import com.liferay.portal.kernel.editor.configuration.EditorConfigurationFactory;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
+import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletException;
@@ -46,10 +53,12 @@ import javax.servlet.http.HttpServletRequest;
 public class ViewNotificationTemplatesDisplayContext {
 
 	public ViewNotificationTemplatesDisplayContext(
+		EditorConfigurationFactory editorConfigurationFactory,
 		HttpServletRequest httpServletRequest,
 		ModelResourcePermission<NotificationTemplate>
 			notificationTemplateModelResourcePermission) {
 
+		_editorConfigurationFactory = editorConfigurationFactory;
 		_notificationTemplateModelResourcePermission =
 			notificationTemplateModelResourcePermission;
 
@@ -80,6 +89,29 @@ public class ViewNotificationTemplatesDisplayContext {
 						"add-notification-template"));
 			}
 		).build();
+	}
+
+	public Object getEditorConfig(String editorConfigKey) {
+		HttpServletRequest httpServletRequest =
+			_notificationRequestHelper.getRequest();
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+		EditorConfiguration editorConfiguration =
+			_editorConfigurationFactory.getEditorConfiguration(
+				themeDisplay.getPpid(), editorConfigKey, "ckeditor_classic",
+				HashMapBuilder.<String, Object>put(
+					"liferay-ui:input-editor:allowBrowseDocuments", true
+				).build(),
+				(ThemeDisplay)httpServletRequest.getAttribute(
+					WebKeys.THEME_DISPLAY),
+				RequestBackedPortletURLFactoryUtil.create(httpServletRequest));
+
+		Map<String, Object> data = editorConfiguration.getData();
+
+		return data.get("editorConfig");
 	}
 
 	public List<FDSActionDropdownItem> getFDSActionDropdownItems()
@@ -167,6 +199,7 @@ public class ViewNotificationTemplatesDisplayContext {
 			NotificationActionKeys.ADD_NOTIFICATION_TEMPLATE);
 	}
 
+	private final EditorConfigurationFactory _editorConfigurationFactory;
 	private final NotificationRequestHelper _notificationRequestHelper;
 	private final ModelResourcePermission<NotificationTemplate>
 		_notificationTemplateModelResourcePermission;
