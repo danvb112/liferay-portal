@@ -31,12 +31,14 @@ portletDisplay.setShowBackIcon(true);
 portletDisplay.setURLBack(redirect);
 %>
 
-<%--<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" var="baseResourceURL" />--%>
+<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" var="baseResourceURL" />
 
 <react:component
 	module="js/components/EditNotificationTemplate"
 	props='<%=
 		HashMapBuilder.<String, Object>put(
+			"baseResourceURL", String.valueOf(baseResourceURL)
+		).put(
 			"editingNotificationTemplateId", editingNotificationTemplateId
 		).put(
 			"editorConfig", viewNotificationTemplatesDisplayContext.getEditorConfig("rich_text")

@@ -25,7 +25,7 @@ import {
 	AutoComplete,
 	onActionDropdownItemClick,
 } from '@liferay/object-js-components-web';
-import {fetch, createResourceURL} from 'frontend-js-web';
+import {createResourceURL, fetch} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
 import {defaultLanguageId} from '../utils/locale';
@@ -39,7 +39,7 @@ interface IProps {
 	baseResourceURL: string;
 }
 
-export default function DefinitionOfTerms({baseResourceURL}:IProps) {
+export default function DefinitionOfTerms({baseResourceURL}: IProps) {
 	const [objectDefinitons, setObjectDefinitons] = useState<
 		ObjectDefinition[]
 	>();
@@ -139,47 +139,20 @@ export default function DefinitionOfTerms({baseResourceURL}:IProps) {
 		makeFetch();
 	}, []);
 
-	const getFieldTerm = (fieldLabel: string) => {
-		const formattedFieldLabel = fieldLabel
-			.toLocaleUpperCase()
-			.split(' ')
-			.join('_');
-		const term = '[%' + formattedFieldLabel + '%]';
-
-		return term;
-	};
-
 	const getEntityFields = async (objectDefinition: ObjectDefinition) => {
-		// const response = await fetch(
-		// 	`/o/object-admin/v1.0/object-definitions/${objectDefinition.id}/object-fields`,
-		// 	{
-		// 		headers: HEADERS,
-		// 		method: 'GET',
-		// 	}
-		// );
-		
 		const response = await fetch(
-			createResourceURL(
-				baseResourceURL, {
+			createResourceURL(baseResourceURL, {
 				objectDefinitionId: objectDefinition.id,
 				p_p_resource_id:
 					'/notification_templates/get_notification_template_terms',
-			}));
+			})
+		);
 
-		const {items} = (await response.json()) as {items: ObjectField[]};
-
-		console.log(items);
-
-		const dataSetItems = items.map((item) => {
-			return {
-				name: item.label[defaultLanguageId],
-				term: getFieldTerm(item.label[defaultLanguageId] as string),
-			};
-		});
+		const responseJSON = (await response.json()) as any[];
 
 		setFrontEndDataSetProps({
 			...frontEndDataSetProps,
-			items: dataSetItems,
+			items: responseJSON,
 		});
 	};
 

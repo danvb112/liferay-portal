@@ -123,6 +123,8 @@ export default function EditNotificationTemplate({
 				),
 				type: 'success',
 			});
+
+			window.history.back()
 		}
 		else if (response.status === 404) {
 			openToast({
@@ -194,7 +196,7 @@ export default function EditNotificationTemplate({
 				</ClayManagementToolbar.ItemList>
 
 				<ClayManagementToolbar.ItemList>
-					<ClayButton displayType="secondary" onClick={() => {}}>
+					<ClayButton displayType="secondary" onClick={() => window.history.back()}>
 						Cancel
 					</ClayButton>
 
@@ -378,9 +380,7 @@ export default function EditNotificationTemplate({
 							translations={values.body}
 						/>
 
-						<DefinitionOfTerms 
-							baseResourceURL={baseResourceURL}
-						/>
+						<DefinitionOfTerms baseResourceURL={baseResourceURL} />
 					</Card>
 				</div>
 			</div>
