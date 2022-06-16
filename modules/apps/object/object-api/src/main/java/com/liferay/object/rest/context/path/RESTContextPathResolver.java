@@ -21,4 +21,6 @@ public interface RESTContextPathResolver {
 
 	public String getRESTContextPath(long groupId);
 
+	public String getRESTContextPathByExternalReferenceCode(long groupId);
+
 }

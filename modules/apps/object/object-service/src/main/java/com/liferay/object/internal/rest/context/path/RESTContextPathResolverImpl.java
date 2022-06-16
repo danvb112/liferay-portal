@@ -50,6 +50,22 @@ public class RESTContextPathResolverImpl implements RESTContextPathResolver {
 			new String[] {String.valueOf(groupId), String.valueOf(groupId)});
 	}
 
+	@Override
+	public String getRESTContextPathByExternalReferenceCode(long groupId) {
+
+		String contextPathByExternalReferenceCode = _contextPath + "/by-externalReferenceCode";
+
+		if (!_objectScopeProvider.isGroupAware() ||
+			!_objectScopeProvider.isValidGroupId(groupId)) {
+
+			return contextPathByExternalReferenceCode;
+		}
+
+		return StringUtil.replace(
+			contextPathByExternalReferenceCode, new String[] {"{groupId}", "{scopeKey}"},
+			new String[] {String.valueOf(groupId), String.valueOf(groupId)});
+	}
+
 	private final String _contextPath;
 	private final ObjectScopeProvider _objectScopeProvider;
 

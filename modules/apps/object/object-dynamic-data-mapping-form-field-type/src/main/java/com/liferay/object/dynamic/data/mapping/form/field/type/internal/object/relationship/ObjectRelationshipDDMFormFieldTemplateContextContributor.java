@@ -69,6 +69,8 @@ public class ObjectRelationshipDDMFormFieldTemplateContextContributor
 		return HashMapBuilder.<String, Object>put(
 			"apiURL", _getAPIURL(ddmFormField, ddmFormFieldRenderingContext)
 		).put(
+			"apiURLByExternalReferenceCode", _getAPIURLByExternalReferenceCode(ddmFormField, ddmFormFieldRenderingContext)
+		).put(
 			"inputName", ddmFormField.getName()
 		).put(
 			"labelKey", _getLabelKey(ddmFormField)
@@ -92,7 +94,7 @@ public class ObjectRelationshipDDMFormFieldTemplateContextContributor
 		).put(
 			"value", ddmFormFieldRenderingContext.getValue()
 		).put(
-			"valueKey", "externalReferenceCode"
+			"valueKey", "id"
 		).build();
 	}
 
@@ -136,6 +138,36 @@ public class ObjectRelationshipDDMFormFieldTemplateContextContributor
 				objectDefinition.getClassName());
 
 		String restContextPath = restContextPathResolver.getRESTContextPath(
+			_getGroupId(ddmFormFieldRenderingContext, objectDefinition));
+
+		return apiURL + restContextPath;
+	}
+
+	private String _getAPIURLByExternalReferenceCode(
+		DDMFormField ddmFormField,
+		DDMFormFieldRenderingContext ddmFormFieldRenderingContext) {
+
+		String apiURL = GetterUtil.getString(
+			ddmFormField.getProperty("apiURL"));
+
+		if (Validator.isNotNull(apiURL)) {
+			return apiURL;
+		}
+
+		apiURL = _portal.getPortalURL(
+			ddmFormFieldRenderingContext.getHttpServletRequest());
+
+		ObjectDefinition objectDefinition = _getObjectDefinition(ddmFormField);
+
+		if (objectDefinition == null) {
+			return apiURL;
+		}
+
+		RESTContextPathResolver restContextPathResolver =
+			_restContextPathResolverRegistry.getRESTContextPathResolver(
+				objectDefinition.getClassName());
+
+		String restContextPath = restContextPathResolver.getRESTContextPathByExternalReferenceCode(
 			_getGroupId(ddmFormFieldRenderingContext, objectDefinition));
 
 		return apiURL + restContextPath;

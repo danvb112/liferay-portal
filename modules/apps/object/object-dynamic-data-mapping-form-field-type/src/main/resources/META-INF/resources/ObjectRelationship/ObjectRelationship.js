@@ -46,6 +46,7 @@ const LoadingWithDebounce = ({loading, render}) => {
 
 export function ObjectRelationship({
 	apiURL,
+	apiURLByExternalReferenceCode,
 	id,
 	inputName,
 	labelKey = 'label',
@@ -76,7 +77,27 @@ export function ObjectRelationship({
 
 				const reponseJSON = await response.json();
 
-				setSearch(getLabel(reponseJSON, labelKey));
+				const label = getLabel(reponseJSON, labelKey);
+
+				if(!label) {
+					const {externalReferenceCode} = reponseJSON;
+
+					const response = await fetch(`${apiURLByExternalReferenceCode}/${externalReferenceCode}`, {
+						headers: HEADERS,
+						method: 'GET',
+					});
+
+					const reponseJSON = await response.json();
+
+					const labelExternal = getLabel(reponseJSON, labelKey);
+
+					setSearch(labelExternal);
+
+					return;
+
+				}
+
+				setSearch(label);
 			};
 
 			makeRequest();
