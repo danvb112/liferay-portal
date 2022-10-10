@@ -49,10 +49,10 @@ public class ObjectODataFilterParserImpl implements ObjectODataFilterParser {
 			return null;
 		}
 
-		return objectFilter.getFilterBy() + _buildExpressionFilterString(map);
+		return _buildExpressionFilterString(map, objectFilter.getFilterBy());
 	}
 
-	private String _buildExpressionFilterString(Object value) {
+	private String _buildExpressionFilterString(Object value, String filterBy) {
 		if (value instanceof Map) {
 			Map<String, Object> map = (Map<String, Object>)value;
 
@@ -62,7 +62,8 @@ public class ObjectODataFilterParserImpl implements ObjectODataFilterParser {
 
 			for (String operator : operators) {
 				result.append(
-					_buildOperatorFilterString(operator, map.get(operator)));
+					_buildOperatorFilterString(
+						operator, map.get(operator), filterBy));
 			}
 
 			return result.toString();
@@ -71,7 +72,9 @@ public class ObjectODataFilterParserImpl implements ObjectODataFilterParser {
 		return value.toString();
 	}
 
-	private String _buildInExpressionFilterString(Object[] values) {
+	private String _buildInExpressionFilterString(
+		String filterBy, Object[] values) {
+
 		List<String> valuesList = new ArrayList<>();
 
 		for (Object value : values) {
@@ -79,21 +82,111 @@ public class ObjectODataFilterParserImpl implements ObjectODataFilterParser {
 		}
 
 		return StringBundler.concat(
-			" in (", StringUtil.merge(valuesList, StringPool.COMMA_AND_SPACE),
-			")");
+			"(", filterBy, " in (",
+			StringUtil.merge(valuesList, StringPool.COMMA_AND_SPACE), "))");
 	}
 
-	private String _buildOperatorFilterString(String operator, Object value) {
-		if (StringUtil.equals(operator, "not")) {
+	private String _buildOperatorFilterString(
+		String operator, Object value, String filterBy) {
+
+		if (StringUtil.equals(operator, "le") ||
+			StringUtil.equals(operator, "ge")) {
+
+			return _buildRangeExpressionFilterString(
+				filterBy, operator, (String)value);
+		}
+
+		if (StringUtil.equals(operator, "eq") ||
+			StringUtil.equals(operator, "ne")) {
+
 			return StringBundler.concat(
-				" not (", _buildExpressionFilterString(value), ")");
+				"(", filterBy, StringPool.SPACE, operator, StringPool.SPACE,
+				StringUtil.removeSubstring(value.toString(), "\""), ")");
+		}
+
+		if (StringUtil.equals(filterBy, "status") &&
+			StringUtil.equals(operator, "not")) {
+
+			Map<String, Object> map = (Map<String, Object>)value;
+
+			Object statusValues = map.get("in");
+
+			return _buildStatusExpressionFilterString(
+				"ne", statusValues, " and ");
+		}
+
+		if (StringUtil.equals(filterBy, "status") &&
+			StringUtil.equals(operator, "in")) {
+
+			return _buildStatusExpressionFilterString("eq", value, " or ");
+		}
+
+		if (StringUtil.equals(operator, "not")) {
+			return "not " + _buildExpressionFilterString(value, filterBy);
 		}
 
 		if (StringUtil.equals(operator, "in")) {
-			return _buildInExpressionFilterString((Object[])value);
+			return _buildInExpressionFilterString(filterBy, (Object[])value);
 		}
 
 		return null;
+	}
+
+	private String _buildRangeExpressionFilterString(
+		String filterBy, String operator, String value) {
+
+		if (StringUtil.equals(operator, "le")) {
+			if (StringUtil.equals(filterBy, "createDate") ||
+				StringUtil.equals(filterBy, "modifiedDate")) {
+
+				return StringBundler.concat(
+					"(", filterBy, StringPool.SPACE, operator, StringPool.SPACE,
+					value, "T23:59:59.999Z) and ");
+			}
+
+			return StringBundler.concat(
+				"(", filterBy, StringPool.SPACE, operator, StringPool.SPACE,
+				value, ") and ");
+		}
+		else if (StringUtil.equals(operator, "ge")) {
+			if (StringUtil.equals(filterBy, "createDate") ||
+				StringUtil.equals(filterBy, "modifiedDate")) {
+
+				return StringBundler.concat(
+					"(", filterBy, StringPool.SPACE, operator, StringPool.SPACE,
+					value, "T00:00:00.000Z)");
+			}
+
+			return StringBundler.concat(
+				"(", filterBy, StringPool.SPACE, operator, StringPool.SPACE,
+				value, ")");
+		}
+
+		return StringPool.BLANK;
+	}
+
+	private String _buildStatusExpressionFilterString(
+		String operator, Object value, String delimiter) {
+
+		String expressionFilterString =
+			_buildStatusValuesExpressionFilterString(
+				operator, delimiter, (Object[])value);
+
+		return "(status/any(x:" + expressionFilterString + "))";
+	}
+
+	private String _buildStatusValuesExpressionFilterString(
+		String operator, String delimiter, Object[] values) {
+
+		List<String> statusValuesExpressionFilter = new ArrayList<>();
+
+		for (Object value : values) {
+			statusValuesExpressionFilter.add(
+				StringBundler.concat(
+					"(x ", operator, StringPool.SPACE, value.toString(), ")"));
+		}
+
+		return StringUtil.merge(statusValuesExpressionFilter, delimiter);
 	}
 
 }
