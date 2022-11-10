@@ -181,7 +181,8 @@ renderResponse.setTitle(LanguageUtil.format(request, "edit-x", objectDefinition.
 							<aui:option label='<%= LanguageUtil.get(request, "choose-an-option") %>' selected="<%= true %>" value="" />
 
 							<%
-							for (KeyValuePair keyValuePair : objectDefinitionsDetailsDisplayContext.getKeyValuePairs()) {
+							for (KeyValuePair keyValuePair : objectDefinitionsDetailsDisplayContext.getKeyValuePairs("scope")) {
+								System.out.println(keyValuePair.getKey());
 							%>
 
 								<aui:option label="<%= keyValuePair.getValue() %>" selected="<%= Objects.equals(keyValuePair.getKey(), objectDefinition.getPanelCategoryKey()) %>" value="<%= keyValuePair.getKey() %>" />
