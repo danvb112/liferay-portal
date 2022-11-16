@@ -182,7 +182,6 @@ renderResponse.setTitle(LanguageUtil.format(request, "edit-x", objectDefinition.
 
 							<%
 							for (KeyValuePair keyValuePair : objectDefinitionsDetailsDisplayContext.getKeyValuePairs("scope")) {
-								System.out.println(keyValuePair.getKey());
 							%>
 
 								<aui:option label="<%= keyValuePair.getValue() %>" selected="<%= Objects.equals(keyValuePair.getKey(), objectDefinition.getPanelCategoryKey()) %>" value="<%= keyValuePair.getKey() %>" />

@@ -17,7 +17,12 @@
 import './ObjectDetails.scss';
 interface ObjectDetailsProps {
 	DBTableName: string;
+	backURL: string;
 	companyKeyValuePair: KeyValuePair[];
+	externalReferenceCode: string;
+	hasPublishObjectPermission: boolean;
+	hasUpdateObjectDefinitionPermission: boolean;
+	isApproved: boolean;
 	label: LocalizedValue<string>;
 	nonRelationshipObjectFieldsInfo: {
 		label: LocalizedValue<string>;
@@ -25,6 +30,7 @@ interface ObjectDetailsProps {
 	}[];
 	objectDefinitionId: number;
 	pluralLabel: LocalizedValue<string>;
+	portletNamespace: string;
 	shortName: string;
 	siteKeyValuePair: KeyValuePair[];
 }
@@ -34,11 +40,17 @@ declare type KeyValuePair = {
 };
 export default function ObjectDetails({
 	DBTableName,
+	backURL,
 	companyKeyValuePair,
+	externalReferenceCode,
+	hasPublishObjectPermission,
+	hasUpdateObjectDefinitionPermission,
+	isApproved,
 	label,
 	nonRelationshipObjectFieldsInfo,
 	objectDefinitionId,
 	pluralLabel,
+	portletNamespace,
 	shortName,
 	siteKeyValuePair,
 }: ObjectDetailsProps): JSX.Element;

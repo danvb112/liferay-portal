@@ -25,6 +25,7 @@ import {
 import React, {useEffect, useMemo, useState} from 'react';
 
 import {defaultLanguageId} from '../../utils/constants';
+import ObjectDefinitionManagementToolbar from '../ObjectDefinitionManagementToolbar';
 
 import './ObjectDetails.scss';
 import Sheet from './Sheet';
@@ -32,7 +33,12 @@ import {useObjectDetailsForm} from './useObjectDetailsForm';
 
 interface ObjectDetailsProps {
 	DBTableName: string;
+	backURL: string;
 	companyKeyValuePair: KeyValuePair[];
+	externalReferenceCode: string;
+	hasPublishObjectPermission: boolean;
+	hasUpdateObjectDefinitionPermission: boolean;
+	isApproved: boolean;
 	label: LocalizedValue<string>;
 	nonRelationshipObjectFieldsInfo: {
 		label: LocalizedValue<string>;
@@ -40,6 +46,7 @@ interface ObjectDetailsProps {
 	}[];
 	objectDefinitionId: number;
 	pluralLabel: LocalizedValue<string>;
+	portletNamespace: string;
 	shortName: string;
 	siteKeyValuePair: KeyValuePair[];
 }
@@ -62,11 +69,17 @@ const SCOPE_OPTIONS = [
 
 export default function ObjectDetails({
 	DBTableName,
+	backURL,
 	companyKeyValuePair,
+	externalReferenceCode,
+	hasPublishObjectPermission,
+	hasUpdateObjectDefinitionPermission,
+	isApproved,
 	label,
 	nonRelationshipObjectFieldsInfo,
 	objectDefinitionId,
 	pluralLabel,
+	portletNamespace,
 	shortName,
 	siteKeyValuePair,
 }: ObjectDetailsProps) {
@@ -94,6 +107,7 @@ export default function ObjectDetails({
 
 	const {errors, handleChange, setValues, values} = useObjectDetailsForm({
 		initialValues: {
+			externalReferenceCode,
 			id: objectDefinitionId,
 			label,
 			name: shortName,
@@ -101,6 +115,10 @@ export default function ObjectDetails({
 		},
 		onSubmit: () => {},
 	});
+
+	const onSubmit = (values: Partial<ObjectDefinition>) => {
+		
+	}
 
 	const setPanelCategoryKey = (
 		KeyValuePairArray: KeyValuePair[],
@@ -209,248 +227,282 @@ export default function ObjectDetails({
 	}, [objectDefinitionId]);
 
 	return (
-		<div className="lfr-objects__object-definition-details">
-			<Sheet title={Liferay.Language.get('basic-information')}>
-				<ClayPanel
-					displayTitle={Liferay.Language.get(
-						'object-definition-data'
-					)}
-					displayType="unstyled"
-				>
-					<ClayPanel.Body>
-						<Input
-							error={errors.name}
-							label={Liferay.Language.get('name')}
-							name="name"
-							onChange={handleChange}
-							required
-							value={values.name}
-						/>
+		<>
+			<div className="lfr-objects__object-definition-details-management-toolbar">
+				<ObjectDefinitionManagementToolbar
+					backURL={backURL}
+					externalReferenceCode={externalReferenceCode}
+					hasPublishObjectPermission={hasPublishObjectPermission}
+					hasUpdateObjectDefinitionPermission={
+						hasUpdateObjectDefinitionPermission
+					}
+					isApproved={isApproved}
+					label={
+						(values?.label as LocalizedValue<string>)[
+							defaultLanguageId
+						] as string
+					}
+					objectDefinitionId={values.id as number}
+					portletNamespace={portletNamespace}
+					screenNavigationCategoryKey="details"
+					system={values.system as boolean}
+					setValues={setValues}
+				/>
+			</div>
 
-						<InputLocalized
-							error={errors.label}
-							label={Liferay.Language.get('label')}
-							onChange={(label) => setValues({label})}
-							required
-							translations={
-								values.label as LocalizedValue<string>
-							}
-						/>
-
-						<InputLocalized
-							error={errors.pluralLabel}
-							label={Liferay.Language.get('plural-label')}
-							onChange={(pluralLabel) => setValues({pluralLabel})}
-							required
-							translations={
-								values.pluralLabel as LocalizedValue<string>
-							}
-						/>
-
-						<Input
-							disabled
-							label={Liferay.Language.get(
-								'object-definition-table-name'
-							)}
-							name="name"
-							required
-							value={DBTableName}
-						/>
-
-						<ClayToggle
-							label={Liferay.Language.get('active')}
-							name="active"
-							onToggle={() => setValues({active: !values.active})}
-							toggled={values.active}
-						/>
-					</ClayPanel.Body>
-				</ClayPanel>
-
-				<ClayPanel
-					collapsable
-					defaultExpanded
-					displayTitle={Liferay.Language.get('entry-display')}
-					displayType="unstyled"
-				>
-					<ClayPanel.Body>
-						<SingleSelect<{label: string; name: string}>
-							error={errors.titleObjectFieldId}
-							label={Liferay.Language.get(
-								'title-object-field-id'
-							)}
-							onChange={(target: {
-								label: string;
-								name: string;
-							}) => {
-								const field = objectFields.find(
-									({name}) => name === target.name
-								);
-
-								setSelectedObjectField(field);
-
-								setValues({
-									titleObjectFieldId: field?.id,
-									titleObjectFieldName: field?.name,
-								});
-							}}
-							options={titleFieldOptions}
-							value={
-								selectedObjectField?.label[defaultLanguageId]
-							}
-						/>
-					</ClayPanel.Body>
-				</ClayPanel>
-
-				<ClayPanel
-					collapsable
-					defaultExpanded
-					displayTitle={Liferay.Language.get('scope')}
-					displayType="unstyled"
-				>
-					<ClayPanel.Body>
-						<SingleSelect<LabelValueObject>
-							error={errors.titleObjectFieldId}
-							label={Liferay.Language.get('scope')}
-							onChange={({value}) => {
-								setValues({
-									panelCategoryKey: '',
-									scope: value,
-								});
-								setSelectedPanelCategoryKey('');
-							}}
-							options={SCOPE_OPTIONS}
-							value={
-								SCOPE_OPTIONS.find(
-									(scopeOption) =>
-										scopeOption.value === values.scope
-								)?.label
-							}
-						/>
-
-						<AutoComplete
-							emptyStateMessage={Liferay.Language.get(
-								'no-options-were-found'
-							)}
-							error={errors.titleObjectFieldId}
-							items={filteredPanelCaretogyKey}
-							label={Liferay.Language.get('panelCategoryKey')}
-							onChangeQuery={setPanelCategoryKeyQuery}
-							onSelectItem={({key, value}: KeyValuePair) => {
-								setValues({
-									panelCategoryKey: key,
-								});
-
-								setSelectedPanelCategoryKey(value);
-							}}
-							query={panelCategoryKeyQuery}
-							value={selectedPanelCategoryKey}
-						>
-							{({value}) => (
-								<div className="d-flex justify-content-between">
-									<div>{value}</div>
-								</div>
-							)}
-						</AutoComplete>
-					</ClayPanel.Body>
-				</ClayPanel>
-
-				<ClayPanel
-					collapsable
-					defaultExpanded
-					displayTitle={Liferay.Language.get('account-restriction')}
-					displayType="unstyled"
-				>
-					<ClayPanel.Body>
-						<ClayToggle
-							disabled={!accountRelationshipFields.length}
-							label={Liferay.Language.get('inactive')}
-							name="accountEntryRestricted"
-							onToggle={() =>
-								setValues({
-									accountEntryRestricted: !values.accountEntryRestricted,
-								})
-							}
-							toggled={values.accountEntryRestricted}
-						/>
-
-						<SingleSelect
-							disabled={
-								!accountRelationshipFields.length &&
-								!values.accountEntryRestricted
-							}
-							label={Liferay.Language.get(
-								'Account Restricted Field'
-							)}
-							onChange={({label, value}) => {
-								setSelectedAccountRelationshipFields(label);
-
-								setValues({
-									accountEntryRestrictedObjectFieldId: value,
-								});
-							}}
-							options={accountRelationshipFields}
-							value={selectedAccountRelationshipFields}
-						/>
-					</ClayPanel.Body>
-				</ClayPanel>
-
-				<ClayPanel
-					collapsable
-					defaultExpanded
-					displayTitle={Liferay.Language.get('configuration')}
-					displayType="unstyled"
-				>
-					<ClayPanel.Body>
-						<div className="lfr-objects__object-definition-details-configuration">
-							<ClayToggle
-								label={Liferay.Language.get('show-widget')}
-								name="showWidget"
-								onToggle={() =>
-									setValues({portlet: !values.portlet})
-								}
-								toggled={values.portlet}
+			<div className="lfr-objects__object-definition-details">
+				<Sheet title={Liferay.Language.get('basic-information')}>
+					<ClayPanel
+						displayTitle={Liferay.Language.get(
+							'object-definition-data'
+						)}
+						displayType="unstyled"
+					>
+						<ClayPanel.Body>
+							<Input
+								error={errors.name}
+								label={Liferay.Language.get('name')}
+								name="name"
+								onChange={handleChange}
+								required
+								value={values.name}
 							/>
 
-							<ClayToggle
+							<InputLocalized
+								error={errors.label}
+								label={Liferay.Language.get('label')}
+								onChange={(label) => setValues({label})}
+								required
+								translations={
+									values.label as LocalizedValue<string>
+								}
+							/>
+
+							<InputLocalized
+								error={errors.pluralLabel}
+								label={Liferay.Language.get('plural-label')}
+								onChange={(pluralLabel) =>
+									setValues({pluralLabel})
+								}
+								required
+								translations={
+									values.pluralLabel as LocalizedValue<string>
+								}
+							/>
+
+							<Input
+								disabled
 								label={Liferay.Language.get(
-									'enable-categorization'
+									'object-definition-table-name'
 								)}
-								name="enableCategorization"
-								onToggle={() =>
-									setValues({
-										enableCategorization: !values.enableCategorization,
-									})
-								}
-								toggled={values.enableCategorization}
+								name="name"
+								required
+								value={DBTableName}
 							/>
 
 							<ClayToggle
-								label={Liferay.Language.get('enable-comments')}
-								name="enableComments"
+								label={Liferay.Language.get('active')}
+								name="active"
 								onToggle={() =>
-									setValues({
-										enableComments: !values.enableComments,
-									})
+									setValues({active: !values.active})
 								}
-								toggled={values.enableComments}
+								toggled={values.active}
 							/>
+						</ClayPanel.Body>
+					</ClayPanel>
 
-							<ClayToggle
+					<ClayPanel
+						collapsable
+						defaultExpanded
+						displayTitle={Liferay.Language.get('entry-display')}
+						displayType="unstyled"
+					>
+						<ClayPanel.Body>
+							<SingleSelect<{label: string; name: string}>
+								error={errors.titleObjectFieldId}
 								label={Liferay.Language.get(
-									'enable-entry-history'
+									'title-object-field-id'
 								)}
-								name="enableEntryHistory"
+								onChange={(target: {
+									label: string;
+									name: string;
+								}) => {
+									const field = objectFields.find(
+										({name}) => name === target.name
+									);
+
+									setSelectedObjectField(field);
+
+									setValues({
+										titleObjectFieldId: field?.id,
+										titleObjectFieldName: field?.name,
+									});
+								}}
+								options={titleFieldOptions}
+								value={
+									selectedObjectField?.label[
+										defaultLanguageId
+									]
+								}
+							/>
+						</ClayPanel.Body>
+					</ClayPanel>
+
+					<ClayPanel
+						collapsable
+						defaultExpanded
+						displayTitle={Liferay.Language.get('scope')}
+						displayType="unstyled"
+					>
+						<ClayPanel.Body>
+							<SingleSelect<LabelValueObject>
+								error={errors.titleObjectFieldId}
+								label={Liferay.Language.get('scope')}
+								onChange={({value}) => {
+									setValues({
+										panelCategoryKey: '',
+										scope: value,
+									});
+									setSelectedPanelCategoryKey('');
+								}}
+								options={SCOPE_OPTIONS}
+								value={
+									SCOPE_OPTIONS.find(
+										(scopeOption) =>
+											scopeOption.value === values.scope
+									)?.label
+								}
+							/>
+
+							<AutoComplete
+								emptyStateMessage={Liferay.Language.get(
+									'no-options-were-found'
+								)}
+								error={errors.titleObjectFieldId}
+								items={filteredPanelCaretogyKey}
+								label={Liferay.Language.get('panelCategoryKey')}
+								onChangeQuery={setPanelCategoryKeyQuery}
+								onSelectItem={({key, value}: KeyValuePair) => {
+									setValues({
+										panelCategoryKey: key,
+									});
+
+									setSelectedPanelCategoryKey(value);
+								}}
+								query={panelCategoryKeyQuery}
+								value={selectedPanelCategoryKey}
+							>
+								{({value}) => (
+									<div className="d-flex justify-content-between">
+										<div>{value}</div>
+									</div>
+								)}
+							</AutoComplete>
+						</ClayPanel.Body>
+					</ClayPanel>
+
+					<ClayPanel
+						collapsable
+						defaultExpanded
+						displayTitle={Liferay.Language.get(
+							'account-restriction'
+						)}
+						displayType="unstyled"
+					>
+						<ClayPanel.Body>
+							<ClayToggle
+								disabled={!accountRelationshipFields.length}
+								label={Liferay.Language.get('inactive')}
+								name="accountEntryRestricted"
 								onToggle={() =>
 									setValues({
-										enableObjectEntryHistory: !values.enableObjectEntryHistory,
+										accountEntryRestricted: !values.accountEntryRestricted,
 									})
 								}
-								toggled={values.enableObjectEntryHistory}
+								toggled={values.accountEntryRestricted}
 							/>
-						</div>
-					</ClayPanel.Body>
-				</ClayPanel>
-			</Sheet>
-		</div>
+
+							<SingleSelect
+								disabled={
+									!accountRelationshipFields.length &&
+									!values.accountEntryRestricted
+								}
+								label={Liferay.Language.get(
+									'Account Restricted Field'
+								)}
+								onChange={({label, value}) => {
+									setSelectedAccountRelationshipFields(label);
+
+									setValues({
+										accountEntryRestrictedObjectFieldId: value,
+									});
+								}}
+								options={accountRelationshipFields}
+								value={selectedAccountRelationshipFields}
+							/>
+						</ClayPanel.Body>
+					</ClayPanel>
+
+					<ClayPanel
+						collapsable
+						defaultExpanded
+						displayTitle={Liferay.Language.get('configuration')}
+						displayType="unstyled"
+					>
+						<ClayPanel.Body>
+							<div className="lfr-objects__object-definition-details-configuration">
+								<ClayToggle
+									label={Liferay.Language.get('show-widget')}
+									name="showWidget"
+									onToggle={() =>
+										setValues({portlet: !values.portlet})
+									}
+									toggled={values.portlet}
+								/>
+
+								<ClayToggle
+									label={Liferay.Language.get(
+										'enable-categorization'
+									)}
+									name="enableCategorization"
+									onToggle={() =>
+										setValues({
+											enableCategorization: !values.enableCategorization,
+										})
+									}
+									toggled={values.enableCategorization}
+								/>
+
+								<ClayToggle
+									label={Liferay.Language.get(
+										'enable-comments'
+									)}
+									name="enableComments"
+									onToggle={() =>
+										setValues({
+											enableComments: !values.enableComments,
+										})
+									}
+									toggled={values.enableComments}
+								/>
+
+								<ClayToggle
+									label={Liferay.Language.get(
+										'enable-entry-history'
+									)}
+									name="enableEntryHistory"
+									onToggle={() =>
+										setValues({
+											enableObjectEntryHistory: !values.enableObjectEntryHistory,
+										})
+									}
+									toggled={values.enableObjectEntryHistory}
+								/>
+							</div>
+						</ClayPanel.Body>
+					</ClayPanel>
+				</Sheet>
+			</div>
+		</>
 	);
 }

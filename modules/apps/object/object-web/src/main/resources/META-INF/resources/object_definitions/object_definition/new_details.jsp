@@ -40,9 +40,19 @@ renderResponse.setTitle(LanguageUtil.format(request, "edit-x", objectDefinition.
 			HashMapBuilder.<String, Object>put(
 				"accountEntryRelationshipObjectFields", accountEntryRelationshipObjectFields
 			).put(
+				"backURL", ParamUtil.getString(request, "backURL", String.valueOf(renderResponse.createRenderURL()))
+			).put(
 				"companyKeyValuePair", objectDefinitionsDetailsDisplayContext.getKeyValuePairs("company")
 			).put(
 				"DBTableName", objectDefinition.getExtensionDBTableName()
+			).put(
+				"externalReferenceCode", objectDefinition.getExternalReferenceCode()
+			).put(
+				"hasPublishObjectPermission", objectDefinitionsDetailsDisplayContext.hasPublishObjectPermission()
+			).put(
+				"hasUpdateObjectDefinitionPermission", objectDefinitionsDetailsDisplayContext.hasUpdateObjectDefinitionPermission()
+			).put(
+				"isApproved", objectDefinition.isApproved()
 			).put(
 				"label", LocalizationUtil.getLocalizationMap(objectDefinition.getLabel())
 			).put(
@@ -57,6 +67,8 @@ renderResponse.setTitle(LanguageUtil.format(request, "edit-x", objectDefinition.
 				"panelCategoryKey", objectDefinition.getPanelCategoryKey()
 			).put(
 				"pluralLabel", LocalizationUtil.getLocalizationMap(objectDefinition.getPluralLabel())
+			).put(
+				"portletNamespace", liferayPortletResponse.getNamespace()
 			).put(
 				"shortName", objectDefinition.getShortName()
 			).put(

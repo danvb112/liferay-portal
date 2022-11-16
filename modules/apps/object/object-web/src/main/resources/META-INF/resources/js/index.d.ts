@@ -113,6 +113,7 @@ interface ObjectDefinition {
 	enableCategorization: boolean;
 	enableComments: boolean;
 	enableObjectEntryHistory: boolean;
+	externalReferenceCode: string;
 	id: number;
 	label: LocalizedValue<string>;
 	name: string;

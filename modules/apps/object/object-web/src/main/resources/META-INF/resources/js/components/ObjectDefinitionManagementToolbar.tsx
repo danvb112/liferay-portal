@@ -18,11 +18,26 @@ import ClayManagementToolbar from '@clayui/management-toolbar';
 import {useModal} from '@clayui/modal';
 import classNames from 'classnames';
 import {navigate} from 'frontend-js-web';
-import React, {useState} from 'react';
+import React, {useState, FormEventHandler} from 'react';
 
 import ModalEditExternalReferenceCode from './ModalEditExternalReferenceCode';
 
-export default function ManagementToolbar({
+interface ObjectDefinitionManagementToolbarProps {
+	backURL: string;
+	externalReferenceCode: string;
+	hasPublishObjectPermission: boolean;
+	hasUpdateObjectDefinitionPermission: boolean;
+	isApproved: boolean;
+	label: string;
+	objectDefinitionId: number;
+	portletNamespace: string;
+	screenNavigationCategoryKey: string;
+	system: boolean;
+	setValues: (values: Partial<ObjectDefinition>) => void;
+}
+
+
+export default function ObjectDefinitionManagementToolbar({
 	backURL,
 	externalReferenceCode: initialExternalReferenceCode,
 	hasPublishObjectPermission,
@@ -33,10 +48,12 @@ export default function ManagementToolbar({
 	portletNamespace,
 	screenNavigationCategoryKey,
 	system,
-}: IProps) {
+	setValues,
+}: ObjectDefinitionManagementToolbarProps) {
 	const [externalReferenceCode, setExternalReferenceCode] = useState<string>(
 		initialExternalReferenceCode
 	);
+
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 
 	const {observer, onClose} = useModal({
@@ -44,20 +61,7 @@ export default function ManagementToolbar({
 	});
 
 	const submitObjectDefinition = (draft: boolean) => {
-		const form = document.getElementById(`${portletNamespace}fm`);
-
-		if (!draft) {
-			form?.querySelector(`#${portletNamespace}cmd`)?.setAttribute(
-				'value',
-				'publish'
-			);
-		}
-
-		form?.querySelector(
-			`#${portletNamespace}externalReferenceCode`
-		)?.setAttribute('value', externalReferenceCode);
-
-		(form as HTMLFormElement)?.submit();
+		
 	};
 
 	return (
@@ -111,6 +115,7 @@ export default function ManagementToolbar({
 							<ClayButton
 								className="ml-3 p-0 text-secondary"
 								displayType="unstyled"
+								type='submit'
 								onClick={() => setVisibleModal(true)}
 							>
 								<ClayIcon symbol="pencil" />
@@ -170,17 +175,4 @@ export default function ManagementToolbar({
 			)}
 		</>
 	);
-}
-
-interface IProps {
-	backURL: string;
-	externalReferenceCode: string;
-	hasPublishObjectPermission: boolean;
-	hasUpdateObjectDefinitionPermission: boolean;
-	isApproved: boolean;
-	label: string;
-	objectDefinitionId: number;
-	portletNamespace: string;
-	screenNavigationCategoryKey: string;
-	system: boolean;
 }
