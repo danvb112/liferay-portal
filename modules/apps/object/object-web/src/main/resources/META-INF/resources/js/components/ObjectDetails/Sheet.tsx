@@ -12,10 +12,29 @@
  * details.
  */
 
-export const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
+import React from 'react';
 
-export const HEADERS = new Headers({
-	'Accept': 'application/json',
-	'Accept-Language': Liferay.ThemeDisplay.getBCP47LanguageId(),
-	'Content-Type': 'application/json',
-});
+interface IProps {
+	children: React.ReactNode;
+	description?: String;
+	footer?: React.ReactNode;
+	title: String;
+}
+
+export default function Sheet({children, description, footer, title}: IProps) {
+	return (
+		<div className="sheet sheet-lg">
+			<div className="sheet-header">
+				<h2 className="sheet-title">{title}</h2>
+
+				<div className="sheet-text">{description}</div>
+			</div>
+
+			<div className="sheet-section">{children}</div>
+
+			<div className="sheet-footer sheet-footer-btn-block-sm-down">
+				{footer}
+			</div>
+		</div>
+	);
+}

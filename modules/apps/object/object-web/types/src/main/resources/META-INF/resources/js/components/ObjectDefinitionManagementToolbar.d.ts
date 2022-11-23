@@ -14,19 +14,7 @@
 
 /// <reference types="react" />
 
-export default function ManagementToolbar({
-	backURL,
-	externalReferenceCode: initialExternalReferenceCode,
-	hasPublishObjectPermission,
-	hasUpdateObjectDefinitionPermission,
-	isApproved,
-	label,
-	objectDefinitionId,
-	portletNamespace,
-	screenNavigationCategoryKey,
-	system,
-}: IProps): JSX.Element;
-interface IProps {
+interface ObjectDefinitionManagementToolbarProps {
 	backURL: string;
 	externalReferenceCode: string;
 	hasPublishObjectPermission: boolean;
@@ -38,4 +26,16 @@ interface IProps {
 	screenNavigationCategoryKey: string;
 	system: boolean;
 }
+export default function ObjectDefinitionManagementToolbar({
+	backURL,
+	externalReferenceCode: initialExternalReferenceCode,
+	hasPublishObjectPermission,
+	hasUpdateObjectDefinitionPermission,
+	isApproved,
+	label,
+	objectDefinitionId,
+	portletNamespace,
+	screenNavigationCategoryKey,
+	system,
+}: ObjectDefinitionManagementToolbarProps): JSX.Element;
 export {};
