@@ -220,6 +220,7 @@ type ObjectFieldSettingName =
 	| 'function'
 	| 'maxLength'
 	| 'maximumFileSize'
+	| 'objectDefinition1ShortName'
 	| 'objectFieldName'
 	| 'objectRelationshipName'
 	| 'output'
@@ -300,8 +301,8 @@ interface HTTPMethod {
 
 interface PredefinedValue {
 	inputAsValue: boolean;
-	name: string;
 	label: LocalizedValue<string>;
+	name: string;
 	value: string;
 }
 

@@ -63,7 +63,7 @@ export default function PredefinedValuesTable({
 			});
 		}
 
-		return predefinedValues.map(({inputAsValue, name, value, label}) => {
+		return predefinedValues.map(({inputAsValue, label, name, value}) => {
 			return {
 				inputAsValue: (
 					<div className="lfr-object-web__predefined-values-table-input-method">
@@ -107,21 +107,9 @@ export default function PredefinedValuesTable({
 					</div>
 				),
 
-				name: (
-					<div className="lfr-object-web__predefined-values-table-field">
-						{name}
-
-						{objectFieldsMap.get(name)?.required === true && (
-							<span className="lfr-object-web__predefined-values-table-reference-mark">
-								<ClayIcon symbol="asterisk" />
-							</span>
-						)}
-					</div>
-				),
-
 				label: (
 					<div className="lfr-object-web__predefined-values-table-field">
-						{label}
+						{label[defaultLanguageId]}
 
 						{objectFieldsMap.get(name)?.required === true && (
 							<span className="lfr-object-web__predefined-values-table-reference-mark">
@@ -240,8 +228,8 @@ export default function PredefinedValuesTable({
 			parentWindow.Liferay.fire('openModalAddColumns', {
 				disableRequired: true,
 				disableRequiredChecked,
-				getName: ({name}: ObjectField) => name,
 				getLabel: ({label}: ObjectField) => label[defaultLanguageId],
+				getName: ({name}: ObjectField) => name,
 				header: Liferay.Language.get('add-fields'),
 				items: currentObjectDefinitionFields,
 				onSave: (items: ObjectField[]) => {
@@ -261,8 +249,8 @@ export default function PredefinedValuesTable({
 							? value
 							: {
 									inputAsValue: false,
-									name,
 									label,
+									name,
 									value: '',
 							  };
 					});
@@ -337,17 +325,10 @@ export default function PredefinedValuesTable({
 								schema: {
 									fields: [
 										{
-											fieldName: 'name',
+											fieldName: 'label',
 											label: Liferay.Language.get(
 												'field'
 											),
-										},
-										{
-											expand: false,
-											fieldName: 'label',
-											label: Liferay.Language.get('field'),
-											localizeLabel: true,
-											sortable: false,
 										},
 										{
 											fieldName: 'inputAsValue',
@@ -387,7 +368,7 @@ interface IProps {
 
 interface Item {
 	inputAsValue: JSX.Element;
+	label: JSX.Element;
 	name: JSX.Element;
 	newValue: JSX.Element;
-	label: JSX.Element;
 }
