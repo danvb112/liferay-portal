@@ -29,6 +29,7 @@ function ModalAddColumns<T extends ModalItem>() {
 			disableRequired,
 			disableRequiredChecked,
 			getName,
+			getLabel,
 			header,
 			items,
 			onSave,
@@ -162,7 +163,7 @@ function ModalAddColumns<T extends ModalItem>() {
 								item.required &&
 								!disableRequiredChecked
 							}
-							label={getName?.(item)}
+							label={getLabel?.(item)}
 							onChange={() => {
 								toggleFieldCheckbox(item.id, !item.checked);
 							}}
@@ -215,7 +216,8 @@ interface ModalItem {
 interface IState<T extends ModalItem> {
 	disableRequired?: boolean;
 	disableRequiredChecked?: boolean;
-	getName?: (label: T) => string;
+	getName?: (name: T) => string;
+	getLabel?: (label: T) => string;
 	header?: string;
 	items: T[];
 	onSave?: (selected: T[]) => void;
