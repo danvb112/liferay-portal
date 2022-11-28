@@ -28,8 +28,8 @@ function ModalAddColumns<T extends ModalItem>() {
 		{
 			disableRequired,
 			disableRequiredChecked,
-			getName,
 			getLabel,
+			getName,
 			header,
 			items,
 			onSave,
@@ -216,8 +216,8 @@ interface ModalItem {
 interface IState<T extends ModalItem> {
 	disableRequired?: boolean;
 	disableRequiredChecked?: boolean;
-	getName?: (name: T) => string;
 	getLabel?: (label: T) => string;
+	getName?: (name: T) => string;
 	header?: string;
 	items: T[];
 	onSave?: (selected: T[]) => void;
