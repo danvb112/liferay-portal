@@ -737,8 +737,46 @@ paths:
                                 $ref: "#/components/schemas/ObjectDefinition"
             tags: ["ObjectDefinition"]
     "/object-definitions/by-external-reference-code/{objectDefinitionExternalReferenceCode}/object-relationships":
+        get:
+            operationId: getObjectDefinitionByExternalReferenceCodeObjectDefinitionExternalReferenceCodeObjectRelationshipsPage
+            parameters:
+                - in: path
+                  name: objectDefinitionExternalReferenceCode
+                  required: true
+                  schema:
+                      type: string
+                - in: query
+                  name: filter
+                  schema:
+                      type: string
+                - in: query
+                  name: page
+                  schema:
+                      type: integer
+                - in: query
+                  name: pageSize
+                  schema:
+                      type: integer
+                - in: query
+                  name: search
+                  schema:
+                      type: string
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/ObjectRelationship"
+                                type: array
+                        application/xml:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/ObjectRelationship"
+                                type: array
+            tags: ["ObjectRelationship"]
         post:
-            operationId: postObjectDefinitionObjectRelationship
+            operationId: postObjectDefinitionByExternalReferenceCodeObjectDefinitionExternalReferenceCodeObjectRelationship
             parameters:
                 - in: path
                   name: objectDefinitionExternalReferenceCode
