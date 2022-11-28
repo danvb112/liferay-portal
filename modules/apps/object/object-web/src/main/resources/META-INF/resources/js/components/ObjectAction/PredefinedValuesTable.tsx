@@ -32,6 +32,8 @@ import React, {useEffect, useMemo} from 'react';
 
 import './PredefinedValuesTable.scss';
 
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
+
 export default function PredefinedValuesTable({
 	currentObjectDefinitionFields,
 	disableRequiredChecked,
@@ -61,7 +63,7 @@ export default function PredefinedValuesTable({
 			});
 		}
 
-		return predefinedValues.map(({inputAsValue, name, value}) => {
+		return predefinedValues.map(({inputAsValue, name, value, label}) => {
 			return {
 				inputAsValue: (
 					<div className="lfr-object-web__predefined-values-table-input-method">
@@ -108,6 +110,18 @@ export default function PredefinedValuesTable({
 				name: (
 					<div className="lfr-object-web__predefined-values-table-field">
 						{name}
+
+						{objectFieldsMap.get(name)?.required === true && (
+							<span className="lfr-object-web__predefined-values-table-reference-mark">
+								<ClayIcon symbol="asterisk" />
+							</span>
+						)}
+					</div>
+				),
+
+				label: (
+					<div className="lfr-object-web__predefined-values-table-field">
+						{label}
 
 						{objectFieldsMap.get(name)?.required === true && (
 							<span className="lfr-object-web__predefined-values-table-reference-mark">
@@ -227,6 +241,7 @@ export default function PredefinedValuesTable({
 				disableRequired: true,
 				disableRequiredChecked,
 				getName: ({name}: ObjectField) => name,
+				getLabel: ({label}: ObjectField) => label[defaultLanguageId],
 				header: Liferay.Language.get('add-fields'),
 				items: currentObjectDefinitionFields,
 				onSave: (items: ObjectField[]) => {
@@ -239,7 +254,7 @@ export default function PredefinedValuesTable({
 						predefinedValuesMap.set(field.name, field);
 					});
 
-					const newPredefinedValues = items.map(({name}) => {
+					const newPredefinedValues = items.map(({label, name}) => {
 						const value = predefinedValuesMap.get(name);
 
 						return value
@@ -247,6 +262,7 @@ export default function PredefinedValuesTable({
 							: {
 									inputAsValue: false,
 									name,
+									label,
 									value: '',
 							  };
 					});
@@ -327,6 +343,13 @@ export default function PredefinedValuesTable({
 											),
 										},
 										{
+											expand: false,
+											fieldName: 'label',
+											label: Liferay.Language.get('field'),
+											localizeLabel: true,
+											sortable: false,
+										},
+										{
 											fieldName: 'inputAsValue',
 											label: Liferay.Language.get(
 												'input-method'
@@ -366,4 +389,5 @@ interface Item {
 	inputAsValue: JSX.Element;
 	name: JSX.Element;
 	newValue: JSX.Element;
+	label: JSX.Element;
 }
