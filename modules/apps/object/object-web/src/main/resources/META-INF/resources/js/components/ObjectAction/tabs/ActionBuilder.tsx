@@ -228,11 +228,27 @@ export default function ActionBuilder({
 		setValues({conditionExpression});
 	};
 
-	const isValidField = ({businessType, system}: ObjectField) =>
-		businessType !== 'Aggregation' &&
-		businessType !== 'Formula' &&
-		businessType !== 'Relationship' &&
-		!system;
+	const isValidField = ({
+		businessType,
+		objectFieldSettings,
+		system,
+	}: ObjectField) => {
+		const userRelationship = !!objectFieldSettings?.find(
+			({name, value}) =>
+				name === 'objectDefinition1ShortName' && value === 'User'
+		);
+
+		if (businessType === 'Relationship' && userRelationship) {
+			return true;
+		}
+
+		return (
+			businessType !== 'Aggregation' &&
+			businessType !== 'Formula' &&
+			businessType !== 'Relationship' &&
+			!system
+		);
+	};
 
 	const fetchObjectDefinitionFields = async () => {
 		let validFields: ObjectField[] = [];
@@ -262,7 +278,7 @@ export default function ActionBuilder({
 
 		const newPredefinedValues: PredefinedValue[] = [];
 
-		validFields.forEach(({name, required}) => {
+		validFields.forEach(({label, name, required}) => {
 			if (predefinedValuesMap.has(name)) {
 				const field = predefinedValuesMap.get(name);
 
@@ -274,6 +290,7 @@ export default function ActionBuilder({
 			) {
 				newPredefinedValues.push({
 					inputAsValue: false,
+					label,
 					name,
 					value: '',
 				});
@@ -313,6 +330,7 @@ export default function ActionBuilder({
 				) {
 					(parameters.predefinedValues as PredefinedValue[]).push({
 						inputAsValue: false,
+						label: field.label,
 						name: field.name,
 						value: '',
 					});

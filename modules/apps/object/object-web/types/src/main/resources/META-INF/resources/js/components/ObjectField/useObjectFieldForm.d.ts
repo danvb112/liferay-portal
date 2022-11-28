@@ -12,8 +12,6 @@
  * details.
  */
 
-/// <reference types="react" />
-
 interface IUseObjectFieldForm {
 	forbiddenChars?: string[];
 	forbiddenLastChars?: string[];
@@ -36,6 +34,7 @@ export declare function useObjectFieldForm({
 			filters: unknown;
 			maxLength: unknown;
 			maximumFileSize: unknown;
+			objectDefinition1ShortName: unknown;
 			objectFieldName: unknown;
 			objectRelationshipName: unknown;
 			output: unknown;
