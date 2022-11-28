@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +72,14 @@ public class ObjectCodeEditorUtil {
 						"label", objectField.getLabel(locale)
 					).build()),
 				"fields", locale));
+
+		codeEditorElements.add(_createCodeEditorElement(Collections.singletonList(HashMapBuilder.put(
+			"content", "currentUserId"
+		).put(
+			"helpText", StringPool.BLANK
+		).put(
+			"label", LanguageUtil.get(locale, "current-user")
+		).build()) ,"general-variables", locale));
 
 		if (includeDDMExpressionBuilderElements) {
 			Collections.addAll(
