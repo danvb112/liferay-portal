@@ -18,6 +18,8 @@
 
 <%
 ObjectDefinitionsActionsDisplayContext objectDefinitionsActionsDisplayContext = (ObjectDefinitionsActionsDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
+
+ObjectDefinition objectDefinition = objectDefinitionsActionsDisplayContext.getObjectDefinition();
 %>
 
 <liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" id="/object_definitions/get_object_definitions_relations" varImpl="objectDefinitionsRelationshipsURL">
@@ -35,6 +37,8 @@ ObjectDefinitionsActionsDisplayContext objectDefinitionsActionsDisplayContext = 
 			"objectActionExecutors", objectDefinitionsActionsDisplayContext.getObjectActionExecutorsJSONArray()
 		).put(
 			"objectActionTriggers", objectDefinitionsActionsDisplayContext.getObjectActionTriggersJSONArray()
+		).put(
+			"objectDefinitionExternalReferenceCode", objectDefinition.getExternalReferenceCode()
 		).put(
 			"objectDefinitionId", objectDefinitionsActionsDisplayContext.getObjectDefinitionId()
 		).put(

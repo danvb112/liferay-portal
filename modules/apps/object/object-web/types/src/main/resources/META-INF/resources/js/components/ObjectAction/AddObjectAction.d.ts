@@ -20,6 +20,7 @@ export default function AddObjectAction({
 	objectActionCodeEditorElements,
 	objectActionExecutors,
 	objectActionTriggers,
+	objectDefinitionExternalReferenceCode,
 	objectDefinitionId,
 	objectDefinitionsRelationshipsURL,
 	validateExpressionURL,
@@ -29,6 +30,7 @@ interface IProps {
 	objectActionCodeEditorElements: SidebarCategory[];
 	objectActionExecutors: CustomItem[];
 	objectActionTriggers: CustomItem[];
+	objectDefinitionExternalReferenceCode: string;
 	objectDefinitionId: number;
 	objectDefinitionsRelationshipsURL: string;
 	validateExpressionURL: string;

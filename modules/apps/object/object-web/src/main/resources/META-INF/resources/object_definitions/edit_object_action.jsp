@@ -37,6 +37,8 @@ ObjectDefinition objectDefinition = objectDefinitionsActionsDisplayContext.getOb
 		).put(
 			"objectActionTriggers", objectDefinitionsActionsDisplayContext.getObjectActionTriggersJSONArray()
 		).put(
+			"objectDefinitionExternalReferenceCode", objectDefinition.getExternalReferenceCode()
+		).put(
 			"objectDefinitionsRelationshipsURL", objectDefinitionsActionsDisplayContext.getObjectDefinitionsRelationshipsURL()
 		).put(
 			"readOnly", !objectDefinitionsActionsDisplayContext.hasUpdateObjectDefinitionPermission()
