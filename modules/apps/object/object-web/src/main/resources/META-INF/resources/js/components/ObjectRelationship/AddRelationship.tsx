@@ -31,9 +31,8 @@ import SelectRelationship from './SelectRelationship';
 const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
 function ModalAddObjectRelationship({
-	apiURL,
 	ffOneToOneRelationshipConfigurationEnabled,
-	objectDefinitionId,
+	objectDefinitionExternalReferenceCode,
 	observer,
 	onClose,
 	parameterRequired,
@@ -41,13 +40,13 @@ function ModalAddObjectRelationship({
 	const [error, setError] = useState<string>('');
 
 	const initialValues: Partial<ObjectRelationship> = {
-		objectDefinitionId1: Number(objectDefinitionId),
+		objectDefinitionExternalReferenceCode1: objectDefinitionExternalReferenceCode,
 	};
 
 	const onSubmit = async ({label, name, ...others}: ObjectRelationship) => {
 		try {
 			await API.save(
-				apiURL,
+				`/o/object-admin/v1.0/object-definitions/by-external-reference-code/${objectDefinitionExternalReferenceCode}/object-relationships`,
 				{
 					...others,
 					label,
@@ -115,11 +114,13 @@ function ModalAddObjectRelationship({
 						values.type === ObjectRelationshipType.ONE_TO_MANY && (
 							<SelectRelationship
 								error={errors.parameterObjectFieldId}
-								objectDefinitionId={values.objectDefinitionId2}
-								onChange={(parameterObjectFieldId) =>
-									setValues({parameterObjectFieldId})
+								objectDefinitionExternalReferenceCode={
+									values.objectDefinitionExternalReferenceCode2 as string
 								}
-								value={values.parameterObjectFieldId}
+								onChange={(parameterObjectFieldName) =>
+									setValues({parameterObjectFieldName})
+								}
+								value={values.parameterObjectFieldName}
 							/>
 						)}
 				</ClayModal.Body>
@@ -146,9 +147,8 @@ function ModalAddObjectRelationship({
 }
 
 export default function AddRelationship({
-	apiURL,
 	ffOneToOneRelationshipConfigurationEnabled,
-	objectDefinitionId,
+	objectDefinitionExternalReferenceCode,
 	parameterRequired,
 }: IProps) {
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
@@ -168,11 +168,12 @@ export default function AddRelationship({
 		<ClayModalProvider>
 			{visibleModal && (
 				<ModalAddObjectRelationship
-					apiURL={apiURL}
 					ffOneToOneRelationshipConfigurationEnabled={
 						ffOneToOneRelationshipConfigurationEnabled
 					}
-					objectDefinitionId={objectDefinitionId}
+					objectDefinitionExternalReferenceCode={
+						objectDefinitionExternalReferenceCode
+					}
 					observer={observer}
 					onClose={onClose}
 					parameterRequired={parameterRequired}
@@ -183,9 +184,8 @@ export default function AddRelationship({
 }
 
 interface IProps {
-	apiURL: string;
 	ffOneToOneRelationshipConfigurationEnabled: boolean;
-	objectDefinitionId: number;
+	objectDefinitionExternalReferenceCode: string;
 	observer: Observer;
 	onClose: () => void;
 	parameterRequired: boolean;
