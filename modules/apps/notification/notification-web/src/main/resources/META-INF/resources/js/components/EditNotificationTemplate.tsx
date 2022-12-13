@@ -23,17 +23,12 @@ import {
 import {fetch} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
-import {defaultLanguageId} from '../util/constants';
+import {HEADERS, defaultLanguageId} from '../util/constants';
 
 import './EditNotificationTemplate.scss';
 import {BasicInfoContainer} from './BasicInfoContainer/BasicInfoContainer';
 import ContentContainer from './ContentContainer/ContentContainer';
 import {SettingsContainer} from './SettingsContainer/SettingsContainer';
-
-const HEADERS = new Headers({
-	'Accept': 'application/json',
-	'Content-Type': 'application/json',
-});
 
 export type NotificationTemplateError = {
 	bcc?: string;

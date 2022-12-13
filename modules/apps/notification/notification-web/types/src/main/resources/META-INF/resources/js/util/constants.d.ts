@@ -13,3 +13,4 @@
  */
 
 export declare const defaultLanguageId: Liferay.Language.Locale;
+export declare const HEADERS: Headers;

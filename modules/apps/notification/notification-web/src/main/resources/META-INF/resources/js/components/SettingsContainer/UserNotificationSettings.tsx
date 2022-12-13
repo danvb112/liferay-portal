@@ -18,6 +18,8 @@ import {Input, SingleSelect} from '@liferay/object-js-components-web';
 import {fetch} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
+import {HEADERS} from '../../util/constants';
+
 interface Role {
 	description: string;
 	id: number;
@@ -36,11 +38,6 @@ interface UserNotificationSettingsProps {
 	setValues: (values: Partial<NotificationTemplate>) => void;
 	values: NotificationTemplate;
 }
-
-const HEADERS = new Headers({
-	'Accept': 'application/json',
-	'Content-Type': 'application/json',
-});
 
 const RECIPIENT_OPTIONS = [
 	{
