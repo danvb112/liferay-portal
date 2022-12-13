@@ -15,6 +15,7 @@
 import ClayForm from '@clayui/form';
 import {
 	API,
+	FormError,
 	ManagementToolbar,
 	openToast,
 	useForm,
@@ -68,6 +69,10 @@ export default function EditNotificationTemplate({
 }: IProps) {
 	notificationTemplateId = Number(notificationTemplateId);
 
+	const [errors, setErrors] = useState<
+		FormError<NotificationTemplate & NotificationTemplateError>
+	>({});
+
 	const [selectedLocale, setSelectedLocale] = useState<Locale>(
 		Liferay.ThemeDisplay.getDefaultLanguageId
 	);
@@ -99,6 +104,14 @@ export default function EditNotificationTemplate({
 	};
 
 	const onSubmit = async (notification: NotificationTemplate) => {
+		const currentErrors = validate(notification);
+
+		if (Object.keys(currentErrors).length) {
+			return setErrors(currentErrors);
+		}
+
+		setErrors({});
+
 		const response = await fetch(
 			notificationTemplateId !== 0
 				? `/o/notification/v1.0/notification-templates/${notificationTemplateId}`
@@ -180,7 +193,7 @@ export default function EditNotificationTemplate({
 		type: notificationTemplateType,
 	};
 
-	const {errors, setValues, values} = useForm({
+	const {setValues, values} = useForm({
 		initialValues,
 		onSubmit,
 		validate,
