@@ -50,6 +50,7 @@ interface IProps {
 	filterTypeRequired?: boolean;
 	header: string;
 	objectFields: ObjectField[];
+	objectDefinitionDefaultLanguageId?: Locale;
 	observer: Observer;
 	onClose: () => void;
 	onSave: (
@@ -136,6 +137,7 @@ export function ModalAddFilter({
 	onSave,
 	validate,
 	workflowStatusJSONArray,
+	objectDefinitionDefaultLanguageId,
 }: IProps) {
 	const [items, setItems] = useState<IItem[]>([]);
 
@@ -155,7 +157,7 @@ export function ModalAddFilter({
 	const [filterEndDate, setFilterEndDate] = useState('');
 
 	const filteredAvailableFields = useMemo(() => {
-		return filterArrayByQuery(objectFields, 'label', query);
+		return filterArrayByQuery(objectFields, 'label', query, objectDefinitionDefaultLanguageId);
 	}, [objectFields, query]);
 
 	const setEditingFilterType = () => {
@@ -475,11 +477,11 @@ export function ModalAddFilter({
 						}}
 						query={query}
 						required
-						value={selectedFilterBy?.label[defaultLanguageId]}
+						value={selectedFilterBy?.label[defaultLanguageId] ?? selectedFilterBy?.label[objectDefinitionDefaultLanguageId as Locale]}
 					>
 						{({label}) => (
 							<div className="d-flex justify-content-between">
-								<div>{label[defaultLanguageId]}</div>
+								<div>{label[defaultLanguageId] ?? label[objectDefinitionDefaultLanguageId as Locale]}</div>
 							</div>
 						)}
 					</AutoComplete>

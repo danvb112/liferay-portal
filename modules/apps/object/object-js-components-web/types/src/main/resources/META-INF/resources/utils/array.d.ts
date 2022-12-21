@@ -18,5 +18,6 @@
 export declare function filterArrayByQuery<T>(
 	array: T[] | any[],
 	str: string,
-	query: string
+	query: string,
+	locale?: Locale
 ): any[];

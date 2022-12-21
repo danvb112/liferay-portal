@@ -23,7 +23,8 @@ const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 export function filterArrayByQuery<T>(
 	array: T[] | any[],
 	str: string,
-	query: string
+	query: string,
+	locale?: Locale
 ) {
 	return array.filter((item) => {
 		if (str === 'label') {
@@ -33,7 +34,7 @@ export function filterArrayByQuery<T>(
 
 			const localizedLabels = localizedValue as LocalizedValue<string>;
 
-			let label = localizedLabels[defaultLanguageId] as string;
+			let label = localizedLabels[defaultLanguageId] ?? localizedLabels[locale as Locale];
 
 			if (!label) {
 				label = localizedLabels[

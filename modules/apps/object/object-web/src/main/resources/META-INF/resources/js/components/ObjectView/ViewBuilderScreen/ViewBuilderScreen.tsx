@@ -33,6 +33,7 @@ const ViewBuilderScreen: React.FC<{}> = () => {
 		{
 			objectFields,
 			objectView: {objectViewColumns},
+			objectDefinitionDefaultLanguageId,
 		},
 		dispatch,
 	] = useViewContext();
@@ -49,7 +50,7 @@ const ViewBuilderScreen: React.FC<{}> = () => {
 		const parentWindow = Liferay.Util.getOpener();
 
 		parentWindow.Liferay.fire('openModalAddColumns', {
-			getName: ({label}: ObjectField) => label[defaultLanguageId],
+			getName: ({label}: ObjectField) => label[defaultLanguageId] ?? label[objectDefinitionDefaultLanguageId as Locale],
 			header: Liferay.Language.get('add-columns'),
 			items: objectFields,
 			onSave: (selectedObjectFields: ObjectField[]) =>

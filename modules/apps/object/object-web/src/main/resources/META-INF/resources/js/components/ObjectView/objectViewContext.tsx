@@ -58,6 +58,7 @@ export enum TYPES {
 const initialState = {
 	objectFields: [] as ObjectField[],
 	objectView: {} as TObjectView,
+	objectDefinitionDefaultLanguageId: ''
 } as TState;
 
 const handleChangeColumnOrder = (
@@ -90,6 +91,8 @@ export type TAction =
 			payload: {
 				objectFields: ObjectField[];
 				objectView: TObjectView;
+				objectDefinitionDefaultLanguageId: string;
+			
 			};
 			type: TYPES.ADD_OBJECT_VIEW;
 	  }
@@ -184,7 +187,7 @@ export type TAction =
 const viewReducer = (state: TState, action: TAction) => {
 	switch (action.type) {
 		case TYPES.ADD_OBJECT_VIEW: {
-			const {objectFields, objectView} = action.payload;
+			const {objectFields, objectView, objectDefinitionDefaultLanguageId} = action.payload;
 
 			const {
 				objectViewColumns,
@@ -334,6 +337,7 @@ const viewReducer = (state: TState, action: TAction) => {
 				...state,
 				objectFields: newObjectFields,
 				objectView: newObjectView,
+				objectDefinitionDefaultLanguageId,
 			};
 		}
 		case TYPES.ADD_OBJECT_VIEW_COLUMN: {

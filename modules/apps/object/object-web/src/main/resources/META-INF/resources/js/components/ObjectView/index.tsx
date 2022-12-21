@@ -79,6 +79,8 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 				objectDefinitionExternalReferenceCode
 			);
 
+			const {defaultLanguageId} = await API.getObjectDefinitionByExternalReferenceCode(objectDefinitionExternalReferenceCode)
+
 			const objectView = {
 				defaultObjectView,
 				name,
@@ -92,6 +94,7 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 				payload: {
 					objectFields,
 					objectView,
+					objectDefinitionDefaultLanguageId: defaultLanguageId
 				},
 				type: TYPES.ADD_OBJECT_VIEW,
 			});

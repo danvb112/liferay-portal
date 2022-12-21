@@ -32,6 +32,7 @@ export declare function BuilderScreen({
 	secondColumnHeader,
 	thirdColumnHeader,
 	title,
+	objectDefinitionDefaultLanguageId,
 }: IProps): JSX.Element;
 declare type TLabelValueObject = {
 	label: string;
@@ -63,6 +64,7 @@ interface IProps {
 	firstColumnHeader: string;
 	hasDragAndDrop?: boolean;
 	objectColumns: TBuilderScreenColumn[];
+	objectDefinitionDefaultLanguageId?: string;
 	onChangeColumnOrder?: (draggedIndex: number, targetIndex: number) => void;
 	onDeleteColumn: (objectFieldName: string) => void;
 	onEditing?: (boolean: boolean) => void;

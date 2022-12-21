@@ -69,6 +69,7 @@ export declare type TObjectView = {
 export declare type TState = {
 	filterOperators: TFilterOperators;
 	isViewOnly: boolean;
+	objectDefinitionDefaultLanguageId: string;
 	objectDefinitionExternalReferenceCode: string;
 	objectFields: ObjectField[];
 	objectView: TObjectView;

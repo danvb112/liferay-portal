@@ -47,11 +47,18 @@ export function BuilderScreen({
 	secondColumnHeader,
 	thirdColumnHeader,
 	title,
+	objectDefinitionDefaultLanguageId,
 }: IProps) {
 	const [query, setQuery] = useState('');
 
+	console.log(objectDefinitionDefaultLanguageId);
+
 	const filteredItems = useMemo(() => {
-		return filterArrayByQuery(objectColumns, 'fieldLabel', query);
+		if(objectDefinitionDefaultLanguageId) {
+
+			return filterArrayByQuery(objectColumns, 'fieldLabel', query, objectDefinitionDefaultLanguageId as Locale);
+		}
+		return [];
 	}, [objectColumns, query]);
 
 	const tableItems = query ? filteredItems : objectColumns;
@@ -221,6 +228,7 @@ interface IProps {
 	firstColumnHeader: string;
 	hasDragAndDrop?: boolean;
 	objectColumns: TBuilderScreenColumn[];
+	objectDefinitionDefaultLanguageId?: string;
 	onChangeColumnOrder?: (draggedIndex: number, targetIndex: number) => void;
 	onDeleteColumn: (objectFieldName: string) => void;
 	onEditing?: (boolean: boolean) => void;

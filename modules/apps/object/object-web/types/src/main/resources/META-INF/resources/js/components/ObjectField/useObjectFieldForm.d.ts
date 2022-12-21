@@ -31,18 +31,18 @@ export declare function useObjectFieldForm({
 	errors: import('@liferay/object-js-components-web').FormError<
 		ObjectField & {
 			function: unknown;
+			output: unknown;
+			script: unknown;
+			filters: unknown;
 			acceptedFileExtensions: unknown;
 			fileSource: unknown;
-			filters: unknown;
 			maxLength: unknown;
 			maximumFileSize: unknown;
 			objectDefinition1ShortName: unknown;
 			objectFieldName: unknown;
 			objectRelationshipName: unknown;
-			output: unknown;
 			readOnly: unknown;
 			readOnlyScript: unknown;
-			script: unknown;
 			showCounter: unknown;
 			showFilesInDocumentsAndMedia: unknown;
 			stateFlow: unknown;

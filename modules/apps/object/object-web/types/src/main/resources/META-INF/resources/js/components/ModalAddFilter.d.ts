@@ -26,6 +26,7 @@ interface IProps {
 	filterTypeRequired?: boolean;
 	header: string;
 	objectFields: ObjectField[];
+	objectDefinitionDefaultLanguageId?: Locale;
 	observer: Observer;
 	onClose: () => void;
 	onSave: (
@@ -96,5 +97,6 @@ export declare function ModalAddFilter({
 	onSave,
 	validate,
 	workflowStatusJSONArray,
+	objectDefinitionDefaultLanguageId,
 }: IProps): JSX.Element;
 export {};

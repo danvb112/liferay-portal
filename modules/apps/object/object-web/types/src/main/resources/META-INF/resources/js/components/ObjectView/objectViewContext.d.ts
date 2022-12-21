@@ -52,6 +52,7 @@ export declare type TAction =
 			payload: {
 				objectFields: ObjectField[];
 				objectView: TObjectView;
+				objectDefinitionDefaultLanguageId: string;
 			};
 			type: TYPES.ADD_OBJECT_VIEW;
 	  }

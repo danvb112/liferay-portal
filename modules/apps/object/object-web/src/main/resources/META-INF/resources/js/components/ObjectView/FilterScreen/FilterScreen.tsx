@@ -27,7 +27,7 @@ const REQUIRED_MSG = Liferay.Language.get('required');
 
 export function FilterScreen() {
 	const [
-		{filterOperators, objectFields, objectView, workflowStatusJSONArray},
+		{filterOperators, objectFields, objectView, workflowStatusJSONArray, objectDefinitionDefaultLanguageId},
 		dispatch,
 	] = useViewContext();
 
@@ -156,6 +156,7 @@ export function FilterScreen() {
 				secondColumnHeader={Liferay.Language.get('type')}
 				thirdColumnHeader={Liferay.Language.get('value')}
 				title={Liferay.Language.get('filters')}
+				objectDefinitionDefaultLanguageId={objectDefinitionDefaultLanguageId}
 			/>
 
 			{visibleModal && (
@@ -190,6 +191,7 @@ export function FilterScreen() {
 							  )
 					}
 					observer={observer}
+					objectDefinitionDefaultLanguageId={objectDefinitionDefaultLanguageId as Locale}
 					onClose={onClose}
 					onSave={saveFilterColumn}
 					validate={validateFilters}
