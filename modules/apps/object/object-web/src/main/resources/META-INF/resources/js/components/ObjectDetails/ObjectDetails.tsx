@@ -128,7 +128,9 @@ export default function ObjectDetails({
 				}
 
 				openToast({
-					message: 'Publish Success',
+					message: Liferay.Language.get(
+						'the-object-was-published-successfully'
+					),
 					type: 'success',
 				});
 
@@ -138,7 +140,9 @@ export default function ObjectDetails({
 			}
 
 			openToast({
-				message: 'Success',
+				message: Liferay.Language.get(
+					'the-object-was-saved-successfully'
+				),
 				type: 'success',
 			});
 
