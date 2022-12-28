@@ -141,7 +141,9 @@ export function AccountRestrictionContainer({
 						disableAccountSelect
 					}
 					error={errors.accountEntryRestrictedObjectFieldName}
-					label={Liferay.Language.get('Account Restricted Field')}
+					label={Liferay.Language.get(
+						'account-entry-restricted-object-field-id'
+					)}
 					onChange={({value}) => {
 						setValues({
 							accountEntryRestrictedObjectFieldName: value,
