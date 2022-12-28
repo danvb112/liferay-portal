@@ -133,7 +133,7 @@ export function ScopeContainer({
 					)}
 					error={errors.titleObjectFieldId}
 					items={filteredPanelCaretogyKey}
-					label={Liferay.Language.get('panelCategoryKey')}
+					label={Liferay.Language.get('panel-category-key')}
 					onChangeQuery={setPanelCategoryKeyQuery}
 					onSelectItem={({key, value}: KeyValuePair) => {
 						setValues({
