@@ -107,6 +107,18 @@ const headers = new Headers({
 	'Content-Type': 'application/json',
 });
 
+export async function addPickListItem({
+	id,
+	key,
+	name_i18n,
+}: Partial<PickListItem>) {
+	return await save(
+		`/o/headless-admin-list-type/v1.0/list-type-definitions/${id}/list-type-entries`,
+		{key, name_i18n},
+		'POST'
+	);
+}
+
 async function deleteItem(url: string) {
 	const response = await fetch(url, {headers, method: 'DELETE'});
 
@@ -128,10 +140,28 @@ export function deleteObjectRelationships(id: number) {
 	return deleteItem(`/o/object-admin/v1.0/object-relationships/${id}`);
 }
 
+export async function deletePickList(pickListId: number) {
+	return await deleteItem(
+		`/o/headless-admin-list-type/v1.0/list-type-definitions/${pickListId}`
+	);
+}
+
+export async function deletePickListItem(id: number) {
+	return await deleteItem(
+		`/o/headless-admin-list-type/v1.0/list-type-entries/${id}`
+	);
+}
+
 export async function fetchJSON<T>(input: RequestInfo, init?: RequestInit) {
 	const result = await fetch(input, {headers, method: 'GET', ...init});
 
 	return (await result.json()) as T;
+}
+
+export async function getAllObjectDefinitions() {
+	return await getList<ObjectDefinition>(
+		'/o/object-admin/v1.0/object-definitions?page=-1'
+	);
 }
 
 export async function getList<T>(url: string) {
@@ -176,12 +206,6 @@ export async function getObjectDefinitionById(objectDefinitionId: number) {
 	);
 }
 
-export async function getAllObjectDefinitions() {
-	return await getList<ObjectDefinition>(
-		'/o/object-admin/v1.0/object-definitions?page=-1'
-	);
-}
-
 export async function getObjectDefinitions(parameters?: string) {
 	if (!parameters) {
 		return await getList<ObjectDefinition>(
@@ -202,17 +226,25 @@ export async function getObjectField(objectFieldId: number) {
 	);
 }
 
+export async function getObjectFieldsByExternalReferenceCode(
+	externalReferenceCode: string
+) {
+	return await getList<ObjectField>(
+		`/o/object-admin/v1.0/object-definitions/by-external-reference-code/${externalReferenceCode}/object-fields?pageSize=-1`
+	);
+}
+
 export async function getObjectFieldsById(objectDefinitionId: number) {
 	return await getList<ObjectField>(
 		`/o/object-admin/v1.0/object-definitions/${objectDefinitionId}/object-fields?pageSize=-1`
 	);
 }
 
-export async function getObjectFieldsByExternalReferenceCode(
+export async function getObjectRelationshipsByExternalReferenceCode(
 	externalReferenceCode: string
 ) {
-	return await getList<ObjectField>(
-		`/o/object-admin/v1.0/object-definitions/by-external-reference-code/${externalReferenceCode}/object-fields?pageSize=-1`
+	return await getList<ObjectRelationship>(
+		`/o/object-admin/v1.0/object-definitions/by-external-reference-code/${externalReferenceCode}/object-relationships`
 	);
 }
 
@@ -222,11 +254,9 @@ export async function getObjectRelationshipsById(objectDefinitionId: number) {
 	);
 }
 
-export async function getObjectRelationshipsByExternalReferenceCode(
-	externalReferenceCode: string
-) {
-	return await getList<ObjectRelationship>(
-		`/o/object-admin/v1.0/object-definitions/by-external-reference-code/${externalReferenceCode}/object-relationships`
+export async function getPickListItems(pickListId: number) {
+	return await getList<PickListItem>(
+		`/o/headless-admin-list-type/v1.0/list-type-definitions/${pickListId}/list-type-entries`
 	);
 }
 
@@ -242,9 +272,31 @@ export async function getPickLists() {
 	);
 }
 
-export async function getPickListItems(pickListId: number) {
-	return await getList<PickListItem>(
-		`/o/headless-admin-list-type/v1.0/list-type-definitions/${pickListId}/list-type-entries`
+export async function getRelationship<T>(objectRelationshipId: number) {
+	return fetchJSON<T>(
+		`/o/object-admin/v1.0/object-relationships/${objectRelationshipId}`
+	);
+}
+
+export async function publishObjectDefinitionById(objectDefinitionId: number) {
+	return await fetch(
+		`/o/object-admin/v1.0/object-definitions/${objectDefinitionId}/publish`,
+		{
+			method: 'POST',
+		}
+	);
+}
+
+export async function putObjectDefinitionByExternalReferenceCode(
+	values: Partial<ObjectDefinition>
+) {
+	return await fetch(
+		`/o/object-admin/v1.0/object-definitions/by-external-reference-code/${values.externalReferenceCode}`,
+		{
+			body: JSON.stringify(values),
+			headers,
+			method: 'PUT',
+		}
 	);
 }
 
@@ -291,22 +343,6 @@ export async function save(
 	}
 }
 
-export async function updateRelationship({
-	objectRelationshipId,
-	...others
-}: ObjectRelationship) {
-	return await save(
-		`/o/object-admin/v1.0/object-relationships/${objectRelationshipId}`,
-		others
-	);
-}
-
-export async function getRelationship<T>(objectRelationshipId: number) {
-	return fetchJSON<T>(
-		`/o/object-admin/v1.0/object-relationships/${objectRelationshipId}`
-	);
-}
-
 export async function updatePickList({
 	externalReferenceCode,
 	id,
@@ -316,30 +352,6 @@ export async function updatePickList({
 		`/o/headless-admin-list-type/v1.0/list-type-definitions/${id}`,
 		{externalReferenceCode, name_i18n},
 		'PUT'
-	);
-}
-
-export async function deletePickList(pickListId: number) {
-	return await deleteItem(
-		`/o/headless-admin-list-type/v1.0/list-type-definitions/${pickListId}`
-	);
-}
-
-export async function addPickListItem({
-	id,
-	key,
-	name_i18n,
-}: Partial<PickListItem>) {
-	return await save(
-		`/o/headless-admin-list-type/v1.0/list-type-definitions/${id}/list-type-entries`,
-		{key, name_i18n},
-		'POST'
-	);
-}
-
-export async function deletePickListItem(id: number) {
-	return await deleteItem(
-		`/o/headless-admin-list-type/v1.0/list-type-entries/${id}`
 	);
 }
 
@@ -355,24 +367,12 @@ export async function updatePickListItem({
 	);
 }
 
-export async function publishObjectDefinitionById(objectDefinitionId: number) {
-	return await fetch(
-		`/o/object-admin/v1.0/object-definitions/${objectDefinitionId}/publish`,
-		{
-			method: 'POST',
-		}
-	);
-}
-
-export async function putObjectDefinitionByExternalReferenceCode(
-	values: Partial<ObjectDefinition>
-) {
-	return await fetch(
-		`/o/object-admin/v1.0/object-definitions/by-external-reference-code/${values.externalReferenceCode}`,
-		{
-			body: JSON.stringify(values),
-			headers,
-			method: 'PUT',
-		}
+export async function updateRelationship({
+	objectRelationshipId,
+	...others
+}: ObjectRelationship) {
+	return await save(
+		`/o/object-admin/v1.0/object-relationships/${objectRelationshipId}`,
+		others
 	);
 }
