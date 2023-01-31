@@ -41,6 +41,61 @@ definition {
 		JSONCurlUtil.post("${curl}");
 	}
 
+	@summary = "This calls the JSON WS API to add an Action in an object"
+	macro addObjectAction {
+		var portalURL = JSONCompany.getPortalURL();
+		var objectId = JSONObject.getObjectId(
+			objectName = "${objectName}",
+			userEmailAddress = "${userEmailAddress}",
+			userPassword = "${userPassword}");
+
+		if (!(isSet(userEmailAddress))) {
+			var userEmailAddress = "test@liferay.com";
+		}
+
+		if (!(isSet(userPassword))) {
+			var userPassword = "test";
+		}
+
+		if(!(isSet(active))) {
+			var active = "true";
+		}
+
+		if(!(isSet(label))) {
+			var label = "Action Test";
+		}
+
+		if(!(isSet(name))) {
+			var name = "actionTest";
+		}
+
+		if(!(isSet(parameters))) {
+			var parameters = "{}";
+		}
+
+		var curl = '''
+			${portalURL}/o/object-admin/v1.0/object-definitions/${objectId}/object-actions \
+				-H 'Content-Type: application/json' \
+				-u ${userEmailAddress}:${userPassword} \
+				-d '{
+					"active": "${active}",
+					"conditionExpression": "${conditionExpression}",
+					"description": "${description}",
+					"label": {
+						"en_US": "${label}"
+					},
+					"name": "${name}",
+					"objectActionExecutorKey": "${objectActionExecutorKey}",
+					"objectActionTriggerKey": "${objectActionTriggerKey}",
+					"parameters": { 
+						"url": "http://localhost:8080"
+					}
+				}'
+			''';
+
+		JSONCurlUtil.post("${curl}");
+	}
+
 	@summary = "This calls the JSON WS API to add a field in an object"
 	macro addObjectField {
 		var portalURL = JSONCompany.getPortalURL();

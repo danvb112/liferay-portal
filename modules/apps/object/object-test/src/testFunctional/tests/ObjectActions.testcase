@@ -135,18 +135,23 @@ definition {
 			objectName = "CustomObject182",
 			pluralLabelName = "Custom Objects 182");
 
+		ObjectAdmin.addObjectActionViaAPI(
+			active = "false",
+			conditionExpression = "",
+			description = "",
+			label = "Action Label",
+			name = "ActionName",
+			objectActionExecutorKey = "onAfterAdd",
+			objectActionTriggerKey = "webhook",
+			objectName = "CustomObject182",
+			parameters = "http://localhost:8080"
+		);
+
 		ObjectAdmin.openObjectAdmin();
 
 		ObjectPortlet.selectCustomObject(label = "Custom Object 182");
 
 		ObjectAdmin.goToActionsTab();
-
-		ObjectAdmin.addObjectActionViaUI(
-			actionLabel = "Action Label",
-			actionName = "ActionName",
-			thenAction = "Webhook",
-			urlAction = "http://localhost:8080",
-			whenAction = "On After Add");
 
 		ObjectAdmin.goToActionDetails(viewEntry = "ActionName");
 

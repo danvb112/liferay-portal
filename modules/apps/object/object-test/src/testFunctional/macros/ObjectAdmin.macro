@@ -77,6 +77,21 @@ definition {
 			whenAction = "${whenAction}");
 	}
 
+	macro addObjectActionViaAPI {
+		JSONObject.addObjectAction(
+			active = "${active}",
+			conditionExpression = "${conditionExpression}",
+			description = "${description}",
+			label = "${label}",
+			name = "${name}",
+			objectActionExecutorKey = "${objectActionExecutorKey}",
+			objectActionTriggerKey = "${objectActionTriggerKey}",
+			objectName = "${objectName}",
+			parameters = "${parameters}",
+			userEmailAddress = "${userEmailAddress}",
+			userPassword = "${userPassword}");
+	}
+
 	macro addObjectBooleanFieldEntryViaUI {
 		ObjectAdmin.goToCustomObject(objectName = "${objectName}");
 
