@@ -1,0 +1,35 @@
+.lfr-notification-web__definition-of-terms-list {
+	&-container {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 13px;
+	}
+
+	&-left-container {
+		display: flex;
+		flex-direction: column;
+		max-width: 230px;
+	}
+
+	&-name {
+		font-weight: 600;
+		font-size: 14px;
+		line-height: 21px;
+		word-break: break-all;
+	}
+
+	&-term {
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 21px;
+		word-break: break-all;
+	}
+
+	&-button {
+		width: 32px;
+		height: 32px;
+		padding: 0;
+		margin-left: 1rem;
+	}
+}

@@ -14,17 +14,11 @@
 
 /// <reference types="react" />
 
-import './DefinitionOfTerms.scss';
-interface DefinitionOfTermsProps {
+import './NotificationSidebar.scss';
+interface NotificationSidebarProps {
 	baseResourceURL: string;
-	objectDefinitions: ObjectDefinition[];
 }
-export interface Item {
-	name: string;
-	term: string;
-}
-export declare function DefinitionOfTerms({
+export declare function NotificationSidebar({
 	baseResourceURL,
-	objectDefinitions,
-}: DefinitionOfTermsProps): JSX.Element;
+}: NotificationSidebarProps): JSX.Element;
 export {};

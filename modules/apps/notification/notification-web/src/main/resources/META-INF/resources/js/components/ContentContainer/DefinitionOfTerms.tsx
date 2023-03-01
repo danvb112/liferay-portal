@@ -12,17 +12,19 @@
  * details.
  */
 
+import ClayButton from '@clayui/button';
+import ClayIcon from '@clayui/icon';
 import ClayPanel from '@clayui/panel';
-import {FrontendDataSet} from '@liferay/frontend-data-set-web';
 import {
 	AutoComplete,
 	filterArrayByQuery,
 	getLocalizableLabel,
-	onActionDropdownItemClick,
 	openToast,
 } from '@liferay/object-js-components-web';
 import {createResourceURL, fetch} from 'frontend-js-web';
 import React, {useEffect, useMemo, useState} from 'react';
+
+import './DefinitionOfTerms.scss';
 
 interface DefinitionOfTermsProps {
 	baseResourceURL: string;
@@ -127,44 +129,39 @@ export function DefinitionOfTerms({
 					)}
 				</AutoComplete>
 
-				<div id="lfr-notification-web__definition-of-terms-table">
-					<FrontendDataSet
-						id="DefinitionOfTermsTable"
-						items={entityFields}
-						itemsActions={[
-							{
-								href: 'copyObjectFieldTerm',
-								id: 'copyObjectFieldTerm',
-								label: Liferay.Language.get('copy'),
-								target: 'event',
-							},
-						]}
-						onActionDropdownItemClick={onActionDropdownItemClick}
-						selectedItemsKey="id"
-						showManagementBar={false}
-						showPagination={false}
-						showSearch={false}
-						views={[
-							{
-								contentRenderer: 'table',
-								label: 'Table',
-								name: 'table',
-								schema: {
-									fields: [
-										{
-											fieldName: 'name',
-											label: Liferay.Language.get('name'),
-										},
-										{
-											fieldName: 'term',
-											label: Liferay.Language.get('term'),
-										},
-									],
-								},
-								thumbnail: 'table',
-							},
-						]}
-					/>
+				<div id="lfr-notification-web__definition-of-terms">
+					{entityFields.map((entityField) => (
+						<div className="lfr-notification-web__definition-of-terms-list-container">
+							<div className="lfr-notification-web__definition-of-terms-list-left-container">
+								<span className="lfr-notification-web__definition-of-terms-list-name">
+									{entityField.name}
+								</span>
+
+								<span className="lfr-notification-web__definition-of-terms-list-term">
+									{entityField.term}
+								</span>
+							</div>
+
+							<ClayButton
+								className="lfr-notification-web__definition-of-terms-list-button"
+								displayType="secondary"
+								onClick={() => {
+									navigator.clipboard.writeText(
+										entityField.term
+									);
+
+									openToast({
+										message: Liferay.Language.get(
+											'term-copied-successfully'
+										),
+										type: 'success',
+									});
+								}}
+							>
+								<ClayIcon symbol="copy" />
+							</ClayButton>
+						</div>
+					))}
 				</div>
 			</ClayPanel.Body>
 		</ClayPanel>

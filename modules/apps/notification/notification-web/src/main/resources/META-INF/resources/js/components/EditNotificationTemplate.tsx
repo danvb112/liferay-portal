@@ -29,6 +29,7 @@ import {defaultLanguageId} from '../util/constants';
 import './EditNotificationTemplate.scss';
 import {BasicInfoContainer} from './BasicInfoContainer/BasicInfoContainer';
 import ContentContainer from './ContentContainer/ContentContainer';
+import {NotificationSidebar} from './NotificationSidebar/NotificationSidebar';
 import {SettingsContainer} from './SettingsContainer/SettingsContainer';
 
 const HEADERS = new Headers({
@@ -287,24 +288,18 @@ export default function EditNotificationTemplate({
 
 			<div className="lfr__notification-template-container">
 				<div className="lfr__notification-template-cards">
-					<div className="row">
-						<div className="col-lg-6 lfr__notification-template-card">
-							<BasicInfoContainer
-								errors={errors}
-								setValues={setValues}
-								values={values}
-							/>
-						</div>
+					<BasicInfoContainer
+						errors={errors}
+						setValues={setValues}
+						values={values}
+					/>
 
-						<div className="col-lg-6 lfr__notification-template-card">
-							<SettingsContainer
-								errors={errors}
-								selectedLocale={selectedLocale}
-								setValues={setValues}
-								values={values}
-							/>
-						</div>
-					</div>
+					<SettingsContainer
+						errors={errors}
+						selectedLocale={selectedLocale}
+						setValues={setValues}
+						values={values}
+					/>
 
 					<ContentContainer
 						baseResourceURL={baseResourceURL}
@@ -316,6 +311,8 @@ export default function EditNotificationTemplate({
 						values={values}
 					/>
 				</div>
+
+				<NotificationSidebar baseResourceURL={baseResourceURL} />
 			</div>
 		</ClayForm>
 	);
