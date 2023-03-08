@@ -2,6 +2,15 @@ type Cart = {
 	accountId: number;
 	cartItems: CartItem[];
 	currencyCode: string;
+}
+
+type Channel = {
+	currencyCode: string;
+	externalReferenceCode: string;
+	id: number;
+	name: string;
+	siteGroupId: number;
+	type: string;
 };
 
 type CartItem = {
@@ -17,15 +26,6 @@ type CartItem = {
 		maxQuantity: number;
 	};
 	skuId: number;
-};
-
-type Channel = {
-	currencyCode: string;
-	externalReferenceCode: string;
-	id: number;
-	name: string;
-	siteGroupId: number;
-	type: string;
 };
 
 interface PostCartResponse {
