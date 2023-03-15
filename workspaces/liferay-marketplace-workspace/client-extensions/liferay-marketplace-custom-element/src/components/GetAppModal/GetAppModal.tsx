@@ -4,11 +4,15 @@ import ClayModal, {useModal} from '@clayui/modal';
 
 import {
 	getChannelById,
+	getOrderbyERC,
+	getPaymentMethodURL,
+	getPaymentMethods,
 	getProductSKU,
 	patchOrderByERC,
 	postCartByChannelId,
 	postCheckoutCart,
 } from '../../utils/api';
+import {useState} from 'react';
 
 import './GetAppModal.scss';
 
@@ -68,6 +72,7 @@ export function GetAppModal({
 				},
 			],
 			currencyCode: channel.currencyCode,
+			paymentMethod: "paypal",
 		};
 
 		const cartResponse = await postCartByChannelId({
@@ -78,12 +83,29 @@ export function GetAppModal({
 		const cartCheckoutResponse = await postCheckoutCart({
 			cartId: cartResponse.id,
 		});
+		const orderResponse = await getOrderbyERC(cartResponse.orderUUID);
+
+		const paymentMethods = await getPaymentMethods(cartResponse.id);
 
 		const newOrderStatus = {
-			orderStatus: 1,
-		};
+			orderStatus: 1
+		}
 
 		await patchOrderByERC(cartCheckoutResponse.orderUUID, newOrderStatus);
+		// const newOrderStatus = {
+		// 	orderStatus: 1,
+		// };
+
+		// await patchOrderByERC(orderResponse.externalReferenceCode, newOrderStatus);
+
+		await postCheckoutCart({cartId: cartResponse.id});
+
+		const paymentMethodURL = await getPaymentMethodURL(
+			orderResponse.id,
+			''
+		) as any;
+
+		window.location.href = paymentMethodURL;
 	}
 
 	return (
