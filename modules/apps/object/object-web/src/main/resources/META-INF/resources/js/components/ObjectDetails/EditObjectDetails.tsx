@@ -99,6 +99,7 @@ export default function EditObjectDetails({
 		values,
 	} = useObjectDetailsForm({
 		initialValues: {
+			defaultLanguageId: 'en_US',
 			externalReferenceCode,
 			id: objectDefinitionId,
 			label,

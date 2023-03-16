@@ -13,7 +13,11 @@
  */
 
 import ClayPanel from '@clayui/panel';
-import {FormError, SingleSelect} from '@liferay/object-js-components-web';
+import {
+	FormError,
+	SingleSelect,
+	getLocalizableLabel,
+} from '@liferay/object-js-components-web';
 import React, {useEffect, useMemo, useState} from 'react';
 
 import {defaultLanguageId} from '../../utils/constants';
@@ -42,9 +46,17 @@ export function EntryDisplayContainer({
 
 	const titleFieldOptions = useMemo(() => {
 		return nonRelationshipObjectFieldsInfo.map(({label, name}) => {
-			return {label: label[defaultLanguageId] ?? '', name};
+			return {
+				label:
+					getLocalizableLabel(
+						values.defaultLanguageId as Liferay.Language.Locale,
+						label,
+						name
+					) ?? '',
+				name,
+			};
 		});
-	}, [nonRelationshipObjectFieldsInfo]);
+	}, [nonRelationshipObjectFieldsInfo, values.defaultLanguageId]);
 
 	useEffect(() => {
 		if (values.titleObjectFieldName) {
