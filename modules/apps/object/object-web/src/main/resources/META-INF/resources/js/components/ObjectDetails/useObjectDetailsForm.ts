@@ -14,11 +14,11 @@
 
 import {
 	FormError,
+	getLocalizableLabel,
 	invalidateRequired,
 	useForm,
 } from '@liferay/object-js-components-web';
 
-import {defaultLanguageId} from '../../utils/constants';
 import {
 	checkIfFirstLetterIsUppercase,
 	specialCharactersInString,
@@ -73,17 +73,23 @@ export function useObjectDetailsForm({
 	const validate = (objectDefinition: Partial<ObjectDefinition>) => {
 		const errors: ObjectDetailsErrors = {};
 
-		const label = objectDefinition.label?.[defaultLanguageId];
+		const label = getLocalizableLabel(
+			objectDefinition.defaultLanguageId as Liferay.Language.Locale,
+			objectDefinition.label,
+			objectDefinition.name
+		);
 
 		if (invalidateRequired(label)) {
 			errors.label = REQUIRED_MSG;
 		}
 
-		if (
-			invalidateRequired(
-				objectDefinition.pluralLabel?.[defaultLanguageId]
-			)
-		) {
+		const pluralLabel = getLocalizableLabel(
+			objectDefinition.defaultLanguageId as Liferay.Language.Locale,
+			objectDefinition.pluralLabel,
+			objectDefinition.name
+		);
+
+		if (invalidateRequired(pluralLabel)) {
 			errors.pluralLabel = REQUIRED_MSG;
 		}
 

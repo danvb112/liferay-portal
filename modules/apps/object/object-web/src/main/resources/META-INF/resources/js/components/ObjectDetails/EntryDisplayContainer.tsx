@@ -20,8 +20,6 @@ import {
 } from '@liferay/object-js-components-web';
 import React, {useEffect, useMemo, useState} from 'react';
 
-import {defaultLanguageId} from '../../utils/constants';
-
 interface EntryDisplayContainerProps {
 	errors: FormError<ObjectDefinition>;
 	nonRelationshipObjectFieldsInfo: {
@@ -47,12 +45,11 @@ export function EntryDisplayContainer({
 	const titleFieldOptions = useMemo(() => {
 		return nonRelationshipObjectFieldsInfo.map(({label, name}) => {
 			return {
-				label:
-					getLocalizableLabel(
-						values.defaultLanguageId as Liferay.Language.Locale,
-						label,
-						name
-					) ?? '',
+				label: getLocalizableLabel(
+					values.defaultLanguageId as Liferay.Language.Locale,
+					label,
+					name
+				),
 				name,
 			};
 		});
@@ -100,7 +97,11 @@ export function EntryDisplayContainer({
 						});
 					}}
 					options={titleFieldOptions}
-					value={selectedObjectField?.label[defaultLanguageId]}
+					value={getLocalizableLabel(
+						values.defaultLanguageId as Liferay.Language.Locale,
+						selectedObjectField?.label,
+						selectedObjectField?.name
+					)}
 				/>
 			</ClayPanel.Body>
 		</ClayPanel>
