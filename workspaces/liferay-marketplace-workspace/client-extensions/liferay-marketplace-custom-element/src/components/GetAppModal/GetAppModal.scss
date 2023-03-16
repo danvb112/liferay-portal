@@ -82,6 +82,27 @@
 					line-height: 1rem;
 				}
 
+				&-subscription {
+					&-container {
+						width: 57px;
+						height: 16px;
+						border-radius: 4px;
+						background: #e6ebf5;
+						padding: 8px;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+					}
+
+					&-text {
+						font-family: 'Source Sans Pro', sans-serif;
+						font-weight: 400;
+						font-size: 11px;
+						line-height: 16px;
+						color: #1c3667;
+					}
+				}
+
 				&-value {
 					color: #282934;
 					font-family: 'Source Sans Pro', sans-serif;
@@ -97,6 +118,7 @@
 			border-radius: 0.625rem;
 			height: 11.188rem;
 			width: 34.5rem;
+			height: 206px;
 		}
 
 		&-card-header {

@@ -8,11 +8,12 @@ import {
 	getPaymentMethodURL,
 	getPaymentMethods,
 	getProductSKU,
+	getProductSubscriptionConfiguration,
 	patchOrderByERC,
 	postCartByChannelId,
 	postCheckoutCart,
 } from '../../utils/api';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import './GetAppModal.scss';
 
@@ -46,6 +47,10 @@ export function GetAppModal({
 		onClose: handleClose,
 	});
 
+	const [productSubscriptionConfiguration, setProductSubscriptionConfiguration] = useState<SubscriptionConfiguration>();
+
+	const freeApp = Number(app.price) === 0;
+
 	async function handleGetApp() {
 		const channel = await getChannelById(channelId);
 
@@ -72,7 +77,7 @@ export function GetAppModal({
 				},
 			],
 			currencyCode: channel.currencyCode,
-			paymentMethod: "paypal",
+			paymentMethod: 'paypal',
 		};
 
 		const cartResponse = await postCartByChannelId({
@@ -80,33 +85,39 @@ export function GetAppModal({
 			channelId,
 		});
 
-		const cartCheckoutResponse = await postCheckoutCart({
-			cartId: cartResponse.id,
-		});
 		const orderResponse = await getOrderbyERC(cartResponse.orderUUID);
 
-		const paymentMethods = await getPaymentMethods(cartResponse.id);
+		//const paymentMethods = await getPaymentMethods(cartResponse.id);
 
-		const newOrderStatus = {
-			orderStatus: 1
-		}
-
-		await patchOrderByERC(cartCheckoutResponse.orderUUID, newOrderStatus);
 		// const newOrderStatus = {
-		// 	orderStatus: 1,
-		// };
+		// 	orderStatus: 1
+		// }
 
-		// await patchOrderByERC(orderResponse.externalReferenceCode, newOrderStatus);
+		// await patchOrderByERC(cartCheckoutResponse.orderUUID, newOrderStatus);
 
 		await postCheckoutCart({cartId: cartResponse.id});
 
 		const paymentMethodURL = await getPaymentMethodURL(
 			orderResponse.id,
 			''
-		) as any;
+		);
 
 		window.location.href = paymentMethodURL;
 	}
+
+	useEffect(() => {
+		const makeFetch = async () => {
+			if(!freeApp) {
+				const subscriptionConfiguration = await getProductSubscriptionConfiguration(app.id);
+	
+				setProductSubscriptionConfiguration(subscriptionConfiguration)
+			}
+		};
+
+		makeFetch();
+	}, [])
+
+	console.log(productSubscriptionConfiguration);
 
 	return (
 		<ClayModal observer={observer}>
@@ -178,10 +189,16 @@ export function GetAppModal({
 								</span>
 
 								<span className="get-app-modal-body-content-right-value">
-									{Number(app.price) === 0
-										? 'Free'
-										: app.price}
+									{freeApp ? 'Free' : `$ ${app.price}`}
 								</span>
+
+								{!freeApp && productSubscriptionConfiguration && (
+									<div className="get-app-modal-body-content-right-subscription-container">
+										<span className="get-app-modal-body-content-right-subscription-text">
+											{productSubscriptionConfiguration?.subscriptionType === 'yearly' && "Annually"}
+										</span>
+									</div>
+								)}
 							</div>
 						</div>
 
@@ -192,8 +209,9 @@ export function GetAppModal({
 							/>
 
 							<span className="get-app-modal-body-content-alert-message">
-								A free app does not include support, maintenance
-								or updates from the publisher.
+								{freeApp
+									? ' A free app does not include support, maintenance or updates from the publisher.'
+									: 'A subscription license includes support, maintenance and updates for the app as long as the subscription is current.'}
 							</span>
 						</div>
 					</div>

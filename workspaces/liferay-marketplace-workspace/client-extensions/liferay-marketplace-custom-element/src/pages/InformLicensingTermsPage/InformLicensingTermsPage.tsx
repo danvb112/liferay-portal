@@ -142,6 +142,7 @@ export function InformLicensingTermsPage({
 						if (appLicense === 'non-perpetual') {
 							createProductSubscriptionConfiguration({
 								body: {
+									enable: true,
 									length: 1,
 									numberOfLength: 0,
 									subscriptionType: 'yearly',

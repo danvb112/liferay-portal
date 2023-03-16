@@ -2,7 +2,11 @@ type Cart = {
 	accountId: number;
 	cartItems: CartItem[];
 	currencyCode: string;
-}
+	paymentMethod: string;
+	orderStatusInfo: {
+		code: number;
+	};
+};
 
 type Channel = {
 	currencyCode: string;
@@ -68,3 +72,15 @@ type SKU = {
 	sku: string;
 	skuOptions: [];
 };
+
+type SubscriptionConfiguration = {
+	enable: boolean;
+	length: number;
+	numberOfLength: number;
+	subscriptionType: string;
+	subscriptionTypeSettings: {
+		month: string;
+		monthDay: string;
+		yearlyMode: string
+	}
+}
