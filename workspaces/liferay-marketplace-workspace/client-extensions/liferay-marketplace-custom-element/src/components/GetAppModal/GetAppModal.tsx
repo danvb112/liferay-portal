@@ -9,6 +9,8 @@ import {Input} from '../../components/Input/Input';
 import {Section} from '../../components/Section/Section';
 import {
 	getChannelById,
+	getOrderbyERC,
+	getPaymentMethodURL,
 	getProductSKU,
 	patchOrderByERC,
 	postCartByChannelId,
@@ -19,6 +21,7 @@ import {TrialTimeline} from './TrialTimeline';
 import './GetAppModal.scss';
 import {RadioCard} from '../RadioCard/RadioCard';
 import {PaymentMethodSelector} from './PaymentMethodSelector';
+import {AddNewAddress} from './AddNewAddress';
 
 interface GetAppModalProps {
 	account: {
@@ -27,10 +30,7 @@ interface GetAppModalProps {
 		image: string;
 		name: string;
 	};
-	addresses: {
-		title: string;
-		description: string;
-	}[];
+	addresses: BillingAddress[];
 	app: {
 		createdBy: string;
 		externalReferenceCode?: string;
@@ -40,6 +40,7 @@ interface GetAppModalProps {
 		price: number;
 		version: string;
 		paymentMethods: string[];
+		license: 'perpetual' | 'nonPerpetual';
 	};
 	channelId: number;
 	handleClose: () => void;
@@ -69,7 +70,9 @@ export function GetAppModal({
 	const [selectedPaymentMethod, setSelectedPaymentMethod] =
 		useState<PaymentMethod>('pay');
 
-	const [selectedAddress, setSelectedAddress] = useState('');
+	const [paymentType, setPaymentType] = useState('');
+
+	const [selectedAddress, setSelectedAddress] = useState<BillingAddress>();
 
 	const [showNewAddressButton, setShowNewAddressButton] = useState(true);
 
@@ -80,41 +83,99 @@ export function GetAppModal({
 
 		const defaultSku = skuResponse.items.find(({sku}) => sku === 'default');
 
-		const newCart: Partial<Cart> = {
-			accountId: account.id as number,
-			cartItems: [
-				{
-					price: {
-						currency: channel.currencyCode,
-						discount: 0,
-						finalPrice: app.price,
-						price: app.price,
+		if (paid && app.license === 'perpetual') {
+			const defaultSku = skuResponse.items.find(
+				({sku}) => sku === 'default'
+			);
+
+			const newCart: Partial<Cart> = {
+				accountId: account.id as number,
+				billingAddress: selectedAddress,
+				cartItems: [
+					{
+						price: {
+							currency: channel.currencyCode,
+							discount: 0,
+							finalPrice: app.price,
+							price: app.price,
+						},
+						productId: app.id,
+						quantity: 1,
+						settings: {
+							maxQuantity: 1,
+						},
+						skuId: defaultSku?.id as number,
 					},
-					productId: app.id,
-					quantity: 1,
-					settings: {
-						maxQuantity: 1,
+				],
+				currencyCode: channel.currencyCode,
+				paymentMethod: 'paypal',
+			};
+
+			const cartResponse = await postCartByChannelId({
+				cartBody: newCart,
+				channelId,
+			});
+
+			const orderResponse = await getOrderbyERC(cartResponse.orderUUID);
+
+			// const paymentMethods = await getPaymentMethods(cartResponse.id);
+
+			// const newOrderStatus = {
+			// 	orderStatus: 1
+			// }
+
+			// await patchOrderByERC(cartCheckoutResponse.orderUUID, newOrderStatus);
+
+			await postCheckoutCart({cartId: cartResponse.id});
+
+			const paymentMethodURL = await getPaymentMethodURL(
+				orderResponse.id,
+				''
+			);
+
+			window.location.href = paymentMethodURL;
+		}
+
+		if (!paid) {
+			const newCart: Partial<Cart> = {
+				accountId: account.id as number,
+				cartItems: [
+					{
+						price: {
+							currency: channel.currencyCode,
+							discount: 0,
+							finalPrice: app.price,
+							price: app.price,
+						},
+						productId: app.id,
+						quantity: 1,
+						settings: {
+							maxQuantity: 1,
+						},
+						skuId: defaultSku?.id as number,
 					},
-					skuId: defaultSku?.id as number,
-				},
-			],
-			currencyCode: channel.currencyCode,
-		};
+				],
+				currencyCode: channel.currencyCode,
+			};
 
-		const cartResponse = await postCartByChannelId({
-			cartBody: newCart,
-			channelId,
-		});
+			const cartResponse = await postCartByChannelId({
+				cartBody: newCart,
+				channelId,
+			});
 
-		const cartCheckoutResponse = await postCheckoutCart({
-			cartId: cartResponse.id,
-		});
+			const cartCheckoutResponse = await postCheckoutCart({
+				cartId: cartResponse.id,
+			});
 
-		const newOrderStatus = {
-			orderStatus: 1,
-		};
+			const newOrderStatus = {
+				orderStatus: 1,
+			};
 
-		await patchOrderByERC(cartCheckoutResponse.orderUUID, newOrderStatus);
+			await patchOrderByERC(
+				cartCheckoutResponse.orderUUID,
+				newOrderStatus
+			);
+		}
 	}
 
 	return (
@@ -240,7 +301,9 @@ export function GetAppModal({
 									{paymentTypes.map((paymentType) => {
 										return (
 											<RadioCard
-												onChange={() => {}}
+												onChange={() =>
+													setPaymentType('paypal')
+												}
 												selected={
 													selectedPaymentMethod ===
 													'pay'
@@ -278,18 +341,16 @@ export function GetAppModal({
 										return (
 											<RadioCard
 												description={
-													address.description
+													'24029 W Archer Blvd, New York, NY 02881, United States (714) 718-4565'
 												}
 												onChange={() => {
-													setSelectedAddress(
-														address.title
-													);
+													setSelectedAddress(address);
 												}}
 												selected={
-													selectedAddress ===
-													address.title
+													selectedAddress?.id ===
+													address.id
 												}
-												title={address.title}
+												title={address.name}
 											/>
 										);
 									})}
@@ -313,81 +374,11 @@ export function GetAppModal({
 										</button>
 									</>
 								) : (
-									<div className="get-app-modal-body-card-container">
-										<div className="get-app-modal-body-card-header">
-											<span className="get-app-modal-body-card-header-left-content">
-												New Address
-											</span>
-
-											<button
-												onClick={() =>
-													setShowNewAddressButton(
-														true
-													)
-												}
-											>
-												Cancel
-											</button>
-										</div>
-
-										<div className="get-app-modal-body-container">
-											<div className="get-app-modal-double-input">
-												<Input
-													label="First Name"
-													required
-													value=""
-												/>
-
-												<Input
-													label="Last Name"
-													required
-													value=""
-												/>
-											</div>
-
-											<Input
-												label="Address"
-												required
-												value=""
-											/>
-
-											<Input required value="" />
-
-											<div className="get-app-modal-double-input">
-												<Input
-													label="City"
-													required
-													value=""
-												/>
-
-												<Input
-													label="State"
-													required
-													value=""
-												/>
-											</div>
-
-											<div className="get-app-modal-double-input">
-												<Input
-													label="Zip/Area Code"
-													required
-													value=""
-												/>
-
-												<Input
-													label="Country"
-													required
-													value=""
-												/>
-											</div>
-
-											<Input
-												label="Phone"
-												required
-												value=""
-											/>
-										</div>
-									</div>
+									<AddNewAddress
+										setShowNewAddressButton={
+											setShowNewAddressButton
+										}
+									/>
 								)}
 							</Section>
 
@@ -418,7 +409,7 @@ export function GetAppModal({
 
 								<button
 									className="get-app-modal-button-get-this-app"
-									onClick={handleGetApp}
+									onClick={() => handleGetApp()}
 								>
 									{selectedPaymentMethod === 'pay'
 										? `Pay $${app.price} Now`
