@@ -196,6 +196,45 @@ export async function getChannelById(channelId: number) {
 	return (await channelResponse.json()) as Channel;
 }
 
+export async function getOrderbyERC(erc: string) {
+	const orderResponse = await fetch(
+		`/o/headless-commerce-admin-order/v1.0/orders/by-externalReferenceCode/${erc}`,
+		{
+			headers,
+			method: 'GET',
+		}
+	);
+
+	return await orderResponse.json();
+}
+
+export async function getPaymentMethodURL(
+	orderId: number,
+	callbackURL: string
+) {
+	const paymentResponse = await fetch(
+		`/o/headless-commerce-delivery-cart/v1.0/carts/${orderId}/payment-url?callbackURL=${callbackURL}`,
+		{
+			headers,
+			method: 'GET',
+		}
+	);
+
+	return await paymentResponse.text();
+}
+
+export async function getPaymentMethods(cartId: number) {
+	const paymentMethodsResponse = await fetch(
+		`/o/headless-commerce-delivery-cart/v1.0/carts/${cartId}/payment-methods`,
+		{
+			headers,
+			method: 'GET',
+		}
+	);
+
+	return await paymentMethodsResponse.json();
+}
+
 export async function getProduct({appERC}: {appERC: string}) {
 	const response = await fetch(
 		`/o/headless-commerce-admin-catalog/v1.0/products/by-externalReferenceCode/${appERC}

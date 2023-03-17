@@ -1,7 +1,22 @@
+type BillingAddress = {
+	city: string;
+	country: string;
+	countryISOCode: string;
+	id: number;
+	name: string;
+	phoneNumber: string;
+	region: string;
+	street1: string;
+	street2: string;
+	zip: string;
+};
+
 type Cart = {
 	accountId: number;
+	billingAddress?: BillingAddress;
 	cartItems: CartItem[];
 	currencyCode: string;
+	paymentMethod: string;
 };
 
 type CartItem = {
