@@ -7,24 +7,15 @@ import add from '../../assets/icons/add.svg';
 import infoCircleIcon from '../../assets/icons/info-circle-icon.svg';
 import {Input} from '../../components/Input/Input';
 import {Section} from '../../components/Section/Section';
-import {
-	getChannelById,
-	getOrderbyERC,
-	getPaymentMethodURL,
-	getProductSKU,
-	patchOrderByERC,
-	postCartByChannelId,
-	postCheckoutCart,
-} from '../../utils/api';
+import {getChannelById, getProductSKU} from '../../utils/api';
 import {TrialTimeline} from './TrialTimeline';
 
 import './GetAppModal.scss';
 
-import {zip} from 'lodash';
-
 import {RadioCard} from '../RadioCard/RadioCard';
 import {AddNewAddress} from './AddNewAddress';
 import {PaymentMethodSelector} from './PaymentMethodSelector';
+import {getFreeApp, getPerpetualPaidApp} from '../../utils/getAppUtil';
 
 interface GetAppModalProps {
 	account: {
@@ -91,89 +82,29 @@ export function GetAppModal({
 			paid &&
 			app.license === 'perpetual'
 		) {
-			const defaultSku = skuResponse.items.find(
-				({sku}) => sku === 'default'
-			);
-
-			const newCart: Partial<Cart> = {
+			await getPerpetualPaidApp({
 				accountId: account.id as number,
-				billingAddress: selectedAddress,
-				cartItems: [
-					{
-						price: {
-							currency: channel.currencyCode,
-							discount: 0,
-							finalPrice: app.price,
-							price: app.price,
-						},
-						productId: app.id,
-						quantity: 1,
-						settings: {
-							maxQuantity: 1,
-						},
-						skuId: defaultSku?.id as number,
-					},
-				],
-				currencyCode: channel.currencyCode,
-				paymentMethod: 'paypal',
-			};
-
-			const cartResponse = await postCartByChannelId({
-				cartBody: newCart,
+				appPrice: app.price,
+				appID: app.id,
+				skuId: defaultSku?.id as number,
 				channelId,
+				currencyCode: channel.currencyCode,
+				paymentType,
+				billingAddress: selectedAddress,
 			});
-
-			const orderResponse = await getOrderbyERC(cartResponse.orderUUID);
-
-			await postCheckoutCart({cartId: cartResponse.id});
-
-			const paymentMethodURL = await getPaymentMethodURL(
-				orderResponse.id,
-				''
-			);
-
-			window.location.href = paymentMethodURL;
 		}
 
 		if (!paid) {
-			const newCart: Partial<Cart> = {
+			await getFreeApp({
 				accountId: account.id as number,
-				cartItems: [
-					{
-						price: {
-							currency: channel.currencyCode,
-							discount: 0,
-							finalPrice: app.price,
-							price: app.price,
-						},
-						productId: app.id,
-						quantity: 1,
-						settings: {
-							maxQuantity: 1,
-						},
-						skuId: defaultSku?.id as number,
-					},
-				],
-				currencyCode: channel.currencyCode,
-			};
-
-			const cartResponse = await postCartByChannelId({
-				cartBody: newCart,
+				appPrice: app.price,
+				appID: app.id,
+				skuId: defaultSku?.id as number,
 				channelId,
+				currencyCode: channel.currencyCode,
 			});
 
-			const cartCheckoutResponse = await postCheckoutCart({
-				cartId: cartResponse.id,
-			});
-
-			const newOrderStatus = {
-				orderStatus: 1,
-			};
-
-			await patchOrderByERC(
-				cartCheckoutResponse.orderUUID,
-				newOrderStatus
-			);
+			onClose();
 		}
 	}
 
