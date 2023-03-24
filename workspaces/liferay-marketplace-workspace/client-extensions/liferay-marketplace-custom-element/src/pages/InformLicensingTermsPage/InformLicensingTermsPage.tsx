@@ -10,12 +10,7 @@ import './InformLicensingTermsPage.scss';
 import {NewAppPageFooterButtons} from '../../components/NewAppPageFooterButtons/NewAppPageFooterButtons';
 import {useAppContext} from '../../manage-app-state/AppManageState';
 import {TYPES} from '../../manage-app-state/actionTypes';
-import {
-	createAppLicensePrice,
-	createProductSubscriptionConfiguration,
-	getSKUById,
-	patchSKUById,
-} from '../../utils/api';
+import {createAppLicensePrice, getSKUById, patchSKUById} from '../../utils/api';
 
 interface InformLicensingTermsPageProps {
 	onClickBack: () => void;
@@ -144,20 +139,21 @@ export function InformLicensingTermsPage({
 							});
 						}
 
-						if (appLicense === 'non-perpetual') {
-							createProductSubscriptionConfiguration({
-								body: {
-									length: 1,
-									numberOfLength: 0,
-									subscriptionType: 'yearly',
-									subscriptionTypeSettings: {
-										month: '0',
-										monthDay: '1',
-										yearlyMode: '0',
-									},
-								},
-								externalReferenceCode: appERC,
-							});
+						if (
+							priceModel === 'paid' &&
+							(appLicense === 'non-perpetual' ||
+								appLicense === 'perpetual')
+						) {
+							const skuJSON = await getSKUById(skuId);
+
+							const skuBody = {
+								...skuJSON,
+								purchasable: true,
+								price: 0,
+								neverExpire: appLicense === 'perpetual',
+							};
+
+							await patchSKUById(skuId, skuBody);
 						}
 					};
 
