@@ -21,7 +21,7 @@ interface DashboardNavigationProps {
 	accountIcon: string;
 	accounts: AccountBrief[];
 	dashboardNavigationItems: DashboardListItems[];
-	onSelectAppChange: (value: AppProps) => void;
+	onSelectAppChange?: (value: AppProps) => void;
 	setDashboardNavigationItems: (values: DashboardListItems[]) => void;
 }
 
