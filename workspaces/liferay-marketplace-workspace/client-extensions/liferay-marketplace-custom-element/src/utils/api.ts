@@ -459,15 +459,6 @@ export async function getSpecifications() {
 	return await response.json();
 }
 
-export async function getAccounts() {
-	const response = await fetch('/o/headless-admin-user/v1.0/accounts', {
-		headers,
-		method: 'GET',
-	});
-
-	return response.json();
-}
-
 export async function getUserAccount() {
 	const response = await fetch(
 		'/o/headless-admin-user/v1.0/my-user-account',

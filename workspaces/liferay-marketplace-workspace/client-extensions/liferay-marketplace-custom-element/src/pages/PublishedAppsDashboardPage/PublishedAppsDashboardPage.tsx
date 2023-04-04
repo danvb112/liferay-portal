@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 
 import accountLogo from '../../assets/icons/mainAppLogo.svg';
+import {DashboardNavigation} from '../../components/DashboardNavigation/DashboardNavigation';
 import {DashboardMemberTableRow} from '../../components/DashboardTable/DashboardMemberTableRow';
 import {
 	AppProps,
@@ -26,6 +27,8 @@ import {
 	UserAccountProps,
 	initialDashboardNavigationItems,
 } from './PublishedDashboardPageUtil';
+
+import './PublishedAppsDashboardPage.scss';
 
 declare let Liferay: {ThemeDisplay: any; authToken: string};
 
@@ -72,6 +75,7 @@ const initialAccountsState: Account[] = [
 export function PublishedAppsDashboardPage() {
 	const [accounts, setAccounts] = useState<Account[]>(initialAccountsState);
 	const [apps, setApps] = useState<AppProps[]>(Array<AppProps>());
+	const [selectedApp, setSelectedApp] = useState<AppProps>();
 	const [dashboardNavigationItems, setDashboardNavigationItems] = useState(
 		initialDashboardNavigationItems
 	);
@@ -331,18 +335,24 @@ export function PublishedAppsDashboardPage() {
 	}, [selectedNavigationItem, selectedAccount]);
 
 	return (
-		<>
+		<div className="published-apps-dashboard-page-container">
+			<DashboardNavigation
+				accountAppsNumber="4"
+				accountIcon={accountLogo}
+				accounts={accounts}
+				currentAccount={selectedAccount}
+				dashboardNavigationItems={dashboardNavigationItems}
+				onSelectAppChange={setSelectedApp}
+				selectedApp={selectedApp}
+				setDashboardNavigationItems={setDashboardNavigationItems}
+				setSelectedAccount={setSelectedAccount}
+			/>
+
 			{selectedNavigationItem === 'Apps' && (
 				<DashboardPage
-					accountAppsNumber="4"
-					accountLogo={accountLogo}
-					accounts={accounts}
 					buttonMessage="+ New App"
-							currentAccount={selectedAccount}
 					dashboardNavigationItems={dashboardNavigationItems}
 					messages={appMessages}
-					setDashboardNavigationItems={setDashboardNavigationItems}
-							setSelectedAccount={setSelectedAccount}
 				>
 					<DashboardTable<AppProps>
 						emptyStateMessage={appMessages.emptyStateMessage}
@@ -361,14 +371,8 @@ export function PublishedAppsDashboardPage() {
 
 			{selectedNavigationItem === 'Members' && (
 				<DashboardPage
-					accountAppsNumber="4"
-					accountLogo={accountLogo}
-					accounts={accounts}
-							currentAccount={selectedAccount}
 					dashboardNavigationItems={dashboardNavigationItems}
 					messages={memberMessages}
-					setDashboardNavigationItems={setDashboardNavigationItems}
-							setSelectedAccount={setSelectedAccount}
 				>
 					{selectedMember ? (
 						<MemberProfile
@@ -393,15 +397,7 @@ export function PublishedAppsDashboardPage() {
 				</DashboardPage>
 			)}
 
-			{selectedNavigationItem === 'Account' && (
-				<AccountDetailsPage
-					accountAppsNumber="4"
-					accountIcon={accountLogo}
-					accounts={userAccounts.accountBriefs}
-					dashboardNavigationItems={dashboardNavigationItems}
-					setDashboardNavigationItems={setDashboardNavigationItems}
-				/>
-			)}
-		</>
+			{selectedNavigationItem === 'Account' && <AccountDetailsPage />}
+		</div>
 	);
 }
