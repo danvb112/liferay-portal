@@ -100,7 +100,7 @@ export async function createAppSKU({
 		}
 	);
 
-	return await response.json();
+	return (await response.json()) as SKU;
 }
 
 export function createAttachment({
@@ -231,7 +231,9 @@ export async function getCatalogs() {
 		{headers, method: 'GET'}
 	);
 
-	return response.json();
+	const {items} = (await response.json()) as {items: Catalog[]};
+
+	return items;
 }
 
 export async function getCatalog(catalogId: number) {
@@ -253,6 +255,20 @@ export async function getCategories({vocabId}: {vocabId: number}) {
 	);
 
 	return response.json();
+}
+
+export async function getCategoiesRanked() {
+	const response = await fetch(
+		'/o/headless-admin-taxonomy/v1.0/taxonomy-categories/ranked',
+		{
+			headers,
+			method: 'GET',
+		}
+	);
+
+	const {items} = (await response.json()) as {items: Category[]};
+
+	return items;
 }
 
 export async function getChannelById(channelId: number) {
@@ -662,6 +678,19 @@ export async function postOptionValue(
 
 		return id;
 	}
+}
+
+export async function postProduct(product: any) {
+	const response = await fetch(
+		'/o/headless-commerce-admin-catalog/v1.0/products',
+		{
+			body: JSON.stringify(product),
+			headers,
+			method: 'POST',
+		}
+	);
+
+	return (await response.json()) as Product;
 }
 
 export async function postTrialOption() {
