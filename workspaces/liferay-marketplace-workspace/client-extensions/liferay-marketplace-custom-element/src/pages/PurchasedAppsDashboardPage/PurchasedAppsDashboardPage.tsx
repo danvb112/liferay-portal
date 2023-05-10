@@ -111,9 +111,10 @@ const memberMessages = {
 const solutionMessages = {
 	description: 'Manage solution trial and purchases from the Marketplace',
 	emptyStateMessage: {
-		description1: 'Solution empty message 1',
-		description2: 'Solution empty message 2',
-		title: 'Solutions Empty message title',
+		description1:
+			'Purchase and install new solutions and they will show up here.',
+		description2: 'Click on “New Solutions to start.',
+		title: 'No solutions yet',
 	},
 	title: 'My Solutions',
 };
@@ -177,7 +178,7 @@ export function PurchasedAppsDashboardPage() {
 			);
 
 			setCommerceAccount(commerceAccountResponse);
-			
+
 			const filteredAppOrders = placedOrders.items.filter(
 				({orderTypeExternalReferenceCode}) =>
 					orderTypeExternalReferenceCode === 'CLOUDAPP' ||
