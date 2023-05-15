@@ -370,7 +370,7 @@ export function PurchasedAppsDashboardPage() {
 	return (
 		<div className="purchased-apps-dashboard-page-container">
 			<DashboardNavigation
-				accountAppsNumber={purchasedAppTable.items.length.toString()}
+				accountAppsNumber={purchasedAppTable.items.length}
 				accountIcon={showAccountImage(commerceAccount?.logoURL)}
 				accounts={accounts}
 				currentAccount={selectedAccount}
