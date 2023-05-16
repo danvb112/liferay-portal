@@ -183,8 +183,6 @@ export function AppDetailsPage({
 				</ClayNavigationBar>
 
 				<ReviewAndSubmitAppPage
-					productERC={selectedApp.externalReferenceCode}
-					productId={selectedApp.productId}
 					onClickBack={() => {}}
 					onClickContinue={() => {}}
 					productERC={selectedApp.externalReferenceCode}
