@@ -26,6 +26,7 @@ import {
 	UserAccountProps,
 	customerRoles,
 	getRolesList,
+	getRolesList,
 	publisherRoles,
 } from '../PublishedAppsDashboardPage/PublishedDashboardPageUtil';
 
@@ -33,6 +34,8 @@ import './PurchasedAppsDashboardPage.scss';
 import {
 	initialAccountState,
 	initialDashboardNavigationItems,
+	memberTableHeaders,
+	tableHeaders,
 	memberTableHeaders,
 	tableHeaders,
 } from './PurchasedDashboardPageUtil';
@@ -293,7 +296,10 @@ export function PurchasedAppsDashboardPage() {
 							lastLoginDate: member.lastLoginDate,
 							name: member.name,
 							role: getRolesList(
+								
 								member.accountBriefs,
+								selectedAccount.id
+							,
 								selectedAccount.id
 							),
 							userId: member.id,
