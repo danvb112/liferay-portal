@@ -197,14 +197,14 @@ export function GetAppModal({handleClose}: GetAppModalProps) {
 			setAccounts(userAccounts.accountBriefs);
 			const app = await getDeliveryProduct({
 				accountId,
-				appId: Liferay.MarketplaceCustomerFlow.appId,
+				appId: 48390,
 				channelId: channel.id,
 			});
 
 			setApp(app);
 
 			const skuResponse = await getProductSKU({
-				appProductId: Liferay.MarketplaceCustomerFlow.appId,
+				appProductId: 48390,
 			});
 
 			setSkus(skuResponse.items);
@@ -257,7 +257,10 @@ export function GetAppModal({handleClose}: GetAppModalProps) {
 							}) => customField.name === 'CatalogId'
 						);
 
-						return catalogIdField?.customValue.data == String(catalogId);
+						return (
+							catalogIdField?.customValue.data ==
+							String(catalogId)
+						);
 					}
 				}
 			);

@@ -160,7 +160,9 @@ export function PublishedAppsDashboardPage() {
 					let newAppList: AppProps[] = [];
 
 					appList.items.forEach((product, index: number) => {
-						const isApp = product.categories.find((category) => category.name === 'App');
+						const isApp = product.categories.find(
+							(category) => category.name === 'App'
+						);
 
 						if (product.catalogId === accountCatalogId && isApp) {
 							newAppList.push({
