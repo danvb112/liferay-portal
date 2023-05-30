@@ -42,6 +42,7 @@ interface EditObjectFieldProps {
 	objectName: string;
 	objectRelationshipId: number;
 	readOnly: boolean;
+	readOnlySidebarElements: SidebarCategory[];
 	sidebarElements: SidebarCategory[];
 	workflowStatusJSONArray: LabelValueObject[];
 }
@@ -81,6 +82,7 @@ export default function EditObjectField({
 	objectName,
 	objectRelationshipId,
 	readOnly,
+	readOnlySidebarElements,
 	sidebarElements,
 	workflowStatusJSONArray,
 }: EditObjectFieldProps) {
@@ -194,6 +196,7 @@ export default function EditObjectField({
 						<AdvancedTab
 							creationLanguageId={creationLanguageId}
 							errors={errors}
+							readOnlySidebarElements={readOnlySidebarElements}
 							setValues={setValues}
 							sidebarElements={sidebarElements}
 							values={values}
