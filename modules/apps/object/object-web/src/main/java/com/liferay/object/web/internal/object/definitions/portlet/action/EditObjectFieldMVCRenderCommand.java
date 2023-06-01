@@ -31,7 +31,6 @@ import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermi
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -69,7 +68,7 @@ public class EditObjectFieldMVCRenderCommand implements MVCRenderCommand {
 			renderRequest.setAttribute(ObjectWebKeys.OBJECT_FIELD, objectField);
 
 			renderRequest.setAttribute(
-				WebKeys.PORTLET_DISPLAY_CONTEXT,
+				ObjectWebKeys.OBJECT_PORTLET_DEFINITION_FIELDS_DISPLAY_CONTEXT,
 				new ObjectDefinitionsFieldsDisplayContext(
 					_portal.getHttpServletRequest(renderRequest),
 					_listTypeDefinitionService,
