@@ -13,7 +13,7 @@
  */
 
 import ClayTabs from '@clayui/tabs';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import EditObjectDetails, {
 	KeyValuePair,
@@ -54,6 +54,8 @@ interface ObjectNavigationProps {
 	storageTypes: LabelValueObject[];
 }
 
+let tabs: HTMLCollectionOf<Element>;
+
 function ObjectNavigation({
 	backURL,
 	companyKeyValuePair,
@@ -80,7 +82,39 @@ function ObjectNavigation({
 	storageTypes,
 	system,
 }: ObjectNavigationProps) {
-	const [active, setActive] = useState(1);
+	const [active, setActive] = useState(0);
+	const [selectedTabId, setSelectedTabId] = useState('details');
+	const [firstRender, setFirstRender] = useState(true);
+
+	const display = (tabId: string) => {
+		if (tabs) {
+			for (let i = 0; i < tabs.length; i++) {
+				const currentTabId = tabs[i].id;
+				const tabElt = document.getElementById(currentTabId);
+				
+				if (tabId !== currentTabId) {
+					tabElt?.classList.add('active', 'show');
+				}
+				else {
+					tabElt?.classList.remove('active', 'show');
+				}
+				if (!firstRender && currentTabId) {
+					if(tabElt?.style) {
+						tabElt.style.display = "";
+						tabElt.style.visibility = "";
+						tabElt.style.height = "";
+					}
+				}
+			}
+		}
+	};
+
+	useEffect(() => {
+		tabs = document.getElementsByClassName('tab-pane');
+		display(selectedTabId);
+
+		setFirstRender(false);
+	}, []);
 
 	return (
 		<>
@@ -119,7 +153,11 @@ function ObjectNavigation({
 				</ClayTabs.Item>
 			</ClayTabs>
 			<ClayTabs.Content activeIndex={active} fade>
-				<ClayTabs.TabPane aria-labelledby="tab-1">
+				<ClayTabs.TabPane 
+					aria-labelledby="details-tab"
+					id='detailsTab' 
+					onClick={() => setSelectedTabId('detailsTab')} 
+				>
 					<EditObjectDetails
 						backURL={backURL}
 						companyKeyValuePair={companyKeyValuePair}
@@ -143,7 +181,11 @@ function ObjectNavigation({
 					/>
 				</ClayTabs.TabPane>
 
-				<ClayTabs.TabPane aria-labelledby="tab-2">
+				<ClayTabs.TabPane 
+					aria-labelledby="fields-tab"
+					id='fieldsTab' 
+					onClick={() => setSelectedTabId('fieldsTab')} 
+				>
 					<div>
 						<Fields 
 							creationMenu={fieldsCreationMenu}
