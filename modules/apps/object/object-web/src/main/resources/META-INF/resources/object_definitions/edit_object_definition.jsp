@@ -18,7 +18,8 @@
 
 <%
 ObjectDefinition objectDefinition = (ObjectDefinition)request.getAttribute(ObjectWebKeys.OBJECT_DEFINITION);
-ObjectDefinitionsDetailsDisplayContext objectDefinitionsDetailsDisplayContext = (ObjectDefinitionsDetailsDisplayContext)request.getAttribute("OBJECT_PORTLET_DEFINITION_DETAILS_DISPLAY_CONTEXT");
+ObjectDefinitionsDetailsDisplayContext objectDefinitionsDetailsDisplayContext = (ObjectDefinitionsDetailsDisplayContext)request.getAttribute(ObjectWebKeys.OBJECT_PORTLET_DEFINITION_DETAILS_DISPLAY_CONTEXT);
+ObjectDefinitionsFieldsDisplayContext objectDefinitionsFieldsDisplayContext = (ObjectDefinitionsFieldsDisplayContext)request.getAttribute(ObjectWebKeys.OBJECT_PORTLET_DEFINITION_FIELDS_DISPLAY_CONTEXT);
 %>
 
 <div class="lfr-object__edit-object-definition">
@@ -27,8 +28,6 @@ ObjectDefinitionsDetailsDisplayContext objectDefinitionsDetailsDisplayContext = 
 		props='<%=
 			HashMapBuilder.<String, Object>put(
 				"backURL", ParamUtil.getString(request, "backURL", String.valueOf(renderResponse.createRenderURL()))
-			).put(
-				"companyKeyValuePair", objectDefinitionsDetailsDisplayContext.getScopeKeyValuePairs("company")
 			).put(
 				"dbTableName", objectDefinition.getDBTableName()
 			).put(
@@ -54,11 +53,19 @@ ObjectDefinitionsDetailsDisplayContext objectDefinitionsDetailsDisplayContext = 
 			).put(
 				"shortName", objectDefinition.getShortName()
 			).put(
-				"siteKeyValuePair", objectDefinitionsDetailsDisplayContext.getScopeKeyValuePairs("site")
-			).put(
 				"storageTypes", objectDefinitionsDetailsDisplayContext.getStoragesJSONArray()
 			).put(
 				"system", objectDefinition.isSystem()
+			).put(
+				"fieldsApiURL", objectDefinitionsFieldsDisplayContext.getAPIURL()
+			).put(
+				"fieldsCreationMenu", objectDefinitionsFieldsDisplayContext.getCreationMenu(objectDefinition)
+			).put(
+				"fieldDropdownitems", objectDefinitionsFieldsDisplayContext.getFDSActionDropdownItems()
+			).put(
+				"fieldId", ObjectDefinitionsFDSNames.OBJECT_FIELDS
+			).put(
+				"fieldUrl", objectDefinitionsFieldsDisplayContext.getEditObjectFieldURL()
 			).build()
 		%>'
 	/>

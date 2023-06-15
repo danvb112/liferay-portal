@@ -80,9 +80,30 @@ function setAccountRelationshipFieldMandatory(
 	};
 }
 
+const siteKeyValuePair = [
+	{
+		key: "site",
+		value: "Site",
+	},
+	{
+		key: "company",
+		value: "Company",
+	},
+];
+
+const companyKeyValuePair = [
+	{
+		key: "test",
+		value: "TEST"
+	},
+	{
+		key: "test2",
+		value: "TEST2"
+	},
+]
+
 export default function EditObjectDetails({
 	backURL,
-	companyKeyValuePair,
 	dbTableName,
 	externalReferenceCode,
 	hasPublishObjectPermission,
@@ -94,7 +115,6 @@ export default function EditObjectDetails({
 	pluralLabel,
 	portletNamespace,
 	shortName,
-	siteKeyValuePair,
 	storageTypes,
 }: EditObjectDetailsProps) {
 	const [objectFields, setObjectFields] = useState<ObjectField[]>([]);

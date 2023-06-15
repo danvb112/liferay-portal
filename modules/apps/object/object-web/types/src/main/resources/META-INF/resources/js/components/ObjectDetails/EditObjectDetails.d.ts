@@ -41,7 +41,6 @@ interface EditObjectDetailsProps {
 }
 export default function EditObjectDetails({
 	backURL,
-	companyKeyValuePair,
 	dbTableName,
 	externalReferenceCode,
 	hasPublishObjectPermission,
@@ -53,7 +52,6 @@ export default function EditObjectDetails({
 	pluralLabel,
 	portletNamespace,
 	shortName,
-	siteKeyValuePair,
 	storageTypes,
 }: EditObjectDetailsProps): JSX.Element;
 export {};

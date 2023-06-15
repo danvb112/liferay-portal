@@ -20,6 +20,14 @@ interface ObjectNavigationProps {
 	companyKeyValuePair: KeyValuePair[];
 	dbTableName: string;
 	externalReferenceCode: string;
+	fieldsApiURL: string;
+	fieldsCreationMenu: {
+		primaryItems?: any[];
+		secondaryItems?: any[];
+	};
+	fieldDropdownitems: [];
+	fieldId: string;
+	fieldUrl: string;
 	hasPublishObjectPermission: boolean;
 	hasUpdateObjectDefinitionPermission: boolean;
 	isApproved: boolean;
@@ -46,18 +54,23 @@ declare function ObjectNavigation({
 	externalReferenceCode,
 	hasPublishObjectPermission,
 	hasUpdateObjectDefinitionPermission,
+	fieldsApiURL,
+	fieldsCreationMenu,
+	fieldDropdownitems,
+	fieldId,
+	fieldUrl,
 	isApproved,
 	label,
+	nonRelationshipObjectFieldsInfo,
 	objectDefinitionId,
 	onSubmit,
-	portletNamespace,
 	pluralLabel,
-	nonRelationshipObjectFieldsInfo,
+	portletNamespace,
 	screenNavigationCategoryKey,
-	shortName,
 	setValues,
-	system,
+	shortName,
 	siteKeyValuePair,
 	storageTypes,
+	system,
 }: ObjectNavigationProps): JSX.Element;
 export default ObjectNavigation;

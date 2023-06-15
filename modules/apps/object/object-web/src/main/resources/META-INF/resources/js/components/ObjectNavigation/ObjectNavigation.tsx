@@ -18,6 +18,7 @@ import React, {useState} from 'react';
 import EditObjectDetails, {
 	KeyValuePair,
 } from '../ObjectDetails/EditObjectDetails';
+import Fields from '../ObjectField/Fields';
 import ObjectManagementToolbar from '../ObjectManagementToolbar';
 
 interface ObjectNavigationProps {
@@ -25,6 +26,14 @@ interface ObjectNavigationProps {
 	companyKeyValuePair: KeyValuePair[];
 	dbTableName: string;
 	externalReferenceCode: string;
+	fieldsApiURL: string;
+	fieldsCreationMenu: {
+		primaryItems?: any[];
+		secondaryItems?: any[];
+	};
+	fieldDropdownitems: [];
+	fieldId: string;
+	fieldUrl: string;
 	hasPublishObjectPermission: boolean;
 	hasUpdateObjectDefinitionPermission: boolean;
 	isApproved: boolean;
@@ -52,6 +61,11 @@ function ObjectNavigation({
 	externalReferenceCode,
 	hasPublishObjectPermission,
 	hasUpdateObjectDefinitionPermission,
+	fieldsApiURL,
+	fieldsCreationMenu,
+	fieldDropdownitems,
+	fieldId,
+	fieldUrl,
 	isApproved,
 	label,
 	nonRelationshipObjectFieldsInfo,
@@ -66,7 +80,7 @@ function ObjectNavigation({
 	storageTypes,
 	system,
 }: ObjectNavigationProps) {
-	const [active, setActive] = useState(0);
+	const [active, setActive] = useState(1);
 
 	return (
 		<>
@@ -130,7 +144,16 @@ function ObjectNavigation({
 				</ClayTabs.TabPane>
 
 				<ClayTabs.TabPane aria-labelledby="tab-2">
-					2. Proin efficitur imperdiet dolor, a iaculis orci lacinia
+					<div>
+						<Fields 
+							creationMenu={fieldsCreationMenu}
+							apiURL={fieldsApiURL}
+							id={fieldId}
+							objectDefinitionExternalReferenceCode={externalReferenceCode}
+							url={fieldUrl}
+							items={fieldDropdownitems}
+						/>
+					</div>
 				</ClayTabs.TabPane>
 			</ClayTabs.Content>
 		</>
