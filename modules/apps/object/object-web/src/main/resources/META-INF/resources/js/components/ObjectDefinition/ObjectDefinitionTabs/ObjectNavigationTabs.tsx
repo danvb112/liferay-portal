@@ -14,7 +14,7 @@
 
 import ClayTabs from '@clayui/tabs';
 import {FormError} from '@liferay/object-js-components-web';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import './ObjectNavigationTabs.scss';
 import EditObjectDetails, {
@@ -48,6 +48,8 @@ interface ObjectNavigationProps {
 	values: Partial<ObjectDefinition>;
 }
 
+let tabs: HTMLCollectionOf<Element>;
+
 export function ObjectNavigationTabs({
 	companyKeyValuePair,
 	dbTableName,
@@ -70,6 +72,39 @@ export function ObjectNavigationTabs({
 	values,
 }: ObjectNavigationProps) {
 	const [active, setActive] = useState(0);
+	const [selectedTabId, setSelectedTabId] = useState('details');
+	const [firstRender, setFirstRender] = useState(true);
+
+	const display = (tabId: string) => {
+		if (tabs) {
+			for (let i = 0; i < tabs.length; i++) {
+				const currentTabId = tabs[i].id;
+				const tabElt = document.getElementById(currentTabId);
+
+				if (tabId !== currentTabId) {
+					tabElt?.classList.add('active', 'show');
+				}
+				else {
+					tabElt?.classList.remove('active', 'show');
+				}
+				if (!firstRender && currentTabId) {
+					if (tabElt?.style) {
+						tabElt.style.display = '';
+						tabElt.style.visibility = '';
+						tabElt.style.height = '';
+					}
+				}
+			}
+		}
+	};
+
+	useEffect(() => {
+		tabs = document.getElementsByClassName('tab-pane');
+		display(selectedTabId);
+
+		setFirstRender(false);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<>
@@ -90,7 +125,11 @@ export function ObjectNavigationTabs({
 			</div>
 
 			<ClayTabs.Content activeIndex={active} fade>
-				<ClayTabs.TabPane aria-labelledby="tab-1">
+				<ClayTabs.TabPane
+					aria-labelledby="details-tab"
+					id="detailsTab"
+					onClick={() => setSelectedTabId('detailsTab')}
+				>
 					<EditObjectDetails
 						companyKeyValuePair={companyKeyValuePair}
 						dbTableName={dbTableName}
