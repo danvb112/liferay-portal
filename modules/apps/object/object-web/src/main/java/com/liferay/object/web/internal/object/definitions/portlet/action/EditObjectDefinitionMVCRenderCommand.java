@@ -35,7 +35,6 @@ import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermi
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -76,12 +75,8 @@ public class EditObjectDefinitionMVCRenderCommand implements MVCRenderCommand {
 					_configurationProvider,
 					_portal.getHttpServletRequest(renderRequest),
 					_objectDefinitionModelResourcePermission,
-					_objectEntryManagerRegistry,
-					_objectRelationshipLocalService,
-					_objectScopeProviderRegistry, _panelCategoryRegistry));
-			renderRequest.setAttribute(
-				ObjectWebKeys.OBJECT_FIELDS,
-				_objectFieldLocalService.getObjectFields(objectDefinitionId));
+					_objectEntryManagerRegistry, _objectScopeProviderRegistry,
+					_panelCategoryRegistry));
 			renderRequest.setAttribute(
 				ObjectWebKeys.OBJECT_DEFINITIONS_FIELDS_DISPLAY_CONTEXT,
 				new ObjectDefinitionsFieldsDisplayContext(
@@ -91,6 +86,9 @@ public class EditObjectDefinitionMVCRenderCommand implements MVCRenderCommand {
 					_objectFieldBusinessTypeRegistry,
 					_objectFieldSettingLocalService,
 					_objectRelationshipLocalService));
+			renderRequest.setAttribute(
+				ObjectWebKeys.OBJECT_FIELDS,
+				_objectFieldLocalService.getObjectFields(objectDefinitionId));
 		}
 		catch (PortalException portalException) {
 			SessionErrors.add(renderRequest, portalException.getClass());

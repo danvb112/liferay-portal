@@ -20,14 +20,14 @@ interface EditObjectDefinitionProps {
 	companyKeyValuePair: KeyValuePair[];
 	dbTableName: string;
 	externalReferenceCode: string;
+	fieldDropdownitems: [];
+	fieldId: string;
+	fieldUrl: string;
 	fieldsApiURL: string;
 	fieldsCreationMenu: {
 		primaryItems?: any[];
 		secondaryItems?: any[];
 	};
-	fieldDropdownitems: [];
-	fieldId: string;
-	fieldUrl: string;
 	hasPublishObjectPermission: boolean;
 	hasUpdateObjectDefinitionPermission: boolean;
 	isApproved: boolean;
@@ -37,6 +37,7 @@ interface EditObjectDefinitionProps {
 		name: string;
 	}[];
 	objectDefinitionId: number;
+	objectFieldTypes: ObjectFieldType[];
 	onSubmit: (draft: boolean) => void;
 	pluralLabel: LocalizedValue<string>;
 	portletNamespace: string;
@@ -63,6 +64,7 @@ export default function EditObjectDefinition({
 	label,
 	nonRelationshipObjectFieldsInfo,
 	objectDefinitionId,
+	objectFieldTypes,
 	pluralLabel,
 	portletNamespace,
 	screenNavigationCategoryKey,

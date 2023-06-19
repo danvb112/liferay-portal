@@ -21,14 +21,14 @@ interface ObjectNavigationProps {
 	dbTableName: string;
 	errors: FormError<ObjectDefinition>;
 	externalReferenceCode: string;
+	fieldDropdownitems: [];
+	fieldId: string;
+	fieldUrl: string;
 	fieldsApiURL: string;
 	fieldsCreationMenu: {
 		primaryItems?: any[];
 		secondaryItems?: any[];
 	};
-	fieldDropdownitems: [];
-	fieldId: string;
-	fieldUrl: string;
 	handleChange: React.ChangeEventHandler<HTMLInputElement>;
 	hasPublishObjectPermission: boolean;
 	hasUpdateObjectDefinitionPermission: boolean;
@@ -39,6 +39,7 @@ interface ObjectNavigationProps {
 		name: string;
 	}[];
 	objectDefinitionId: number;
+	objectFieldTypes: ObjectFieldType[];
 	objectFields: ObjectField[];
 	pluralLabel: LocalizedValue<string>;
 	portletNamespace: string;
@@ -67,6 +68,7 @@ export declare function ObjectNavigationTabs({
 	label,
 	nonRelationshipObjectFieldsInfo,
 	objectDefinitionId,
+	objectFieldTypes,
 	objectFields,
 	pluralLabel,
 	portletNamespace,

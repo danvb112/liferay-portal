@@ -15,6 +15,10 @@
 /// <reference types="react" />
 
 import {IFDSTableProps} from '../../utils/fds';
+interface FieldsProps extends IFDSTableProps {
+	objectFieldTypes: ObjectFieldType[];
+	objectName: string;
+}
 export default function Fields({
 	apiURL,
 	creationMenu,
@@ -22,6 +26,7 @@ export default function Fields({
 	id,
 	items,
 	objectDefinitionExternalReferenceCode,
-	style,
-	url,
-}: IFDSTableProps): JSX.Element;
+	objectFieldTypes,
+	objectName,
+}: FieldsProps): JSX.Element;
+export {};

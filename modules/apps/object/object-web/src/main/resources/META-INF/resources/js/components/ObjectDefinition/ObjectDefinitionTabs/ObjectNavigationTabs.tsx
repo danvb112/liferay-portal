@@ -14,7 +14,7 @@
 
 import ClayTabs from '@clayui/tabs';
 import {FormError} from '@liferay/object-js-components-web';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
 import './ObjectNavigationTabs.scss';
 import EditObjectDetails, {
@@ -27,14 +27,14 @@ interface ObjectNavigationProps {
 	dbTableName: string;
 	errors: FormError<ObjectDefinition>;
 	externalReferenceCode: string;
+	fieldDropdownitems: [];
+	fieldId: string;
+	fieldUrl: string;
 	fieldsApiURL: string;
 	fieldsCreationMenu: {
 		primaryItems?: any[];
 		secondaryItems?: any[];
 	};
-	fieldDropdownitems: [];
-	fieldId: string;
-	fieldUrl: string;
 	handleChange: React.ChangeEventHandler<HTMLInputElement>;
 	hasPublishObjectPermission: boolean;
 	hasUpdateObjectDefinitionPermission: boolean;
@@ -45,6 +45,7 @@ interface ObjectNavigationProps {
 		name: string;
 	}[];
 	objectDefinitionId: number;
+	objectFieldTypes: ObjectFieldType[];
 	objectFields: ObjectField[];
 	pluralLabel: LocalizedValue<string>;
 	portletNamespace: string;
@@ -56,8 +57,6 @@ interface ObjectNavigationProps {
 	system: boolean;
 	values: Partial<ObjectDefinition>;
 }
-
-let tabs: HTMLCollectionOf<Element>;
 
 export function ObjectNavigationTabs({
 	companyKeyValuePair,
@@ -76,6 +75,7 @@ export function ObjectNavigationTabs({
 	label,
 	nonRelationshipObjectFieldsInfo,
 	objectDefinitionId,
+	objectFieldTypes,
 	objectFields,
 	pluralLabel,
 	portletNamespace,
@@ -85,40 +85,7 @@ export function ObjectNavigationTabs({
 	storageTypes,
 	values,
 }: ObjectNavigationProps) {
-	const [active, setActive] = useState(0);
-	const [selectedTabId, setSelectedTabId] = useState('details');
-	const [firstRender, setFirstRender] = useState(true);
-
-	const display = (tabId: string) => {
-		if (tabs) {
-			for (let i = 0; i < tabs.length; i++) {
-				const currentTabId = tabs[i].id;
-				const tabElt = document.getElementById(currentTabId);
-
-				if (tabId !== currentTabId) {
-					tabElt?.classList.add('active', 'show');
-				}
-				else {
-					tabElt?.classList.remove('active', 'show');
-				}
-				if (!firstRender && currentTabId) {
-					if (tabElt?.style) {
-						tabElt.style.display = '';
-						tabElt.style.visibility = '';
-						tabElt.style.height = '';
-					}
-				}
-			}
-		}
-	};
-
-	useEffect(() => {
-		tabs = document.getElementsByClassName('tab-pane');
-		display(selectedTabId);
-
-		setFirstRender(false);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	const [active, setActive] = useState(1);
 
 	return (
 		<>
@@ -146,56 +113,60 @@ export function ObjectNavigationTabs({
 				</ClayTabs>
 			</div>
 
-			<ClayTabs.Content activeIndex={active} fade>
-				<ClayTabs.TabPane
-					aria-labelledby="details-tab"
-					id="detailsTab"
-					onClick={() => setSelectedTabId('detailsTab')}
-				>
-					<EditObjectDetails
-						companyKeyValuePair={companyKeyValuePair}
-						dbTableName={dbTableName}
-						errors={errors}
-						externalReferenceCode={externalReferenceCode}
-						handleChange={handleChange}
-						hasPublishObjectPermission={hasPublishObjectPermission}
-						hasUpdateObjectDefinitionPermission={
-							hasUpdateObjectDefinitionPermission
-						}
-						isApproved={isApproved}
-						label={label}
-						nonRelationshipObjectFieldsInfo={
-							nonRelationshipObjectFieldsInfo
-						}
-						objectDefinitionId={objectDefinitionId}
-						objectFields={objectFields}
-						pluralLabel={pluralLabel}
-						portletNamespace={portletNamespace}
-						setValues={setValues}
-						shortName={shortName}
-						siteKeyValuePair={siteKeyValuePair}
-						storageTypes={storageTypes}
-						values={values}
-					/>
-				</ClayTabs.TabPane>
+			<div className="lfr-objects__navigation-tabs-content">
+				<ClayTabs.Content activeIndex={active} fade>
+					<ClayTabs.TabPane
+						aria-labelledby="details-tab"
+						id="detailsTab"
+					>
+						<EditObjectDetails
+							companyKeyValuePair={companyKeyValuePair}
+							dbTableName={dbTableName}
+							errors={errors}
+							externalReferenceCode={externalReferenceCode}
+							handleChange={handleChange}
+							hasPublishObjectPermission={
+								hasPublishObjectPermission
+							}
+							hasUpdateObjectDefinitionPermission={
+								hasUpdateObjectDefinitionPermission
+							}
+							isApproved={isApproved}
+							label={label}
+							nonRelationshipObjectFieldsInfo={
+								nonRelationshipObjectFieldsInfo
+							}
+							objectDefinitionId={objectDefinitionId}
+							objectFields={objectFields}
+							pluralLabel={pluralLabel}
+							portletNamespace={portletNamespace}
+							setValues={setValues}
+							shortName={shortName}
+							siteKeyValuePair={siteKeyValuePair}
+							storageTypes={storageTypes}
+							values={values}
+						/>
+					</ClayTabs.TabPane>
 
-				<ClayTabs.TabPane
-					aria-labelledby="fields-tab"
-					id="fieldsTab"
-					onClick={() => setSelectedTabId('fieldsTab')}
-				>
-					<Fields
-						apiURL={fieldsApiURL}
-						creationMenu={fieldsCreationMenu}
-						id={fieldId}
-						items={fieldDropdownitems}
-						objectDefinitionExternalReferenceCode={
-							externalReferenceCode
-						}
-						url={fieldUrl}
-					/>
-				</ClayTabs.TabPane>
-			</ClayTabs.Content>
+					<ClayTabs.TabPane
+						aria-labelledby="fields-tab"
+						id="fieldsTab"
+					>
+						<Fields
+							apiURL={fieldsApiURL}
+							creationMenu={fieldsCreationMenu}
+							id={fieldId}
+							items={fieldDropdownitems}
+							objectDefinitionExternalReferenceCode={
+								externalReferenceCode
+							}
+							objectFieldTypes={objectFieldTypes}
+							objectName={shortName}
+							url={fieldUrl}
+						/>
+					</ClayTabs.TabPane>
+				</ClayTabs.Content>
+			</div>
 		</>
 	);
 }

@@ -12,6 +12,7 @@
  * details.
  */
 
+import {VerticalBar} from '@clayui/core';
 import {
 	FrontendDataSet,
 
@@ -22,17 +23,19 @@ import {API, getLocalizableLabel} from '@liferay/object-js-components-web';
 import classNames from 'classnames';
 import React, {useEffect, useState} from 'react';
 
-import {
-	IFDSTableProps,
-	defaultDataSetProps,
-	fdsItem,
-	formatActionURL,
-} from '../../utils/fds';
+import {IFDSTableProps, defaultDataSetProps, fdsItem} from '../../utils/fds';
+import AddObjectField from './AddObjectField';
+import EditObjectField from './EditObjectField';
 
 interface ItemData {
 	id: number;
 	required: boolean;
 	system?: boolean;
+}
+
+interface FieldsProps extends IFDSTableProps {
+	objectFieldTypes: ObjectFieldType[];
+	objectName: string;
 }
 
 export default function Fields({
@@ -42,12 +45,22 @@ export default function Fields({
 	id,
 	items,
 	objectDefinitionExternalReferenceCode,
-	style,
-	url,
-}: IFDSTableProps) {
+	objectFieldTypes,
+	objectName,
+}: FieldsProps) {
 	const [creationLanguageId, setCreationLanguageId] = useState<
 		Liferay.Language.Locale
 	>();
+	const [isModalVisible, setModalVisible] = useState<boolean>(false);
+	const [isVerticalBarVisible, setVerticalBarVisible] = useState<boolean>(
+		false
+	);
+
+	const sidePanelitems = [
+		{
+			title: 'Fields',
+		},
+	];
 
 	useEffect(() => {
 		const makeFetch = async () => {
@@ -61,15 +74,15 @@ export default function Fields({
 		makeFetch();
 	}, [objectDefinitionExternalReferenceCode]);
 
-	function objectFieldLabelDataRenderer({
-		itemData,
-		openSidePanel,
-		value,
-	}: fdsItem<ItemData>) {
+	useEffect(() => {
+		Liferay.on('addObjectField', () => setModalVisible(true));
+
+		return () => Liferay.detach('addObjectField');
+	}, []);
+
+	function objectFieldLabelDataRenderer({value}: fdsItem<ItemData>) {
 		const handleEditField = () => {
-			openSidePanel({
-				url: formatActionURL(url, itemData.id),
-			});
+			setVerticalBarVisible(!isVerticalBarVisible);
 		};
 
 		return (
@@ -136,7 +149,10 @@ export default function Fields({
 		},
 		portletId:
 			'com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet',
-		style: 'fluid' as 'fluid',
+		showManagementBar: true,
+		showPagination: true,
+		showSearch: true,
+		style: 'default' as 'default',
 		views: [
 			{
 				contentRenderer: 'table',
@@ -182,5 +198,70 @@ export default function Fields({
 		],
 	};
 
-	return <FrontendDataSet {...dataSetProps} />;
+	return (
+		<>
+			<FrontendDataSet {...dataSetProps} />
+
+			{isVerticalBarVisible && (
+				<VerticalBar
+					defaultActive="Fields"
+					defaultPanelWidth={1100}
+					panelWidth={700}
+					panelWidthMax={1100}
+					panelWidthMin={250}
+					position="right"
+					resize
+				>
+					<div
+						style={{
+							overflow: 'auto',
+						}}
+					>
+						<VerticalBar.Content items={sidePanelitems}>
+							{(item) => (
+								<VerticalBar.Panel key={item.title}>
+									<EditObjectField
+										creationLanguageId="ar_SA"
+										filterOperators={{
+											dateOperators: [],
+											numericOperators: [],
+											picklistOperators: [],
+										}}
+										forbiddenChars={[]}
+										forbiddenLastChars={[]}
+										forbiddenNames={[]}
+										isApproved={false}
+										isDefaultStorageType={false}
+										objectDefinitionExternalReferenceCode=""
+										objectField={{} as ObjectField}
+										objectFieldId={0}
+										objectFieldTypes={[]}
+										objectName=""
+										objectRelationshipId={0}
+										readOnly={false}
+										readOnlySidebarElements={[]}
+										sidebarElements={[]}
+										workflowStatusJSONArray={[]}
+									/>
+								</VerticalBar.Panel>
+							)}
+						</VerticalBar.Content>
+					</div>
+				</VerticalBar>
+			)}
+
+			{isModalVisible && (
+				<AddObjectField
+					apiURL={apiURL as string}
+					creationLanguageId="ar_SA"
+					objectDefinitionExternalReferenceCode={
+						objectDefinitionExternalReferenceCode
+					}
+					objectFieldTypes={objectFieldTypes}
+					objectName={objectName}
+					onVisibilityChange={setModalVisible}
+				/>
+			)}
+		</>
+	);
 }

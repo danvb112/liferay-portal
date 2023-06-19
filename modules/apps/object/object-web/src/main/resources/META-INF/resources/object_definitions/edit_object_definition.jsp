@@ -64,6 +64,8 @@ renderResponse.setTitle(LanguageUtil.format(request, "edit-x", objectDefinition.
 			).put(
 				"objectDefinitionId", objectDefinition.getObjectDefinitionId()
 			).put(
+				"objectFieldTypes", objectDefinitionsFieldsDisplayContext.getObjectFieldBusinessTypeMaps(false, locale)
+			).put(
 				"pluralLabel", LocalizationUtil.getLocalizationMap(objectDefinition.getPluralLabel())
 			).put(
 				"portletNamespace", liferayPortletResponse.getNamespace()
