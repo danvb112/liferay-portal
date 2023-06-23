@@ -210,6 +210,7 @@ export default function EditObjectField({
 								}
 								readOnly={readOnly}
 								setValues={setValues}
+								sidebarElements={sidebarElements}
 								values={values}
 								workflowStatusJSONArray={
 									workflowStatusJSONArray
@@ -244,6 +245,7 @@ export default function EditObjectField({
 					objectRelationshipId={objectRelationshipId as number}
 					readOnly={readOnly}
 					setValues={setValues}
+					sidebarElements={sidebarElements}
 					values={values}
 					workflowStatusJSONArray={workflowStatusJSONArray}
 				/>
