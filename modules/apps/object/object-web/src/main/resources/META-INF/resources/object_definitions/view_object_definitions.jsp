@@ -37,6 +37,19 @@ ViewObjectDefinitionsDisplayContext viewObjectDefinitionsDisplayContext = (ViewO
 			).put(
 				"items", viewObjectDefinitionsDisplayContext.getFDSActionDropdownItems()
 			).put(
+				"importObjectDefinitionURL",
+				PortletURLBuilder.createActionURL(
+					renderResponse
+				).setActionName(
+					"/object_definitions/import_object_definition"
+				).setRedirect(
+					currentURL
+				).buildString()
+			).put(
+				"nameMaxLength", ModelHintsConstants.TEXT_MAX_LENGTH
+			).put(
+				"portletNamespace", liferayPortletResponse.getNamespace()
+			).put(
 				"sorting", viewObjectDefinitionsDisplayContext.getFDSSortItemList()
 			).put(
 				"storages", viewObjectDefinitionsDisplayContext.getStoragesJSONArray()

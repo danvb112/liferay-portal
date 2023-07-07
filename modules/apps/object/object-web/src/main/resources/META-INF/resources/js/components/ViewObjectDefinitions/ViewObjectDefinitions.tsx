@@ -40,9 +40,13 @@ import {ModalDeleteObjectDefinition} from './ModalDeleteObjectDefinition';
 import {deleteObjectDefinition, getFolderActions} from './objectDefinitionUtil';
 
 import './ViewObjectDefinitions.scss';
+import {ModalImportObjectDefinition} from '../ModalImportObjectDefinition';
 
 interface ViewObjectDefinitionsProps extends IFDSTableProps {
 	baseResourceURL: string;
+	importObjectDefinitionURL: string;
+	nameMaxLength: string;
+	portletNamespace: string;
 	storages: LabelTypeObject[];
 }
 
@@ -84,7 +88,10 @@ export default function ViewObjectDefinitions({
 	baseResourceURL,
 	creationMenu,
 	id,
+	importObjectDefinitionURL,
 	items,
+	nameMaxLength,
+	portletNamespace,
 	sorting,
 	storages,
 	url,
@@ -336,6 +343,8 @@ export default function ViewObjectDefinitions({
 		);
 	};
 
+	console.log(showModal);
+
 	return (
 		<>
 			{Liferay.FeatureFlags['LPS-148856'] ? (
@@ -442,6 +451,20 @@ export default function ViewObjectDefinitions({
 							})
 						);
 					}}
+				/>
+			)}
+
+			{showModal.importObject && (
+				<ModalImportObjectDefinition
+					importObjectDefinitionURL={importObjectDefinitionURL}
+					nameMaxLength={nameMaxLength}
+					onVisibilityChange={(value) => {
+						setShowModal((previousState) => ({
+							...previousState,
+							importObject: value,
+						}));
+					}}
+					portletNamespace={portletNamespace}
 				/>
 			)}
 		</>

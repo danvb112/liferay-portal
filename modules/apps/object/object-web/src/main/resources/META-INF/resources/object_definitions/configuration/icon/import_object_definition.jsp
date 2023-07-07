@@ -16,7 +16,7 @@
 
 <%@ include file="/init.jsp" %>
 
-<div>
+<!-- <div>
 	<react:component
 		module="js/components/ModalImportObjectDefinition"
 		props='<%=
@@ -34,8 +34,8 @@
 			).build()
 		%>'
 	/>
-</div>
-
+</div> -->
+<!-- 
 <aui:script>
 	function <portlet:namespace />openImportObjectDefinitionModal() {}
 
@@ -49,4 +49,4 @@
 			});
 		}
 	);
-</aui:script>
+</aui:script> -->

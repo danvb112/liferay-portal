@@ -18,6 +18,9 @@ import {IFDSTableProps} from '../../utils/fds';
 import './ViewObjectDefinitions.scss';
 interface ViewObjectDefinitionsProps extends IFDSTableProps {
 	baseResourceURL: string;
+	importObjectDefinitionURL: string;
+	nameMaxLength: string;
+	portletNamespace: string;
 	storages: LabelTypeObject[];
 }
 export declare type ViewObjectDefinitionsModals = {
@@ -37,7 +40,10 @@ export default function ViewObjectDefinitions({
 	baseResourceURL,
 	creationMenu,
 	id,
+	importObjectDefinitionURL,
 	items,
+	nameMaxLength,
+	portletNamespace,
 	sorting,
 	storages,
 	url,

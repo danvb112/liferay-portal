@@ -17,11 +17,13 @@
 interface ModalImportObjectDefinitionProps {
 	importObjectDefinitionURL: string;
 	nameMaxLength: string;
+	onVisibilityChange: (value: boolean) => void;
 	portletNamespace: string;
 }
-export default function ModalImportObjectDefinition({
+export declare function ModalImportObjectDefinition({
 	importObjectDefinitionURL,
 	nameMaxLength,
+	onVisibilityChange,
 	portletNamespace,
-}: ModalImportObjectDefinitionProps): JSX.Element | null;
+}: ModalImportObjectDefinitionProps): JSX.Element;
 export {};
