@@ -10,6 +10,7 @@ import {getLocalizableLabel} from '@liferay/object-js-components-web';
 import React from 'react';
 
 import {defaultLanguageId} from '../../utils/constants';
+import { sub } from 'frontend-js-web';
 
 interface CardHeaderProps {
 	editObjectFolderURL: string;
@@ -61,8 +62,9 @@ export default function CardHeader({
 
 					<span
 						className="ml-3 text-secondary"
-						title={Liferay.Language.get(
-							'unique-key-for-referencing-the-objects-folder'
+						title={sub(
+							Liferay.Language.get('unique-key-for-referencing-the-x'),
+							Liferay.Language.get('objects-folder')
 						)}
 					>
 						<ClayIcon symbol="question-circle" />
