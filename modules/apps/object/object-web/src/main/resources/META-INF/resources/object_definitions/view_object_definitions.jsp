@@ -30,6 +30,8 @@ ViewObjectDefinitionsDisplayContext viewObjectDefinitionsDisplayContext = (ViewO
 			).put(
 				"items", viewObjectDefinitionsDisplayContext.getFDSActionDropdownItems()
 			).put(
+				"objectFolderPermissionsURL", viewObjectDefinitionsDisplayContext.getPermissionsURL(ObjectFolder.class.getName())
+			).put(
 				"sorting", viewObjectDefinitionsDisplayContext.getFDSSortItemList()
 			).put(
 				"storages", viewObjectDefinitionsDisplayContext.getStoragesJSONArray()
