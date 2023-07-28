@@ -8,23 +8,21 @@ import React from 'react';
 import {KeyValuePair} from '../ObjectDetails/EditObjectDetails';
 import {TDeletionType} from '../ObjectRelationship/EditRelationship';
 import EditObjectFolder from './EditObjectFolder';
-import {FolderContextProvider} from './objectFolderContext';
+import {FolderContextProvider} from './ModelBuilderContext/objectFolderContext';
 
-interface ICustomFolderWrapperProps extends React.HTMLAttributes<HTMLElement> {
+interface ICustomFolderWrapperProps {
 	companyKeyValuePair: KeyValuePair[];
 	deletionTypes: TDeletionType[];
-	objectDefinitions: ObjectDefinition[];
 	siteKeyValuePair: KeyValuePair[];
 }
 
-const CustomFolderWrapper: React.FC<ICustomFolderWrapperProps> = ({
+function CustomFolderWrapper({
 	companyKeyValuePair,
 	deletionTypes,
-	objectDefinitions,
 	siteKeyValuePair,
-}) => {
+}: ICustomFolderWrapperProps) {
 	return (
-		<FolderContextProvider value={{objectDefinitions}}>
+		<FolderContextProvider value={{}}>
 			<EditObjectFolder
 				companyKeyValuePair={companyKeyValuePair}
 				deletionTypes={deletionTypes}
@@ -32,6 +30,6 @@ const CustomFolderWrapper: React.FC<ICustomFolderWrapperProps> = ({
 			/>
 		</FolderContextProvider>
 	);
-};
+}
 
 export default CustomFolderWrapper;

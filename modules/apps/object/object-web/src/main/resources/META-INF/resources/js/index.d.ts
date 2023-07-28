@@ -300,6 +300,17 @@ type ObjectValidationType = {
 	name: string;
 };
 
+interface ObjectFolder {
+	actions: [];
+	dateCreated: string;
+	dateModified: string;
+	definitions?: ObjectDefinition[];
+	externalReferenceCode: string;
+	id: number;
+	label: LocalizedValue<string>;
+	name: string;
+}
+
 interface PickList {
 	actions: Actions;
 	externalReferenceCode: string;

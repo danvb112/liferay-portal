@@ -7,7 +7,7 @@ import {getLocalizableLabel} from '@liferay/object-js-components-web';
 import {sub} from 'frontend-js-web';
 import React from 'react';
 
-import {useFolderContext} from '../objectFolderContext';
+import {useFolderContext} from '../ModelBuilderContext/objectFolderContext';
 
 import './RightSidebarObjectDefinitionDetails.scss';
 import {AccountRestrictionContainer} from '../../ObjectDetails/AccountRestrictionContainer';
