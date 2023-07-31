@@ -6,13 +6,32 @@
 import {getLocalizableLabel} from '@liferay/object-js-components-web';
 
 import {defaultLanguageId} from '../../../utils/constants';
-import {LeftSidebarItemType, TAction, TState} from '../types';
+import {
+	LeftSidebarItemType,
+	ObjectDefinitionNode,
+	ObjectDefinitionNodeTypes,
+	ObjectFieldNode,
+	TAction,
+	TState,
+} from '../types';
 import {TYPES} from './typesEnum';
+
+function compareFn(field1: ObjectFieldNode, field2: any) {
+	if (
+		(field1.name == 'id' || field1.name == 'externalReferenceCode') &&
+		(field2.name != 'id' || field2.name != 'externalReferenceCode')
+	) {
+		return -1;
+	}
+
+	return 0;
+}
 
 export function objectFolderReducer(state: TState, action: TAction) {
 	switch (action.type) {
 		case TYPES.CREATE_MODEL_BUILDER_STRUCTURE: {
 			const {objectFolders} = action.payload;
+			const {selectedFolderERC} = state;
 
 			const newLeftSidebar = objectFolders.map((folder) => {
 				const folderDefinitions = folder.definitions?.map(
@@ -41,9 +60,72 @@ export function objectFolderReducer(state: TState, action: TAction) {
 				} as LeftSidebarItemType;
 			});
 
+			const currentFolder = objectFolders.find(
+				(folder) => folder.externalReferenceCode === selectedFolderERC
+			);
+
+			let newObjectDefinitionNodes: ObjectDefinitionNode[] = [];
+
+			if (currentFolder) {
+				let positionColumn = 1;
+
+				newObjectDefinitionNodes = currentFolder.definitions!.map(
+					(objectDefinition, index) => {
+						const objectFields = objectDefinition.objectFields.map(
+							(field) => {
+								return {
+									businessType: field.businessType,
+									externalReferenceCode:
+										field.externalReferenceCode,
+									label: getLocalizableLabel(
+										objectDefinition.defaultLanguageId,
+										field.label,
+										field.name
+									),
+									name: field.name,
+									primaryKey: field.name === 'id',
+									selected: false,
+								} as ObjectFieldNode;
+							}
+						);
+
+						if ((index + 1) % 4 === 0) {
+							positionColumn++;
+						}
+
+						return {
+							data: {
+								creationLanguageId:
+									objectDefinition.defaultLanguageId,
+								hasDeleteResourcePermission: true,
+								hasManagePermissionsResourcePermission: true,
+								hasObjectDefinitionPublished: true,
+								isLinkedNode: false,
+								nodeSelected: true,
+								objectDefinitionLabel: getLocalizableLabel(
+									objectDefinition.defaultLanguageId,
+									objectDefinition.label,
+									objectDefinition.name
+								),
+								objectDefinitionName: objectDefinition.name,
+								objectFields: objectFields.sort(compareFn),
+								system: objectDefinition.system,
+							},
+							id: objectDefinition.externalReferenceCode,
+							position: {
+								x: ((index) % 4) * 300,
+								y: positionColumn * 400,
+							},
+							type: 'objectDefinition',
+						} as ObjectDefinitionNode;
+					}
+				);
+			}
+
 			return {
 				...state,
 				leftSidebarItems: newLeftSidebar,
+				objectDefinitionNodes: newObjectDefinitionNodes,
 			};
 		}
 		default:

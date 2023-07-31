@@ -16,6 +16,8 @@ export type TState = {
 	leftSidebarItems: LeftSidebarItemType[];
 	objectDefinitions: ObjectDefinition[];
 	objectFolders: ObjectFolder[];
+	objectDefinitionNodes: ObjectDefinitionNode[];
+	selectedFolderERC: string;
 };
 
 export interface FieldNode extends ObjectField {
@@ -31,4 +33,37 @@ export type LeftSidebarItemType = {
 		type: 'objectDefinition';
 	}[];
 	type: 'objectFolder';
+};
+
+export type ObjectDefinitionNodeTypes = 'objectDefinition';
+
+export type ObjectFieldNode = {
+	businessType: ObjectFieldBusinessType;
+	externalReferenceCode: string;
+	label: string;
+	required: boolean;
+	name: string;
+	primaryKey: boolean;
+	selected: boolean;
+};
+
+export type ObjectDefinitionNode = {
+	data: {
+		creationLanguageId: Liferay.Language.Locale;
+		hasDeleteResourcePermission: boolean;
+		hasManagePermissionsResourcePermission: boolean;
+		hasObjectDefinitionPublished: boolean;
+		isLinkedNode: boolean;
+		nodeSelected: boolean;
+		objectDefinitionLabel: string;
+		objectDefinitionName: string;
+		objectFields: ObjectFieldNode[];
+		system: boolean;
+	};
+	id: string;
+	position: {
+		x: number;
+		y: number;
+	};
+	type: ObjectDefinitionNodeTypes;
 };
