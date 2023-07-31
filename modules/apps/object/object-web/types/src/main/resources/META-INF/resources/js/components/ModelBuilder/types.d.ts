@@ -11,9 +11,20 @@ export declare type TAction = {
 	type: TYPES.CREATE_MODEL_BUILDER_STRUCTURE;
 };
 export declare type TState = {
+	leftSidebarItems: LeftSidebarItemType[];
 	objectDefinitions: ObjectDefinition[];
 	objectFolders: ObjectFolder[];
 };
 export interface FieldNode extends ObjectField {
 	selected: boolean;
 }
+export declare type LeftSidebarItemType = {
+	folderName: string;
+	name: string;
+	objectDefinitions?: {
+		definitionName: string;
+		name: string;
+		type: 'objectDefinition';
+	}[];
+	type: 'objectFolder';
+};

@@ -13,6 +13,7 @@ export type TAction = {
 };
 
 export type TState = {
+	leftSidebarItems: LeftSidebarItemType[];
 	objectDefinitions: ObjectDefinition[];
 	objectFolders: ObjectFolder[];
 };
@@ -20,3 +21,14 @@ export type TState = {
 export interface FieldNode extends ObjectField {
 	selected: boolean;
 }
+
+export type LeftSidebarItemType = {
+	folderName: string;
+	name: string;
+	objectDefinitions?: {
+		definitionName: string;
+		name: string;
+		type: 'objectDefinition';
+	}[];
+	type: 'objectFolder';
+};
