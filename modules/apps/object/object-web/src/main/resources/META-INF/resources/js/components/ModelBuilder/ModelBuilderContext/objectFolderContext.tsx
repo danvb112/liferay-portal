@@ -27,8 +27,8 @@ const FolderContext = createContext({} as IFolderContextProps);
 
 const initialState = {
 	leftSidebarItems: [] as LeftSidebarItemType[],
-	objectDefinitions: [] as ObjectDefinition[],
 	objectDefinitionNodes: [] as ObjectDefinitionNode[],
+	objectDefinitions: [] as ObjectDefinition[],
 	objectFolders: [] as ObjectFolder[],
 	selectedFolderERC: '',
 } as TState;

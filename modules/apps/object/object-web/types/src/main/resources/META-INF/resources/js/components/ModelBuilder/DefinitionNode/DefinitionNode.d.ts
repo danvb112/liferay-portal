@@ -16,6 +16,7 @@ interface DefinitionNodeProps {
 	isLinkedNode: boolean;
 	nodeSelected: boolean;
 	objectDefinitionLabel: string;
+	objectDefinitionName: string;
 	objectFields: FieldNode[];
 	system: boolean;
 }
@@ -28,6 +29,7 @@ export declare function DefinitionNode({
 		isLinkedNode,
 		nodeSelected,
 		objectDefinitionLabel,
+		objectDefinitionName,
 		objectFields,
 		system,
 	},

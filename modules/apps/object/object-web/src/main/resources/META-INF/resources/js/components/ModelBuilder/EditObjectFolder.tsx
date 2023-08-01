@@ -5,6 +5,7 @@
 
 import {API} from '@liferay/object-js-components-web';
 import React, {useEffect} from 'react';
+import {ReactFlowProvider} from 'react-flow-renderer';
 
 import Diagram from './Diagram/Diagram';
 import Header from './Header/Header';
@@ -50,9 +51,11 @@ export default function EditObjectFolder() {
 				hasDraftObjectDefinitions={false}
 			/>
 			<div className="lfr-objects__model-builder-diagram-container">
-				<LeftSidebar />
+				<ReactFlowProvider>
+					<LeftSidebar />
 
-				<Diagram />
+					<Diagram />
+				</ReactFlowProvider>
 			</div>
 		</>
 	);

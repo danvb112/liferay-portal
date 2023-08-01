@@ -5,18 +5,25 @@
 
 import {TYPES} from './ModelBuilderContext/typesEnum';
 
-export type TAction = {
-	payload: {
-		objectFolders: ObjectFolder[];
-	};
-	type: TYPES.CREATE_MODEL_BUILDER_STRUCTURE;
-};
+export type TAction =
+	| {
+			payload: {
+				objectFolders: ObjectFolder[];
+			};
+			type: TYPES.CREATE_MODEL_BUILDER_STRUCTURE;
+	  }
+	| {
+			payload: {
+				selectedObjectDefinitionName: string;
+			};
+			type: TYPES.SET_SELECTED_NODE;
+	  };
 
 export type TState = {
 	leftSidebarItems: LeftSidebarItemType[];
+	objectDefinitionNodes: ObjectDefinitionNode[];
 	objectDefinitions: ObjectDefinition[];
 	objectFolders: ObjectFolder[];
-	objectDefinitionNodes: ObjectDefinitionNode[];
 	selectedFolderERC: string;
 };
 
@@ -27,12 +34,15 @@ export interface FieldNode extends ObjectField {
 export type LeftSidebarItemType = {
 	folderName: string;
 	name: string;
-	objectDefinitions?: {
-		definitionName: string;
-		name: string;
-		type: 'objectDefinition';
-	}[];
-	type: 'objectFolder';
+	objectDefinitions?: LeftSidebarDefinitionItemType[];
+	type: 'objectFolder' | 'objectDefinition';
+};
+
+export type LeftSidebarDefinitionItemType = {
+	definitionName: string;
+	name: string;
+	selected: boolean;
+	type: 'objectDefinition';
 };
 
 export type ObjectDefinitionNodeTypes = 'objectDefinition';
@@ -41,9 +51,9 @@ export type ObjectFieldNode = {
 	businessType: ObjectFieldBusinessType;
 	externalReferenceCode: string;
 	label: string;
-	required: boolean;
 	name: string;
 	primaryKey: boolean;
+	required: boolean;
 	selected: boolean;
 };
 

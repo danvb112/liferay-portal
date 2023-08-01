@@ -9,7 +9,6 @@ import {defaultLanguageId} from '../../../utils/constants';
 import {
 	LeftSidebarItemType,
 	ObjectDefinitionNode,
-	ObjectDefinitionNodeTypes,
 	ObjectFieldNode,
 	TAction,
 	TState,
@@ -43,6 +42,7 @@ export function objectFolderReducer(state: TState, action: TAction) {
 								definition.label,
 								definition.name
 							),
+							selected: false,
 							type: 'objectDefinition',
 						};
 					}
@@ -101,7 +101,7 @@ export function objectFolderReducer(state: TState, action: TAction) {
 								hasManagePermissionsResourcePermission: true,
 								hasObjectDefinitionPublished: true,
 								isLinkedNode: false,
-								nodeSelected: true,
+								nodeSelected: false,
 								objectDefinitionLabel: getLocalizableLabel(
 									objectDefinition.defaultLanguageId,
 									objectDefinition.label,
@@ -113,7 +113,7 @@ export function objectFolderReducer(state: TState, action: TAction) {
 							},
 							id: objectDefinition.externalReferenceCode,
 							position: {
-								x: ((index) % 4) * 300,
+								x: (index % 4) * 300,
 								y: positionColumn * 400,
 							},
 							type: 'objectDefinition',
@@ -126,6 +126,68 @@ export function objectFolderReducer(state: TState, action: TAction) {
 				...state,
 				leftSidebarItems: newLeftSidebar,
 				objectDefinitionNodes: newObjectDefinitionNodes,
+			};
+		}
+		case TYPES.SET_SELECTED_NODE: {
+			const {selectedObjectDefinitionName} = action.payload;
+
+			const {leftSidebarItems, objectDefinitionNodes} = state;
+
+			const newObjectDefinitionNodes = objectDefinitionNodes.map(
+				(definitionNode) => {
+					if (
+						definitionNode.data.objectDefinitionName ===
+						selectedObjectDefinitionName
+					) {
+						return {
+							...definitionNode,
+							data: {
+								...definitionNode.data,
+								nodeSelected: true,
+							},
+						};
+					}
+
+					return {
+						...definitionNode,
+						data: {
+							...definitionNode.data,
+							nodeSelected: false,
+						},
+					};
+				}
+			);
+
+			const newLeftSidebarItems = leftSidebarItems.map((sidebarItem) => {
+				const newLeftSidebarDefinitions = sidebarItem.objectDefinitions?.map(
+					(sidebarDefinition) => {
+						if (
+							selectedObjectDefinitionName ===
+							sidebarDefinition.definitionName
+						) {
+							return {
+								...sidebarDefinition,
+								selected: true,
+							};
+						}
+
+						return {
+							...sidebarDefinition,
+							selected: false,
+						};
+					}
+				);
+
+				return {
+					...sidebarItem,
+					objectDefinitions: newLeftSidebarDefinitions,
+				};
+			});
+
+			return {
+				...state,
+				objectDefinitionNodes: newObjectDefinitionNodes,
+				leftSidebarItems: newLeftSidebarItems,
 			};
 		}
 		default:

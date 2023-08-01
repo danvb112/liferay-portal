@@ -19,7 +19,6 @@ function DiagramBuilder() {
 	};
 
 	const [{objectDefinitionNodes}] = useFolderContext();
-	console.log(objectDefinitionNodes);
 
 	// const INITIAL_NODES = objectDefinitionNodes;
 	// [
