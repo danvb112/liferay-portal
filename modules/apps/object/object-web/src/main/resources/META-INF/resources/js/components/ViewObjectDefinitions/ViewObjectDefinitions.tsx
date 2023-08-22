@@ -34,6 +34,7 @@ import './ViewObjectDefinitions.scss';
 import {ModalBindToRootObject} from './ModalBindToRootObject';
 import {ModalDeleteFolder} from './ModalDeleteFolder';
 import {ModalMoveObjectDefinition} from './ModalMoveObjectDefinition';
+import {ModalUnbindObject} from './ModalUnbindObject';
 
 interface ViewObjectDefinitionsProps extends IFDSTableProps {
 	baseResourceURL: string;
@@ -49,6 +50,7 @@ export type ViewObjectDefinitionsModals = {
 	deleteObjectDefinition: boolean;
 	editFolder: boolean;
 	moveObjectDefinition: boolean;
+	unbindFromRootObject: boolean;
 };
 
 export interface DeletedObjectDefinition extends ObjectDefinition {
@@ -83,6 +85,7 @@ export default function ViewObjectDefinitions({
 		deleteObjectDefinition: false,
 		editFolder: false,
 		moveObjectDefinition: false,
+		unbindFromRootObject: false,
 	});
 	const [selectedFolder, setSelectedFolder] = useState<Partial<Folder>>(
 		initialValues
@@ -99,9 +102,10 @@ export default function ViewObjectDefinitions({
 		moveObjectDefinition,
 		setMoveObjectDefinition,
 	] = useState<ObjectDefinition | null>();
-	const [selectedObjectToBind, setSelectedObjectToBind] = useState<
-		ObjectDefinition
-	>();
+	const [
+		selectedObjectToBindOrUnbind,
+		setSelectedObjectToBindOrUnbind,
+	] = useState<ObjectDefinition>();
 	const [loading, setLoading] = useState(true);
 
 	function objectDefinitionLabelDataRenderer({
@@ -176,7 +180,7 @@ export default function ViewObjectDefinitions({
 				action.data.id === 'bind' &&
 				Liferay.FeatureFlags['LPS-187142']
 			) {
-				setSelectedObjectToBind(itemData);
+				setSelectedObjectToBindOrUnbind(itemData);
 
 				setShowModal((previousState: ViewObjectDefinitionsModals) => ({
 					...previousState,
@@ -233,6 +237,18 @@ export default function ViewObjectDefinitions({
 				setShowModal((previousState: ViewObjectDefinitionsModals) => ({
 					...previousState,
 					moveObjectDefinition: true,
+				}));
+			}
+
+			if (
+				action.data.id === 'unbind' &&
+				Liferay.FeatureFlags['LPS-187142']
+			) {
+				setSelectedObjectToBindOrUnbind(itemData);
+
+				setShowModal((previousState: ViewObjectDefinitionsModals) => ({
+					...previousState,
+					unbindFromRootObject: true,
 				}));
 			}
 		},
@@ -477,9 +493,27 @@ export default function ViewObjectDefinitions({
 							})
 						);
 					}}
-					selectedObjectToBind={selectedObjectToBind}
+					selectedObjectToBind={selectedObjectToBindOrUnbind}
 				/>
 			)}
+
+			{showModal.unbindFromRootObject &&
+				Liferay.FeatureFlags['LPS-187142'] && (
+					<ModalUnbindObject
+						baseResourceURL={baseResourceURL}
+						onvisibilityChange={() => {
+							setShowModal(
+								(
+									previousState: ViewObjectDefinitionsModals
+								) => ({
+									...previousState,
+									unbindFromRootObject: false,
+								})
+							);
+						}}
+						selectedObjectToUnbind={selectedObjectToBindOrUnbind}
+					/>
+				)}
 		</>
 	);
 }
