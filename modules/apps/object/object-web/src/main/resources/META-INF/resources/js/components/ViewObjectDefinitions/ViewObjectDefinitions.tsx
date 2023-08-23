@@ -31,6 +31,7 @@ import {ModalEditFolder} from './ModalEditFolder';
 import {deleteObjectDefinition, getFolderActions} from './objectDefinitionUtil';
 
 import './ViewObjectDefinitions.scss';
+import {ModalDeletionNotAllowed} from '../ModalDeletionNotAllowed';
 import {ModalBindToRootObject} from './ModalBindToRootObject';
 import {ModalDeleteFolder} from './ModalDeleteFolder';
 import {ModalMoveObjectDefinition} from './ModalMoveObjectDefinition';
@@ -48,6 +49,7 @@ export type ViewObjectDefinitionsModals = {
 	bindToRootObject: boolean;
 	deleteFolder: boolean;
 	deleteObjectDefinition: boolean;
+	deletionNotAllowed: boolean;
 	editFolder: boolean;
 	moveObjectDefinition: boolean;
 	unbindFromRootObject: boolean;
@@ -83,6 +85,7 @@ export default function ViewObjectDefinitions({
 		bindToRootObject: false,
 		deleteFolder: false,
 		deleteObjectDefinition: false,
+		deletionNotAllowed: false,
 		editFolder: false,
 		moveObjectDefinition: false,
 		unbindFromRootObject: false,
@@ -189,6 +192,20 @@ export default function ViewObjectDefinitions({
 			}
 
 			if (action.data.id === 'deleteObjectDefinition') {
+				if (
+					itemData.rootObjectDefinitionExternalReferenceCode &&
+					Liferay.FeatureFlags['LPS-187142']
+				) {
+					setSelectedObjectToBindOrUnbind(itemData);
+
+					setShowModal((previousState) => ({
+						...previousState,
+						deletionNotAllowed: true,
+					}));
+
+					return;
+				}
+
 				const getDeleteObjectDefinition = async () => {
 					const url = createResourceURL(baseResourceURL, {
 						objectDefinitionId: itemData.id,
@@ -418,6 +435,28 @@ export default function ViewObjectDefinitions({
 					setDeletedObjectDefinition={setDeletedObjectDefinition}
 				/>
 			)}
+
+			{showModal.deletionNotAllowed &&
+				selectedObjectToBindOrUnbind &&
+				Liferay.FeatureFlags['LPS-187142'] && (
+					<ModalDeletionNotAllowed
+						onvisibilityChange={() =>
+							setShowModal(
+								(
+									previousState: ViewObjectDefinitionsModals
+								) => ({
+									...previousState,
+									deletionNotAllowed: false,
+								})
+							)
+						}
+						selectedItemLabel={getLocalizableLabel(
+							selectedObjectToBindOrUnbind.defaultLanguageId,
+							selectedObjectToBindOrUnbind.label,
+							selectedObjectToBindOrUnbind.name
+						)}
+					/>
+				)}
 
 			{showModal.addFolder && (
 				<ModalAddFolder
