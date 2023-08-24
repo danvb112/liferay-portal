@@ -73,19 +73,19 @@ export function ExpressionBuilder({
 	);
 }
 
-export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
+export function ExpressionBuilderModal({
+	sidebarElements,
+	error,
+	eventSidebarElements,
+	header,
+	onSave,
+	placeholder,
+	required,
+	source,
+}: IModalProps) {
 	const editorRef = useRef<CodeMirror.Editor>(null);
 	const [
-		{
-			error,
-			eventSidebarElements,
-			header,
-			onSave,
-			placeholder,
-			required,
-			source,
-			validateExpressionURL,
-		},
+		state,
 		setState,
 	] = useState<{
 		error?: string;
@@ -96,7 +96,15 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 		required?: boolean;
 		source?: string;
 		validateExpressionURL?: string;
-	}>({});
+	}>({
+		error: error ?? "",
+		eventSidebarElements: eventSidebarElements ?? [],
+		header: header ?? "",
+		onSave: onSave ?? (() => {}),
+		placeholder: placeholder ?? "",
+		required: required ?? false,
+		source: source ?? "",
+	});
 
 	const {observer, onOpenChange} = useModal({
 		onClose: () => setState({}),
@@ -124,7 +132,7 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 			);
 	}, []);
 
-	if (source === undefined) {
+	if (state.source === undefined) {
 		return null;
 	}
 
@@ -137,12 +145,12 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 
 		let error: string | undefined;
 
-		if (required && !source?.trim()) {
+		if (state.required && !source?.trim()) {
 			error = REQUIRED_MSG;
 		}
-		else if (source?.trim() && validateExpressionURL) {
+		else if (source?.trim() && state.validateExpressionURL) {
 			const response = await fetch(
-				createResourceURL(validateExpressionURL, {
+				createResourceURL(state.validateExpressionURL, {
 					expression: source,
 				}).href
 			);
@@ -161,7 +169,7 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 			}));
 		}
 		else {
-			onSave?.(source);
+			state.onSave?.(source);
 			closeModal();
 		}
 	};
@@ -173,15 +181,15 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 			size="lg"
 		>
 			<ClayModal.Header>
-				{header ?? Liferay.Language.get('expression-builder')}
+				{state.header ?? Liferay.Language.get('expression-builder')}
 			</ClayModal.Header>
 
 			<ClayModal.Body>
 				<CodeEditor
-					error={error}
+					error={state.error}
 					onChange={() => {}}
 					placeholder={
-						placeholder ??
+						state.placeholder ??
 						`<#-- ${Liferay.Util.sub(
 							Liferay.Language.get(
 								'create-the-condition-of-the-action-using-the-expression-builder-type-x-to-use-the-autocomplete-feature'
@@ -190,8 +198,8 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 						)} -->`
 					}
 					ref={editorRef}
-					sidebarElements={eventSidebarElements || sidebarElements}
-					value={source}
+					sidebarElements={state.eventSidebarElements || sidebarElements}
+					value={state.source}
 				/>
 			</ClayModal.Body>
 
@@ -219,6 +227,14 @@ type Callback = (source?: string) => void;
 
 interface IModalProps {
 	sidebarElements: SidebarCategory[];
+	error?: string;
+	eventSidebarElements?: SidebarCategory[];
+	header?: string;
+	onSave?: Callback;
+	placeholder?: string;
+	required?: boolean;
+	source?: string;
+	validateExpressionURL?: string;
 }
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	buttonDisabled?: boolean;

@@ -11,6 +11,7 @@
 String backURL = ParamUtil.getString(request, "backURL", String.valueOf(renderResponse.createRenderURL()));
 ObjectDefinitionsDetailsDisplayContext objectDefinitionsDetailsDisplayContext = (ObjectDefinitionsDetailsDisplayContext)request.getAttribute(ObjectWebKeys.OBJECT_DEFINITIONS_DETAILS_DISPLAY_CONTEXT);
 ObjectDefinitionsRelationshipsDisplayContext objectDefinitionsRelationshipsDisplayContext = (ObjectDefinitionsRelationshipsDisplayContext)request.getAttribute(ObjectWebKeys.OBJECT_DEFINITIONS_RELATIONSHIP_DISPLAY_CONTEXT);
+ObjectDefinitionsFieldsDisplayContext objectDefinitionsFieldsDisplayContext = (ObjectDefinitionsFieldsDisplayContext)request.getAttribute(ObjectWebKeys.OBJECT_DEFINITIONS_FIELDS_DISPLAY_CONTEXT);
 
 portletDisplay.setShowBackIcon(true);
 portletDisplay.setURLBack(backURL);
@@ -23,22 +24,24 @@ renderResponse.setTitle(LanguageUtil.get(request, "object-model-builder"));
 <react:component
 	module="js/components/ModelBuilder/index"
 	props='<%=
-		HashMapBuilder.<String, Object>put(
-			"baseResourceURL", String.valueOf(baseResourceURL)
-		).put(
-			"companyKeyValuePair", objectDefinitionsDetailsDisplayContext.getScopeKeyValuePairs("company")
-		).put(
-			"deletionTypes", objectDefinitionsRelationshipsDisplayContext.getObjectRelationshipDeletionTypesJSONArray()
-		).put(
-			"editObjectDefinitionURL", objectDefinitionsDetailsDisplayContext.getEditObjectDefinitionURL()
-		).put(
-			"objectDefinitionPermissionsURL", objectDefinitionsDetailsDisplayContext.getPermissionsURL(ObjectDefinition.class.getName())
-		).put(
-			"siteKeyValuePair", objectDefinitionsDetailsDisplayContext.getScopeKeyValuePairs("site")
-		).put(
-			"storages", objectDefinitionsDetailsDisplayContext.getStoragesJSONArray()
-		).put(
-			"viewApiURL", "/o/object-admin/v1.0/object-definitions"
-		).build()
-	%>'
+	HashMapBuilder.<String, Object>put(
+		"baseResourceURL", String.valueOf(baseResourceURL)
+	).put(
+		"companyKeyValuePair", objectDefinitionsDetailsDisplayContext.getScopeKeyValuePairs("company")
+	).put(
+		"deletionTypes", objectDefinitionsRelationshipsDisplayContext.getObjectRelationshipDeletionTypesJSONArray()
+	).put(
+		"editObjectDefinitionURL", objectDefinitionsDetailsDisplayContext.getEditObjectDefinitionURL()
+	).put(
+		"objectDefinitionPermissionsURL", objectDefinitionsDetailsDisplayContext.getPermissionsURL(ObjectDefinition.class.getName())
+	).put(
+		"siteKeyValuePair", objectDefinitionsDetailsDisplayContext.getScopeKeyValuePairs("site")
+	).put(
+		"storages", objectDefinitionsDetailsDisplayContext.getStoragesJSONArray()
+	).put(
+		"viewApiURL", "/o/object-admin/v1.0/object-definitions"
+	).put(
+		"test", objectDefinitionsFieldsDisplayContext.getObjectFieldBusinessTypeMaps(false, locale)
+	).build()
+%>'
 />

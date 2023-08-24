@@ -26,9 +26,25 @@ export declare function ExpressionBuilder({
 }: IProps): JSX.Element;
 export declare function ExpressionBuilderModal({
 	sidebarElements,
+	error,
+	eventSidebarElements,
+	header,
+	onSave,
+	placeholder,
+	required,
+	source,
 }: IModalProps): JSX.Element | null;
+declare type Callback = (source?: string) => void;
 interface IModalProps {
 	sidebarElements: SidebarCategory[];
+	error?: string;
+	eventSidebarElements?: SidebarCategory[];
+	header?: string;
+	onSave?: Callback;
+	placeholder?: string;
+	required?: boolean;
+	source?: string;
+	validateExpressionURL?: string;
 }
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	buttonDisabled?: boolean;

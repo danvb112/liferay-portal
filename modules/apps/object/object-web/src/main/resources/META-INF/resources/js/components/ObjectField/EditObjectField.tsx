@@ -81,6 +81,8 @@ export default function EditObjectField({
 }: EditObjectFieldProps) {
 	const [activeIndex, setActiveIndex] = useState(0);
 
+	console.log(readOnlySidebarElements);
+
 	const onSubmit = async ({id, ...objectField}: ObjectField) => {
 		delete objectField.defaultValue;
 		delete objectField.listTypeDefinitionId;

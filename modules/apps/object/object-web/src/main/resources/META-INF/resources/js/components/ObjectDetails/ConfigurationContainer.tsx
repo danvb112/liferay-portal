@@ -25,7 +25,7 @@ export function ConfigurationContainer({
 		: values.system;
 
 	const disabled =
-		isReadOnly || !hasUpdateObjectDefinitionPermission || isLinkedNode;
+		isReadOnly || !hasUpdateObjectDefinitionPermission || linkedDefinition;
 
 	return (
 		<div className="lfr-objects__object-definition-details-configuration">

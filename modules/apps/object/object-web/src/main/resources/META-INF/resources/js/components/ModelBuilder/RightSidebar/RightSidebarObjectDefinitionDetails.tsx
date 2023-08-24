@@ -5,6 +5,8 @@
 
 import {
 	API,
+	ExpressionBuilder,
+	ExpressionBuilderModal,
 	getLocalizableLabel,
 	openToast,
 } from '@liferay/object-js-components-web';
@@ -68,6 +70,8 @@ export function RightSidebarObjectDefinitionDetails({
 		nonRelationshipObjectFieldsInfo,
 		setNonRelationshipObjectFieldsInfo,
 	] = useState<nonRelationshipObjectFieldsInfo[]>();
+
+	const [showModalExpression, setShowModalExpression] = useState(false);
 
 	const {
 		errors,
@@ -208,6 +212,8 @@ export function RightSidebarObjectDefinitionDetails({
 		}
 	};
 
+	console.log(showModalExpression);
+
 	return (
 		<div onBlur={onSubmit}>
 			<div className="lfr-objects__model-builder-right-sidebar-definition-node-title">
@@ -237,6 +243,32 @@ export function RightSidebarObjectDefinitionDetails({
 					values={values as ObjectDefinition}
 				/>
 			</div>
+
+			<ExpressionBuilder
+				feedbackMessage={Liferay.Language.get(
+					'use-expressions-to-create-a-condition'
+				)}
+				label={Liferay.Language.get('expression-builder')}
+				onChange={({target: {value}}) => {}}
+				onOpenModal={() => {
+					setShowModalExpression(true);
+				}}
+				placeholder={Liferay.Language.get('create-an-expression')}
+				value=""
+			/>
+
+			{showModalExpression && (
+				<ExpressionBuilderModal
+					error=""
+					header="Funciona por favor"
+					onSave={() => {}}
+					placeholder="descrição pra funcionar"
+					required
+					sidebarElements={[]}
+					source=""
+					validateExpressionURL=""
+				/>
+			)}
 
 			<div className="lfr-objects__model-builder-right-sidebar-definition-node-content">
 				<EntryDisplayContainer
