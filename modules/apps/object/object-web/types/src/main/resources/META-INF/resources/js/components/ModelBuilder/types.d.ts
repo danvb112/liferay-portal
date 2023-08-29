@@ -111,22 +111,33 @@ export declare type TAction =
 				updatedNode: Partial<ObjectDefinition>;
 			};
 			type: TYPES.UPDATE_FOLDER_NODE;
+	  }
+	| {
+			payload: {
+				edges: Edge<ObjectRelationshipEdgeData>[];
+				nodes: Node<ObjectDefinitionNodeData>[];
+				selectedFieldDefinitionName: string;
+				selectedObjectDefinitionId: number;
+			};
+			type: TYPES.SET_SELECTED_FIELD;
 	  };
 export declare type TState = {
 	baseResourceURL: string;
 	editObjectDefinitionURL: string;
 	elements: Elements<ObjectDefinitionNodeData | ObjectRelationshipEdgeData>;
+	filterOperators: TFilterOperators;
 	leftSidebarItems: LeftSidebarItemType[];
 	objectDefinitionPermissionsURL: string;
 	objectDefinitions: ObjectDefinition[];
 	objectFolders: ObjectFolder[];
 	rightSidebarType: RightSidebarType;
-	selectedDefinitionNode: Node<ObjectDefinitionNodeData>;
+	selectedDefinitionNode: Node<ObjectDefinitionNodeData> | null;
 	selectedFolder: ObjectFolder;
 	selectedObjectRelationship: ObjectRelationship;
 	showChangesSaved: boolean;
 	storages: LabelValueObject[];
 	viewApiURL: string;
+	workflowStatusJSONArray: LabelValueObject[];
 };
 export declare type LeftSidebarItemType = {
 	folderName: string;
@@ -164,6 +175,7 @@ export declare type nonRelationshipObjectFieldsInfo = {
 };
 export declare type RightSidebarType =
 	| 'empty'
+	| 'objectFieldDetails'
 	| 'objectDefinitionDetails'
 	| 'objectRelationshipDetails';
 export {};

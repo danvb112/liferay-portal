@@ -656,19 +656,70 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 			};
 		}
 
+		case TYPES.SET_SELECTED_FIELD: {
+			const {
+				edges,
+				nodes,
+				selectedFieldDefinitionName,
+				selectedObjectDefinitionId,
+			} = action.payload;
+
+			const newNodes = nodes.map((node) => ({
+				...node,
+				data: {
+					...node.data,
+					nodeSelected: node.data?.id === selectedObjectDefinitionId,
+					objectFields: node.data?.objectFields.map((field) => ({
+						...field,
+						selected:
+							node.data?.id === selectedObjectDefinitionId &&
+							field.name === selectedFieldDefinitionName,
+					})),
+				},
+			})) as Node<ObjectDefinitionNodeData>[];
+
+			const newEdges = edges.map((relationshipEdge) => ({
+				...relationshipEdge,
+				data: {...relationshipEdge.data, edgeSelected: false},
+			})) as Edge<ObjectRelationshipEdgeData>[];
+
+			return {
+				...state,
+				elements: [...newEdges, ...newNodes],
+				rightSidebarType: 'objectFieldDetails' as RightSidebarType,
+			};
+		}
+
 		case TYPES.SET_SELECTED_NODE: {
 			const {edges, nodes, selectedObjectDefinitionId} = action.payload;
 
 			const {leftSidebarItems} = state;
 
-			const newObjectDefinitionNodes = nodes.map((definitionNode) => ({
-				...definitionNode,
-				data: {
-					...definitionNode.data,
-					nodeSelected:
-						definitionNode.id === selectedObjectDefinitionId,
-				},
-			})) as Node<ObjectDefinitionNodeData>[];
+			let selectedNode: Node<ObjectDefinitionNodeData> | null = null;
+
+			const newObjectDefinitionNodes = nodes.map((definitionNode) => {
+				if (
+					definitionNode.id === selectedObjectDefinitionId.toString()
+				) {
+					selectedNode = {
+						...definitionNode,
+						data: {
+							...definitionNode.data,
+							nodeSelected: true,
+						},
+					} as Node<ObjectDefinitionNodeData>;
+
+					return selectedNode;
+				}
+
+				return {
+					...definitionNode,
+					data: {
+						...definitionNode.data,
+						nodeSelected: false,
+					},
+				};
+			}) as Node<ObjectDefinitionNodeData>[];
 
 			const newLeftSidebarItems = leftSidebarItems.map((sidebarItem) => {
 				const newLeftSidebarDefinitions = sidebarItem.objectDefinitions?.map(
@@ -710,6 +761,7 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 				],
 				leftSidebarItems: newLeftSidebarItems,
 				rightSidebarType: 'objectDefinitionDetails' as RightSidebarType,
+				selectedDefinitionNode: selectedNode,
 			};
 		}
 
