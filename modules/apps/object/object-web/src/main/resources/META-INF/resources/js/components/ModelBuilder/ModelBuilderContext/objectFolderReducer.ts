@@ -608,6 +608,42 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 			};
 		}
 
+		case TYPES.DELETE_OBJECT_FIELD: {
+			const {edges, nodes, selectedField, selectedNode} = action.payload;
+
+			const newSelectedNodeFields = selectedNode.data?.objectFields.filter(
+				(objectField) =>
+					objectField.externalReferenceCode !==
+					selectedField.externalReferenceCode
+			);
+
+			const newSelectedNode = {
+				...selectedNode,
+				data: {
+					...selectedNode.data,
+					nodeSelected: false,
+					objectFields: newSelectedNodeFields,
+				},
+			} as Node<ObjectDefinitionNodeData>;
+
+			const newNodes = nodes.map((node) => {
+				if (
+					node.data?.externalReferenceCode ===
+					newSelectedNode.data?.externalReferenceCode
+				) {
+					return newSelectedNode;
+				}
+
+				return node;
+			});
+
+			return {
+				...state,
+				elements: [...edges, ...newNodes],
+				rightSidebarType: 'empty',
+			};
+		}
+
 		case TYPES.SET_ELEMENTS: {
 			const {newElements} = action.payload;
 
