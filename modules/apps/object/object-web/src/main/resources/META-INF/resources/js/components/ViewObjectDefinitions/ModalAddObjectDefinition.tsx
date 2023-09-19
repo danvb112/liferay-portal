@@ -106,9 +106,9 @@ export function ModalAddObjectDefinition({
 			objectDefinition.storageType = storageType.value;
 		}
 		try {
-			const newObjectDefinition = await API.postObjectDefinition(
+			const newObjectDefinition = (await API.postObjectDefinition(
 				objectDefinition
-			);
+			)) as ObjectDefinition;
 
 			onClose();
 

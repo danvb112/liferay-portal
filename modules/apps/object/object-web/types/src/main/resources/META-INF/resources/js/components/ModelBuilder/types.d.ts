@@ -170,11 +170,11 @@ export declare type TState = {
 	baseResourceURL: string;
 	editObjectDefinitionURL: string;
 	elements: Elements<ObjectDefinitionNodeData | ObjectRelationshipEdgeData>;
-	isLoadingObjectFolder: boolean;
 	filterOperators: TFilterOperators;
 	forbiddenChars: string[];
 	forbiddenLastChars: string[];
 	forbiddenNames: string[];
+	isLoadingObjectFolder: boolean;
 	leftSidebarItems: LeftSidebarItem[];
 	objectDefinitionPermissionsURL: string;
 	objectDefinitions: ObjectDefinition[];
@@ -191,7 +191,7 @@ export declare type TState = {
 	workflowStatusJSONArray: LabelValueObject[];
 };
 export interface LeftSidebarItem {
-	hiddenFolderObjectDefinitionNodes: boolean;
+	hiddenObjectFolderObjectDefinitionNodes: boolean;
 	id?: string;
 	leftSidebarObjectDefinitionItems?: LeftSidebarObjectDefinitionItem[];
 	name: string;
