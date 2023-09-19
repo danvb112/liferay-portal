@@ -78,6 +78,7 @@ export function ObjectDefinitionNode({
 		},
 		dispatch,
 	] = useObjectFolderContext();
+
 	const store = useStore();
 
 	const nodeHandlePosition: {
@@ -113,6 +114,7 @@ export function ObjectDefinitionNode({
 		deleteObjectDefinition: false,
 		editObjectDefinitionExternalReferenceCode: false,
 	});
+
 	const [
 		objectRelationshipParameterRequired,
 		setObjectRelationshipParameterRequired,
@@ -125,6 +127,19 @@ export function ObjectDefinitionNode({
 	const [newExternalReferenceCode, setNewExternalReferenceCode] = useState(
 		externalReferenceCode
 	);
+
+	const handleSelectObjectDefinitionNode = () => {
+		const {edges, nodes} = store.getState();
+
+		dispatch({
+			payload: {
+				objectDefinitionNodes: nodes,
+				objectRelationshipEdges: edges,
+				selectedObjectDefinitionId: id.toString(),
+			},
+			type: TYPES.SET_SELECTED_OBJECT_DEFINITION_NODE,
+		});
+	};
 
 	const handleShowDeleteObjectDefinitionModal = () => {
 		setShowModal({
@@ -150,8 +165,8 @@ export function ObjectDefinitionNode({
 		const {edges, nodes} = store.getState();
 		dispatch({
 			payload: {
-				edges,
-				nodes,
+				objectDefinitionNodes: nodes,
+				objectRelationshipEdges: edges,
 				selectedObjectDefinitionId: id.toString(),
 			},
 			type: TYPES.SET_SELECTED_OBJECT_DEFINITION_NODE,
@@ -239,7 +254,9 @@ export function ObjectDefinitionNode({
 						setDeletedObjectDefinition,
 						status,
 					})}
-					handleSelectedNode={handleSelectedNode}
+					handleSelectObjectDefinitionNode={
+						handleSelectObjectDefinitionNode
+					}
 					isLinkedObjectDefinition={linkedObjectDefinition}
 					objectDefinitionLabel={getLocalizableLabel(
 						defaultLanguageId,
@@ -258,7 +275,9 @@ export function ObjectDefinitionNode({
 				/>
 
 				<ObjectDefinitionNodeFooter
-					handleSelectedNode={handleSelectedNode}
+					handleSelectObjectDefinitionNode={
+						handleSelectObjectDefinitionNode
+					}
 					isLinkedObjectDefinition={linkedObjectDefinition}
 					setShowAllObjectFields={setShowAllObjectFields}
 					setShowModal={setShowModal}
@@ -363,18 +382,18 @@ export function ObjectDefinitionNode({
 					objectDefinitionExternalReferenceCode={
 						externalReferenceCode
 					}
-					objectName={name}
+					objectDefinitionName={name}
 					onAfterSubmit={(newObjectField) => {
 						const {edges, nodes} = store.getState();
 
 						dispatch({
 							payload: {
-								edges,
 								newObjectField,
-								nodes,
 								objectDefinitionExternalReferenceCode: externalReferenceCode,
+								objectDefinitionNodes: nodes,
+								objectRelationshipEdges: edges,
 							},
-							type: TYPES.ADD_NEW_OBJECT_FIELD,
+							type: TYPES.ADD_OBJECT_FIELD,
 						});
 
 						openToast({

@@ -41,12 +41,12 @@ export declare type TAction =
 	  }
 	| {
 			payload: {
-				edges: Edge<ObjectRelationshipEdgeData>[];
 				newObjectField: ObjectField;
-				nodes: Node<ObjectDefinitionNodeData>[];
 				objectDefinitionExternalReferenceCode: string;
+				objectDefinitionNodes: Node<ObjectDefinitionNodeData>[];
+				objectRelationshipEdges: Edge<ObjectRelationshipEdgeData>[];
 			};
-			type: TYPES.ADD_NEW_OBJECT_FIELD;
+			type: TYPES.ADD_OBJECT_FIELD;
 	  }
 	| {
 			payload: {
@@ -86,10 +86,10 @@ export declare type TAction =
 	  }
 	| {
 			payload: {
-				edges: Edge<ObjectRelationshipEdgeData>[];
-				nodes: Node<ObjectDefinitionNodeData>[];
-				selectedField: ObjectFieldNode;
-				selectedNode: Node<ObjectDefinitionNodeData>;
+				objectDefinitionNodes: Node<ObjectDefinitionNodeData>[];
+				objectRelationshipEdges: Edge<ObjectRelationshipEdgeData>[];
+				selectedObjectDefinitionNode: Node<ObjectDefinitionNodeData>;
+				selectedObjectField: ObjectFieldNode;
 			};
 			type: TYPES.DELETE_OBJECT_FIELD;
 	  }
@@ -113,26 +113,26 @@ export declare type TAction =
 	  }
 	| {
 			payload: {
-				edges: Edge<ObjectRelationshipEdgeData>[];
-				nodes: Node<ObjectDefinitionNodeData>[];
-				selectedFieldDefinitionName: string;
-				selectedObjectDefinitionField: ObjectFieldNode;
-				selectedObjectDefinitionId: number;
-			};
-			type: TYPES.SET_SELECTED_FIELD;
-	  }
-	| {
-			payload: {
-				edges: Edge<ObjectRelationshipEdgeData>[];
-				nodes: Node<ObjectDefinitionNodeData>[];
+				objectDefinitionNodes: Node<ObjectDefinitionNodeData>[];
+				objectRelationshipEdges: Edge<ObjectRelationshipEdgeData>[];
 				selectedObjectDefinitionId: string;
 			};
 			type: TYPES.SET_SELECTED_OBJECT_DEFINITION_NODE;
 	  }
 	| {
 			payload: {
-				edges: Edge<ObjectRelationshipEdgeData>[];
-				nodes: Node<ObjectDefinitionNodeData>[];
+				objectDefinitionNodes: Node<ObjectDefinitionNodeData>[];
+				objectRelationshipEdges: Edge<ObjectRelationshipEdgeData>[];
+				selectedObjectDefinitionId: number;
+				selectedObjectField: ObjectFieldNode;
+				selectedObjectFieldName: string;
+			};
+			type: TYPES.SET_SELECTED_OBJECT_FIELD;
+	  }
+	| {
+			payload: {
+				objectDefinitionNodes: Node<ObjectDefinitionNodeData>[];
+				objectRelationshipEdges: Edge<ObjectRelationshipEdgeData>[];
 				selectedObjectRelationshipId: string;
 			};
 			type: TYPES.SET_SELECTED_OBJECT_RELATIONSHIP_EDGE;
@@ -145,15 +145,6 @@ export declare type TAction =
 	  }
 	| {
 			payload: {
-				edges: Edge<ObjectRelationshipEdgeData>[];
-				nodes: Node<ObjectDefinitionNodeData>[];
-				selectedNode: Node<ObjectDefinitionNodeData>;
-				updatedField: ObjectField;
-			};
-			type: TYPES.UPDATE_OBJECT_FIELD;
-	  }
-	| {
-			payload: {
 				currentObjectFolderName: string;
 				updatedObjectDefinitionNode: Partial<ObjectDefinition>;
 			};
@@ -161,10 +152,12 @@ export declare type TAction =
 	  }
 	| {
 			payload: {
-				objectFolders: ObjectFolder[];
-				selectedObjectFolder: ObjectFolder;
+				objectDefinitionNodes: Node<ObjectDefinitionNodeData>[];
+				objectRelationshipEdges: Edge<ObjectRelationshipEdgeData>[];
+				selectedObjectDefinitionNode: Node<ObjectDefinitionNodeData>;
+				updatedObjectField: ObjectField;
 			};
-			type: TYPES.ADD_NEW_OBJECT_RELATIONSHIP;
+			type: TYPES.UPDATE_OBJECT_FIELD;
 	  };
 export declare type TState = {
 	baseResourceURL: string;
@@ -183,8 +176,8 @@ export declare type TState = {
 	objectFolders: ObjectFolder[];
 	objectWebLearnResources: ObjectWebLearnResources;
 	rightSidebarType: RightSidebarType;
-	selectedObjectDefinitionField?: ObjectFieldNode;
 	selectedObjectDefinitionNode: Node<ObjectDefinitionNodeData> | null;
+	selectedObjectField?: ObjectFieldNode;
 	selectedObjectFolder: ObjectFolder;
 	selectedObjectRelationship: ObjectRelationship;
 	showChangesSaved: boolean;
