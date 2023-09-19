@@ -153,7 +153,7 @@ export function ObjectDefinitionNode({
 				nodes,
 				selectedObjectDefinitionId: id.toString(),
 			},
-			type: TYPES.SET_SELECTED_NODE,
+			type: TYPES.SET_SELECTED_OBJECT_DEFINITION_NODE,
 		});
 	};
 
