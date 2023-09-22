@@ -53,6 +53,7 @@ interface ObjectFieldFormBaseProps {
 	onRelationshipChange?: (
 		objectDefinitionExternalReferenceCode2: string
 	) => void;
+	onSubmit?: () => void;
 	setValues: (values: Partial<ObjectField>) => void;
 }
 
@@ -167,6 +168,7 @@ export default function ObjectFieldFormBase({
 	objectRelationshipId,
 	onAggregationFilterChange,
 	onRelationshipChange,
+	onSubmit,
 	setValues,
 }: ObjectFieldFormBaseProps) {
 	const [listTypeDefinitions, setListTypeDefinitions] = useState<
@@ -222,6 +224,8 @@ export default function ObjectFieldFormBase({
 			isSearchableByText && !values.indexedAsKeyword
 				? values.indexedLanguageId ?? defaultLanguageId
 				: null;
+
+		setSelectedOutput('');
 
 		setValues({
 			DBType: option.dbType,
@@ -343,6 +347,13 @@ export default function ObjectFieldFormBase({
 				error={errors.name}
 				label={Liferay.Language.get('field-name')}
 				name="name"
+				onBlur={(event) => {
+					event.stopPropagation();
+
+					if (onSubmit) {
+						onSubmit();
+					}
+				}}
 				onChange={handleChange}
 				required
 				value={
@@ -355,6 +366,13 @@ export default function ObjectFieldFormBase({
 				disabled={disabled}
 				error={errors.businessType}
 				label={Liferay.Language.get('type')}
+				onBlur={(event) => {
+					event.stopPropagation();
+
+					if (onSubmit) {
+						onSubmit();
+					}
+				}}
 				onChange={handleTypeChange}
 				options={
 					!Liferay.FeatureFlags['LPS-164948'] && !editingField
@@ -373,6 +391,7 @@ export default function ObjectFieldFormBase({
 					objectFieldSettings={
 						values.objectFieldSettings as ObjectFieldSetting[]
 					}
+					onSubmit={onSubmit}
 					setValues={setValues}
 				/>
 			)}
@@ -392,6 +411,7 @@ export default function ObjectFieldFormBase({
 					}
 					onAggregationFilterChange={onAggregationFilterChange}
 					onRelationshipChange={onRelationshipChange}
+					onSubmit={onSubmit}
 					setValues={setValues}
 				/>
 			)}
@@ -400,6 +420,13 @@ export default function ObjectFieldFormBase({
 				<SingleSelect<FormulaOutput>
 					error={errors.output}
 					label={Liferay.Language.get('output')}
+					onBlur={(event) => {
+						event.stopPropagation();
+
+						if (onSubmit) {
+							onSubmit();
+						}
+					}}
 					onChange={({label, value}) => {
 						let newObjectFieldSettings: ObjectFieldSetting[] = [];
 
@@ -483,6 +510,13 @@ export default function ObjectFieldFormBase({
 							disabled={getMandatoryToggleDisabledState()}
 							label={Liferay.Language.get('mandatory')}
 							name="required"
+							onBlur={(event) => {
+								event.stopPropagation();
+
+								if (onSubmit) {
+									onSubmit();
+								}
+							}}
 							onToggle={(required) => setValues({required})}
 							toggled={values.required || values.state}
 						/>
@@ -500,7 +534,14 @@ export default function ObjectFieldFormBase({
 						}
 						label={Liferay.Language.get('mark-as-state')}
 						name="state"
-						onToggle={async (state) => {
+						onBlur={(event) => {
+							event.stopPropagation();
+
+							if (onSubmit) {
+								onSubmit();
+							}
+						}}
+						onToggle={(state) => {
 							handleStateToggleChange(state);
 						}}
 						toggled={values.state}
@@ -513,6 +554,7 @@ export default function ObjectFieldFormBase({
 				<UniqueValues
 					disabled={disabled}
 					objectField={values}
+					onSubmit={onSubmit}
 					setValues={setValues}
 				/>
 			)}

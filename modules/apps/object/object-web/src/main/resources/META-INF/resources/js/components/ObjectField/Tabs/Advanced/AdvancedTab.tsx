@@ -17,6 +17,7 @@ interface AdvancedTabProps {
 	isDefaultStorageType: boolean;
 	learnResources: ObjectWebLearnResources;
 	modelBuilder?: boolean;
+	onSubmit?: () => void;
 	readOnlySidebarElements: SidebarCategory[];
 	setValues: (value: Partial<ObjectField>) => void;
 	sidebarElements: SidebarCategory[];
@@ -30,6 +31,7 @@ export function AdvancedTab({
 	isDefaultStorageType,
 	learnResources,
 	modelBuilder = false,
+	onSubmit,
 	readOnlySidebarElements,
 	setValues,
 	sidebarElements,
@@ -76,12 +78,7 @@ export function AdvancedTab({
 						errors={errors}
 						learnResources={learnResources}
 						modelBuilder={modelBuilder}
-						objectFieldBusinessType={
-							values.businessType as ObjectFieldBusinessType
-						}
-						objectFieldSettings={
-							values.objectFieldSettings as ObjectFieldSetting[]
-						}
+						onSubmit={onSubmit}
 						setValues={setValues}
 						sidebarElements={sidebarElements}
 						values={values}

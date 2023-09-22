@@ -26,6 +26,7 @@ interface ListTypeEntryBaseFieldProps {
 	error?: string;
 	label: string;
 	onChange: (selected: ListTypeEntry | undefined) => void;
+	onSubmit?: () => void;
 	picklistItems: ListTypeEntry[];
 	placeholder?: string;
 	required?: boolean;
@@ -37,6 +38,7 @@ export function ListTypeEntryBaseField({
 	error,
 	label,
 	onChange,
+	onSubmit,
 	picklistItems,
 	placeholder,
 	required,
@@ -56,6 +58,13 @@ export function ListTypeEntryBaseField({
 				<SingleSelect
 					error={error}
 					label={label}
+					onBlur={(event) => {
+						event.stopPropagation();
+
+						if (onSubmit) {
+							onSubmit();
+						}
+					}}
 					onChange={handleChange}
 					options={picklistItems.map((item) => ({
 						label: creationLanguageId

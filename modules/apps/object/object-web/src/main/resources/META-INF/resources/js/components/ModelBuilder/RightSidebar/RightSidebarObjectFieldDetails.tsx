@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
+import {ClayButtonWithIcon} from '@clayui/button';
 import ClayPanel from '@clayui/panel';
 import {
 	API,
@@ -86,7 +86,7 @@ export function RightSidebarObjectFieldDetails() {
 		);
 	};
 
-	const onSubmit = async () => {
+	const onSubmit = async (editedObjectField?: Partial<ObjectField>) => {
 		const validationErrors = handleValidate();
 
 		if (validationErrors.defaultValue) {
@@ -99,7 +99,14 @@ export function RightSidebarObjectFieldDetails() {
 		}
 
 		if (!Object.keys(validationErrors).length) {
-			const {id, ...objectField} = values;
+			let objectField: Partial<ObjectField>;
+
+			if (!editedObjectField) {
+				objectField = values;
+			}
+			else {
+				objectField = editedObjectField;
+			}
 
 			delete objectField.defaultValue;
 			delete objectField.listTypeDefinitionId;
@@ -109,24 +116,26 @@ export function RightSidebarObjectFieldDetails() {
 				const updatedFieldResponse = await API.save<ObjectField>({
 					item: objectField,
 					returnValue: true,
-					url: `/o/object-admin/v1.0/object-fields/${id}`,
+					url: `/o/object-admin/v1.0/object-fields/${objectField.id}`,
 				});
 
-				dispatch({
-					payload: {
-						objectDefinitionNodes: nodes,
-						objectRelationshipEdges: edges,
-						selectedObjectDefinitionNode,
-						updatedObjectField: updatedFieldResponse as ObjectField,
-					},
-					type: TYPES.UPDATE_OBJECT_FIELD,
-				});
+				if (selectedObjectDefinitionNode) {
+					dispatch({
+						payload: {
+							objectDefinitionNodes: nodes,
+							objectRelationshipEdges: edges,
+							selectedObjectDefinitionNode,
+							updatedObjectField: updatedFieldResponse as ObjectField,
+						},
+						type: TYPES.UPDATE_OBJECT_FIELD,
+					});
 
-				openToast({
-					message: Liferay.Language.get(
-						'the-object-field-was-updated-successfully'
-					),
-				});
+					openToast({
+						message: Liferay.Language.get(
+							'the-object-field-was-updated-successfully'
+						),
+					});
+				}
 			}
 			catch (error) {
 				openToast({
@@ -150,7 +159,7 @@ export function RightSidebarObjectFieldDetails() {
 
 		makeFetch();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedObjectField]);
+	}, []);
 
 	return (
 		<>
@@ -165,14 +174,14 @@ export function RightSidebarObjectFieldDetails() {
 				</span>
 
 				<div className="lfr-objects__model-builder-right-sidebar-definition-node-title-buttons-container">
-					<ClayButton
+					{/* <ClayButton
 						aria-label="Save"
 						className="lfr-objects__model-builder-right-sidebar-definition-node-title-save-button"
 						displayType="primary"
 						onClick={() => onSubmit()}
 					>
 						{Liferay.Language.get('save')}
-					</ClayButton>
+					</ClayButton> */}
 
 					{!values.system &&
 						values.businessType !== 'Relationship' && (
@@ -216,10 +225,14 @@ export function RightSidebarObjectFieldDetails() {
 							selectedObjectDefinitionNode?.data
 								?.externalReferenceCode ?? ''
 						}
+						onSubmit={onSubmit}
 						readOnly={
 							!selectedObjectDefinitionNode?.data
 								?.hasObjectDefinitionUpdateResourcePermission ??
 							false
+
+							// disableRightSidebar
+
 						}
 						setValues={setValues}
 						values={values}
@@ -232,7 +245,10 @@ export function RightSidebarObjectFieldDetails() {
 				<ModalDeleteObjectField
 					objectField={values as ObjectField}
 					onAfterSubmit={() => {
-						if (selectedObjectField) {
+						if (
+							selectedObjectField &&
+							selectedObjectDefinitionNode
+						) {
 							dispatch({
 								payload: {
 									objectDefinitionNodes: nodes,
