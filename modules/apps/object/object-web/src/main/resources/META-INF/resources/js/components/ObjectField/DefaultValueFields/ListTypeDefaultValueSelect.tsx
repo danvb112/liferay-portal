@@ -15,6 +15,7 @@ const ListTypeDefaultValueSelect: React.FC<InputAsValueFieldComponentProps> = ({
 	defaultValue,
 	error,
 	label,
+	onSubmit,
 	required,
 	setValues,
 	values,
@@ -58,6 +59,7 @@ const ListTypeDefaultValueSelect: React.FC<InputAsValueFieldComponentProps> = ({
 					error={error}
 					label={label}
 					onChange={handleChange}
+					onSubmit={onSubmit}
 					picklistItems={listTypeEntries}
 					placeholder={Liferay.Language.get('choose-an-option')}
 					required={required}

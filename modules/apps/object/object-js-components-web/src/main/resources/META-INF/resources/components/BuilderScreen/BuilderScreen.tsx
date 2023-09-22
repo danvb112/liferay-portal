@@ -70,7 +70,7 @@ export function BuilderScreen({
 			</ManagementToolbar.Container>
 
 			{tableItems.length ? (
-				<ClayList>
+				<ClayList onBlur={() => console.log("BuilderScreen onBlur")}>
 					{tableItems.map((viewColumn, index) => (
 						<React.Fragment key={viewColumn?.objectFieldName}>
 							{index === 0 && (

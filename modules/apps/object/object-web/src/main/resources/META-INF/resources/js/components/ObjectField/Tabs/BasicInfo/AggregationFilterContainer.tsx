@@ -47,11 +47,16 @@ interface AggregationFilterProps {
 	filterOperators: TFilterOperators;
 	modelBuilder: boolean;
 	objectDefinitionExternalReferenceCode2?: string;
+	onSubmit?: (editedObjectField?: Partial<ObjectField>) => void;
 	setAggregationFilters: (values: AggregationFilters[]) => void;
 	setCreationLanguageId2: (values: Liferay.Language.Locale) => void;
 	setValues: (values: Partial<ObjectField>) => void;
 	values: Partial<ObjectField>;
 	workflowStatusJSONArray: LabelValueObject[];
+}
+
+interface CustomWindow extends Window {
+	__isReactDndBackendSetUp?: boolean;
 }
 
 const REQUIRED_MSG = Liferay.Language.get('required');
@@ -63,6 +68,7 @@ export function AggregationFilterContainer({
 	filterOperators,
 	modelBuilder,
 	objectDefinitionExternalReferenceCode2,
+	onSubmit,
 	setAggregationFilters,
 	setCreationLanguageId2,
 	setValues,
@@ -449,15 +455,17 @@ export function AggregationFilterContainer({
 				setValues({
 					objectFieldSettings: newObjectFieldSettings,
 				});
+
+				if (onSubmit) {
+					onSubmit({
+						...values,
+						objectFieldSettings: newObjectFieldSettings,
+					});
+				}
 			}
 		},
-		[
-			aggregationFilters,
-			creationLanguageId2,
-			setAggregationFilters,
-			setValues,
-			values,
-		]
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[aggregationFilters, creationLanguageId2, values]
 	);
 
 	const handleDeleteFilterColumn = useCallback(
@@ -498,7 +506,15 @@ export function AggregationFilterContainer({
 			setValues({
 				objectFieldSettings: newObjectFieldSettings,
 			});
+
+			if (onSubmit) {
+				onSubmit({
+					...values,
+					objectFieldSettings: newObjectFieldSettings,
+				});
+			}
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[aggregationFilters, setAggregationFilters, setValues, values]
 	);
 
@@ -524,6 +540,10 @@ export function AggregationFilterContainer({
 			name === 'status'
 		);
 	};
+
+	if ((window as CustomWindow).__isReactDndBackendSetUp) {
+		(window as CustomWindow).__isReactDndBackendSetUp = false;
+	}
 
 	return (
 		<>

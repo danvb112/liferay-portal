@@ -23,6 +23,7 @@ interface ObjectFieldFormBaseProps {
 	onRelationshipChange?: (
 		objectDefinitionExternalReferenceCode2: string
 	) => void;
+	onSubmit?: () => void;
 	setValues: (values: Partial<ObjectField>) => void;
 }
 export declare type ObjectFieldErrors = FormError<
@@ -46,6 +47,7 @@ export default function ObjectFieldFormBase({
 	objectRelationshipId,
 	onAggregationFilterChange,
 	onRelationshipChange,
+	onSubmit,
 	setValues,
 }: ObjectFieldFormBaseProps): JSX.Element;
 export {};

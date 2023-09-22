@@ -44,6 +44,7 @@ export declare type TAction =
 				objectDefinitionExternalReferenceCode: string;
 				objectDefinitionNodes: Node<ObjectDefinitionNodeData>[];
 				objectRelationshipEdges: Edge<ObjectRelationshipEdgeData>[];
+				selectedObjectDefinitionNode: Node<ObjectDefinitionNodeData>;
 			};
 			type: TYPES.ADD_OBJECT_FIELD;
 	  }

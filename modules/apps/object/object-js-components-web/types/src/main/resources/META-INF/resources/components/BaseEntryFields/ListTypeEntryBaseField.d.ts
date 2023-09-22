@@ -18,6 +18,7 @@ interface ListTypeEntryBaseFieldProps {
 	error?: string;
 	label: string;
 	onChange: (selected: ListTypeEntry | undefined) => void;
+	onSubmit?: () => void;
 	picklistItems: ListTypeEntry[];
 	placeholder?: string;
 	required?: boolean;
@@ -28,6 +29,7 @@ export declare function ListTypeEntryBaseField({
 	error,
 	label,
 	onChange,
+	onSubmit,
 	picklistItems,
 	placeholder,
 	required,

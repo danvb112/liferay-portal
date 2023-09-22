@@ -746,26 +746,41 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 				selectedObjectFieldName,
 			} = action.payload;
 
+			let selectedObjectDefinitionNode: Node<
+				ObjectDefinitionNodeData
+			> | null = null;
+
 			const newObjectDefinitionNodes = objectDefinitionNodes.map(
-				(objectDefinitionNode) => ({
-					...objectDefinitionNode,
-					data: {
-						...objectDefinitionNode.data,
-						objectFields: objectDefinitionNode.data?.objectFields.map(
-							(objectField) => ({
-								...objectField,
-								selected:
-									objectDefinitionNode.data?.id ===
-										selectedObjectDefinitionId &&
-									objectField.name ===
-										selectedObjectFieldName,
-							})
-						),
-						selected:
-							objectDefinitionNode.data?.id ===
-							selectedObjectDefinitionId,
-					},
-				})
+				(objectDefinitionNode) => {
+					const newObjectDefinitionNode = {
+						...objectDefinitionNode,
+						data: {
+							...objectDefinitionNode.data,
+							objectFields: objectDefinitionNode.data?.objectFields.map(
+								(objectField) => ({
+									...objectField,
+									selected:
+										objectDefinitionNode.data?.id ===
+											selectedObjectDefinitionId &&
+										objectField.name ===
+											selectedObjectFieldName,
+								})
+							),
+							selected:
+								objectDefinitionNode.data?.id ===
+								selectedObjectDefinitionId,
+						},
+					} as Node<ObjectDefinitionNodeData>;
+
+					if (
+						objectDefinitionNode.data?.id ===
+						selectedObjectDefinitionId
+					) {
+						selectedObjectDefinitionNode = newObjectDefinitionNode;
+					}
+
+					return newObjectDefinitionNode;
+				}
 			) as Node<ObjectDefinitionNodeData>[];
 
 			const newObjectRelationshipEdges = objectRelationshipEdges.map(
@@ -782,6 +797,7 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 					...newObjectRelationshipEdges,
 				],
 				rightSidebarType: 'objectFieldDetails' as RightSidebarType,
+				selectedObjectDefinitionNode,
 				selectedObjectField,
 			};
 		}
