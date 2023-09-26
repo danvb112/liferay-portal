@@ -187,6 +187,10 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 				selected: true,
 			};
 
+			let selectedObjectDefinitionNode: Node<
+				ObjectDefinitionNodeData
+			> | null = null;
+
 			const newObjectDefinitionNodes = objectDefinitionNodes.map(
 				(objectDefinitionNode) => {
 					if (
@@ -201,7 +205,7 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 
 						newObjectFields.push(selectedObjectField);
 
-						return {
+						selectedObjectDefinitionNode = {
 							...objectDefinitionNode,
 							data: {
 								...objectDefinitionNode.data,
@@ -209,6 +213,8 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 								selected: true,
 							},
 						};
+
+						return selectedObjectDefinitionNode;
 					}
 
 					const unselectedObjectFields = convertAllObjectFieldsToUnselected(
@@ -234,6 +240,7 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 					...objectRelationshipEdges,
 				],
 				rightSidebarType: 'objectFieldDetails',
+				selectedObjectDefinitionNode,
 				selectedObjectField,
 			};
 		}
@@ -597,7 +604,7 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 				selectedObjectField,
 			} = action.payload;
 
-			const newSelectedObjectFields = selectedObjectDefinitionNode.data?.objectFields.filter(
+			const newSelectedObjectFields = selectedObjectDefinitionNode?.data?.objectFields.filter(
 				(objectField) =>
 					objectField.externalReferenceCode !==
 					selectedObjectField.externalReferenceCode
@@ -607,7 +614,8 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 				(objectDefinitionNode) => {
 					if (
 						objectDefinitionNode.data?.externalReferenceCode ===
-						selectedObjectDefinitionNode.data?.externalReferenceCode
+						selectedObjectDefinitionNode?.data
+							?.externalReferenceCode
 					) {
 						return {
 							...objectDefinitionNode,
@@ -673,6 +681,11 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 				selectedObjectFieldName,
 			} = action.payload;
 
+			const selectedObjectDefinitionNode = objectDefinitionNodes.find(
+				(objectDefinitionNode) =>
+					objectDefinitionNode.data?.id === selectedObjectDefinitionId
+			) as Node<ObjectDefinitionNodeData>;
+
 			const newObjectDefinitionNodes = objectDefinitionNodes.map(
 				(objectDefinitionNode) => ({
 					...objectDefinitionNode,
@@ -708,7 +721,8 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 					...newObjectDefinitionNodes,
 					...newObjectRelationshipEdges,
 				],
-				rightSidebarType: 'objectFieldDetails' as RightSidebarType,
+				rightSidebarType: 'objectFieldDetails',
+				selectedObjectDefinitionNode,
 				selectedObjectField,
 			};
 		}
@@ -805,8 +819,7 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 					...newObjectRelationshipEdges,
 				],
 				leftSidebarItems: newLeftSidebarItems,
-				rightSidebarType: 'objectDefinitionDetails' as RightSidebarType,
-				selectedObjectDefinitionField: undefined,
+				rightSidebarType: 'objectDefinitionDetails',
 				selectedObjectDefinitionNode,
 				selectedObjectField: undefined,
 			};
@@ -941,7 +954,7 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 				updatedObjectField,
 			} = action.payload;
 
-			const newSelectedObjectFields = selectedObjectDefinitionNode.data?.objectFields.map(
+			const newSelectedObjectFields = selectedObjectDefinitionNode?.data?.objectFields.map(
 				(objectField) => {
 					if (
 						objectField.externalReferenceCode ===
@@ -962,12 +975,13 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 				(objectDefinitionNode) => {
 					if (
 						objectDefinitionNode.data?.externalReferenceCode ===
-						selectedObjectDefinitionNode.data?.externalReferenceCode
+						selectedObjectDefinitionNode?.data
+							?.externalReferenceCode
 					) {
 						return {
 							...selectedObjectDefinitionNode,
 							data: {
-								...selectedObjectDefinitionNode.data,
+								...selectedObjectDefinitionNode?.data,
 								objectFields: newSelectedObjectFields,
 							},
 						} as Node<ObjectDefinitionNodeData>;

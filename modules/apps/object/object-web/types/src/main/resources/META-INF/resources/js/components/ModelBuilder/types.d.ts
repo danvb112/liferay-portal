@@ -70,6 +70,17 @@ export declare type TAction =
 	  }
 	| {
 			payload: {
+				objectDefinitionNodes: Node<ObjectDefinitionNodeData>[];
+				objectRelationshipEdges: Edge<ObjectRelationshipEdgeData>[];
+				selectedObjectDefinitionNode: Node<
+					ObjectDefinitionNodeData
+				> | null;
+				selectedObjectField: ObjectFieldNode;
+			};
+			type: TYPES.DELETE_OBJECT_FIELD;
+	  }
+	| {
+			payload: {
 				objectFolders: ObjectFolder[];
 				rightSidebarType?: RightSidebarType;
 				selectedObjectFolder: ObjectFolder;
@@ -79,23 +90,9 @@ export declare type TAction =
 	  }
 	| {
 			payload: {
-				currentObjectFolderName: string;
-				deletedObjectDefinitionName: string;
-			};
-			type: TYPES.DELETE_OBJECT_DEFINITION;
-	  }
-	| {
-			payload: {
-				objectDefinitionNodes: Node<ObjectDefinitionNodeData>[];
-				objectRelationshipEdges: Edge<ObjectRelationshipEdgeData>[];
-				selectedObjectDefinitionNode: Node<ObjectDefinitionNodeData>;
-				selectedObjectField: ObjectFieldNode;
-			};
-			type: TYPES.DELETE_OBJECT_FIELD;
-	  }
-	| {
-			payload: {
-				newElements: any;
+				newElements: Elements<
+					ObjectDefinitionNodeData | ObjectRelationshipEdgeData
+				>;
 			};
 			type: TYPES.SET_ELEMENTS;
 	  }
@@ -154,7 +151,9 @@ export declare type TAction =
 			payload: {
 				objectDefinitionNodes: Node<ObjectDefinitionNodeData>[];
 				objectRelationshipEdges: Edge<ObjectRelationshipEdgeData>[];
-				selectedObjectDefinitionNode: Node<ObjectDefinitionNodeData>;
+				selectedObjectDefinitionNode: Node<
+					ObjectDefinitionNodeData
+				> | null;
 				updatedObjectField: ObjectField;
 			};
 			type: TYPES.UPDATE_OBJECT_FIELD;

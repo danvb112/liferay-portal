@@ -40,13 +40,11 @@ import ObjectDefinitionNodeFooter from './ObjectDefinitionNodeFooter';
 import ObjectDefinitionNodeHeader from './ObjectDefinitionNodeHeader';
 import ObjectDefinitionNodeFields from './ObjectDefinitionNodeObjectFields';
 import {RedirectToEditObjectDetailsModal} from './RedirectToEditObjectDetailsModal';
-
 const selfRelationshipHandleStyle = {
 	background: 'transparent',
 	border: '2px transparent',
 	borderRadius: '50%',
 };
-
 export function ObjectDefinitionNode({
 	data: {
 		defaultLanguageId,
@@ -122,7 +120,6 @@ export function ObjectDefinitionNode({
 		deletedObjectDefinition,
 		setDeletedObjectDefinition,
 	] = useState<DeletedObjectDefinition | null>();
-
 	const [newExternalReferenceCode, setNewExternalReferenceCode] = useState(
 		externalReferenceCode
 	);
@@ -159,18 +156,6 @@ export function ObjectDefinitionNode({
 	};
 
 	const viewObjectDetailsURL = formatActionURL(editObjectDefinitionURL, id);
-
-	const handleSelectedNode = () => {
-		const {edges, nodes} = store.getState();
-		dispatch({
-			payload: {
-				objectDefinitionNodes: nodes,
-				objectRelationshipEdges: edges,
-				selectedObjectDefinitionId: id.toString(),
-			},
-			type: TYPES.SET_SELECTED_OBJECT_DEFINITION_NODE,
-		});
-	};
 
 	const updateModelBuilderStructure = async (
 		newObjectRelationshipId: number
@@ -219,18 +204,6 @@ export function ObjectDefinitionNode({
 						'lfr-objects__model-builder-node-container--selected': selected,
 					}
 				)}
-				onClick={() => {
-					const {edges, nodes} = store.getState();
-
-					dispatch({
-						payload: {
-							edges,
-							nodes,
-							selectedObjectDefinitionId: id.toString(),
-						},
-						type: TYPES.SET_SELECTED_OBJECT_DEFINITION_NODE,
-					});
-				}}
 				onMouseEnter={() => {
 					displayNodeHandles(true);
 				}}
@@ -315,7 +288,6 @@ export function ObjectDefinitionNode({
 							}}
 							type="source"
 						/>
-
 						<Handle
 							className="lfr-objects__model-builder-node-handle"
 							id="fixedRightHandle"
@@ -333,49 +305,7 @@ export function ObjectDefinitionNode({
 
 			{showModal.addObjectField && (
 				<ModalAddObjectField
-					creationLanguageId={defaultLanguageId}
-					objectDefinitionExternalReferenceCode={
-						externalReferenceCode
-					}
-					objectName={name}
-					onAfterSubmit={(newObjectField) => {
-						const {edges, nodes} = store.getState();
-
-						dispatch({
-							payload: {
-								edges,
-								newObjectField,
-								nodes,
-								objectDefinitionExternalReferenceCode: externalReferenceCode,
-							},
-							type: TYPES.ADD_NEW_OBJECT_FIELD,
-						});
-
-						openToast({
-							message: Liferay.Language.get(
-								'field-successfully-added'
-							),
-							type: 'success',
-						});
-
-						setShowModal((prevState) => ({
-							...prevState,
-							addObjectField: false,
-						}));
-
-						setShowAllObjectFields(true);
-					}}
-					setVisibility={() =>
-						setShowModal((prevState) => ({
-							...prevState,
-							addObjectField: false,
-						}))
-					}
-				/>
-			)}
-
-			{showModal.addObjectField && (
-				<ModalAddObjectField
+					baseResourceURL={baseResourceURL}
 					creationLanguageId={defaultLanguageId}
 					objectDefinitionExternalReferenceCode={
 						externalReferenceCode
@@ -400,12 +330,10 @@ export function ObjectDefinitionNode({
 							),
 							type: 'success',
 						});
-
 						setShowModal((prevState) => ({
 							...prevState,
 							addObjectField: false,
 						}));
-
 						setShowAllObjectFields(true);
 					}}
 					setVisibility={() =>

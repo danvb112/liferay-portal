@@ -72,21 +72,23 @@ export type TAction =
 	  }
 	| {
 			payload: {
+				objectDefinitionNodes: Node<ObjectDefinitionNodeData>[];
+				objectRelationshipEdges: Edge<ObjectRelationshipEdgeData>[];
+				selectedObjectDefinitionNode: Node<
+					ObjectDefinitionNodeData
+				> | null;
+				selectedObjectField: ObjectFieldNode;
+			};
+			type: TYPES.DELETE_OBJECT_FIELD;
+	  }
+	| {
+			payload: {
 				objectFolders: ObjectFolder[];
 				rightSidebarType?: RightSidebarType;
 				selectedObjectFolder: ObjectFolder;
 				selectedObjectRelationshipEdgeId?: number;
 			};
 			type: TYPES.UPDATE_MODEL_BUILDER_STRUCTURE;
-	  }
-	| {
-			payload: {
-				objectDefinitionNodes: Node<ObjectDefinitionNodeData>[];
-				objectRelationshipEdges: Edge<ObjectRelationshipEdgeData>[];
-				selectedObjectDefinitionNode: Node<ObjectDefinitionNodeData>;
-				selectedObjectField: ObjectFieldNode;
-			};
-			type: TYPES.DELETE_OBJECT_FIELD;
 	  }
 	| {
 			payload: {
@@ -151,7 +153,9 @@ export type TAction =
 			payload: {
 				objectDefinitionNodes: Node<ObjectDefinitionNodeData>[];
 				objectRelationshipEdges: Edge<ObjectRelationshipEdgeData>[];
-				selectedObjectDefinitionNode: Node<ObjectDefinitionNodeData>;
+				selectedObjectDefinitionNode: Node<
+					ObjectDefinitionNodeData
+				> | null;
 				updatedObjectField: ObjectField;
 			};
 			type: TYPES.UPDATE_OBJECT_FIELD;

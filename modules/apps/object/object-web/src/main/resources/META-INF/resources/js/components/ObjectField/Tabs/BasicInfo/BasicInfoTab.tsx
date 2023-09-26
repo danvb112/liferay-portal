@@ -81,11 +81,13 @@ export function BasicInfoTab({
 
 	useEffect(() => {
 		const makeFetch = async () => {
-			const objectDefinitionResponse = await API.getObjectDefinitionByExternalReferenceCode(
-				objectDefinitionExternalReferenceCode
-			);
+			if (objectDefinitionExternalReferenceCode) {
+				const objectDefinitionResponse = await API.getObjectDefinitionByExternalReferenceCode(
+					objectDefinitionExternalReferenceCode
+				);
 
-			setObjectDefinition(objectDefinitionResponse);
+				setObjectDefinition(objectDefinitionResponse);
+			}
 		};
 
 		makeFetch();

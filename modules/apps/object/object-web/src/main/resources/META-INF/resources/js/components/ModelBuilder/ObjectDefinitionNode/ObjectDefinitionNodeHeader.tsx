@@ -37,7 +37,11 @@ export default function ObjectDefinitionNodeHeader({
 		<>
 			<div
 				className="lfr-objects__model-builder-node-header-container"
-				onClick={handleSelectObjectDefinitionNode}
+				onClick={(event) => {
+					event.stopPropagation();
+
+					handleSelectObjectDefinitionNode();
+				}}
 			>
 				<div className="lfr-objects__model-builder-node-header-label-container">
 					<div className="lfr-objects__model-builder-node-header-label-title">

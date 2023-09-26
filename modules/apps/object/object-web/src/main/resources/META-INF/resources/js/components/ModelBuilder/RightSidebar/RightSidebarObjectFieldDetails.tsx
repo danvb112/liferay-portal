@@ -12,7 +12,7 @@ import {
 } from '@liferay/object-js-components-web';
 import {createResourceURL} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
-import {Node, isNode, useStore} from 'react-flow-renderer';
+import {useStore} from 'react-flow-renderer';
 
 import {objectFieldInitialValues} from '../../ObjectField/EditObjectField';
 import {EditObjectFieldContent} from '../../ObjectField/EditObjectFieldContent';
@@ -35,12 +35,13 @@ export function RightSidebarObjectFieldDetails() {
 	const [
 		{
 			baseResourceURL,
-			elements,
 			filterOperators,
 			forbiddenChars,
 			forbiddenLastChars,
 			forbiddenNames,
 			objectWebLearnResources,
+			selectedObjectDefinitionNode,
+			selectedObjectField,
 			workflowStatusJSONArray,
 		},
 		dispatch,
@@ -48,16 +49,6 @@ export function RightSidebarObjectFieldDetails() {
 	const store = useStore();
 
 	const {edges, nodes} = store.getState();
-
-	const selectedObjectDefinitionNode = elements.find((element) => {
-		if (isNode(element)) {
-			return (element as Node<ObjectDefinitionNodeData>).data?.selected;
-		}
-	}) as Node<ObjectDefinitionNodeData>;
-
-	const selectedObjectField = selectedObjectDefinitionNode.data?.objectFields.find(
-		({selected}) => selected
-	);
 
 	const {
 		errors,
@@ -97,6 +88,15 @@ export function RightSidebarObjectFieldDetails() {
 
 	const onSubmit = async () => {
 		const validationErrors = handleValidate();
+
+		if (validationErrors.defaultValue) {
+			openToast({
+				message: Liferay.Language.get(
+					'please-fill-out-all-required-fields'
+				),
+				type: 'danger',
+			});
+		}
 
 		if (!Object.keys(validationErrors).length) {
 			const {id, ...objectField} = values;
@@ -157,7 +157,7 @@ export function RightSidebarObjectFieldDetails() {
 			<div className="lfr-objects__model-builder-right-sidebar-definition-node-title">
 				<span>
 					{getLocalizableLabel(
-						selectedObjectDefinitionNode.data
+						selectedObjectDefinitionNode?.data
 							?.defaultLanguageId as Liferay.Language.Locale,
 						selectedObjectField?.label,
 						selectedObjectField?.name
@@ -196,28 +196,28 @@ export function RightSidebarObjectFieldDetails() {
 						baseResourceURL={baseResourceURL}
 						containerWrapper={ClayPanel}
 						creationLanguageId={
-							selectedObjectDefinitionNode.data
+							selectedObjectDefinitionNode?.data
 								?.defaultLanguageId ?? 'en_US'
 						}
 						errors={errors}
 						filterOperators={filterOperators}
 						handleChange={handleChange}
 						isApproved={
-							selectedObjectDefinitionNode.data?.status.label ===
+							selectedObjectDefinitionNode?.data?.status.label ===
 							'approved'
 						}
 						isDefaultStorageType={
-							selectedObjectDefinitionNode.data?.storageType ===
+							selectedObjectDefinitionNode?.data?.storageType ===
 								'default' ?? true
 						}
 						learnResources={objectWebLearnResources}
 						modelBuilder
 						objectDefinitionExternalReferenceCode={
-							selectedObjectDefinitionNode.data
+							selectedObjectDefinitionNode?.data
 								?.externalReferenceCode ?? ''
 						}
 						readOnly={
-							!selectedObjectDefinitionNode.data
+							!selectedObjectDefinitionNode?.data
 								?.hasObjectDefinitionUpdateResourcePermission ??
 							false
 						}

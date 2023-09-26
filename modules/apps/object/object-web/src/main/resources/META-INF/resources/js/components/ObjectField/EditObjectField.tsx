@@ -115,6 +115,17 @@ export default function EditObjectField({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [objectFieldId]);
 
+	useEffect(() => {
+		if (errors.defaultValue) {
+			openToast({
+				message: Liferay.Language.get(
+					'please-fill-out-all-required-fields'
+				),
+				type: 'danger',
+			});
+		}
+	}, [errors]);
+
 	return (
 		<SidePanelForm
 			className="lfr-objects__edit-object-field"
