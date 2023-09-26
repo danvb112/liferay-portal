@@ -708,7 +708,7 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 					...newObjectDefinitionNodes,
 					...newObjectRelationshipEdges,
 				],
-				rightSidebarType: 'objectFieldDetails' as RightSidebarType,
+				rightSidebarType: 'objectFieldDetails',
 				selectedObjectField,
 			};
 		}
@@ -805,8 +805,7 @@ export function ObjectFolderReducer(state: TState, action: TAction): TState {
 					...newObjectRelationshipEdges,
 				],
 				leftSidebarItems: newLeftSidebarItems,
-				rightSidebarType: 'objectDefinitionDetails' as RightSidebarType,
-				selectedObjectDefinitionField: undefined,
+				rightSidebarType: 'objectDefinitionDetails',
 				selectedObjectDefinitionNode,
 				selectedObjectField: undefined,
 			};
