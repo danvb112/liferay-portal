@@ -108,6 +108,7 @@ export default function ViewObjectDefinitions({
 	const [objectFolders, setObjectFolders] = useState<Partial<ObjectFolder>[]>(
 		[initialValues]
 	);
+	const [reloadFDS, setReloadFDS] = useState(false);
 	const [
 		deletedObjectDefinition,
 		setDeletedObjectDefinition,
@@ -321,6 +322,12 @@ export default function ViewObjectDefinitions({
 		};
 	}, []);
 
+	useEffect(() => {
+		if (reloadFDS) {
+			setTimeout(() => setReloadFDS(false), 1000);
+		}
+	}, [reloadFDS]);
+
 	return (
 		<>
 			{Liferay.FeatureFlags['LPS-148856'] ? (
@@ -364,7 +371,14 @@ export default function ViewObjectDefinitions({
 								}
 								viewMode="no-header-border"
 							>
-								<FrontendDataSet {...dataSetProps} />
+								{reloadFDS ? (
+									<ClayLoadingIndicator
+										displayType="secondary"
+										size="sm"
+									/>
+								) : (
+									<FrontendDataSet {...dataSetProps} />
+								)}
 							</Card>
 						</>
 					)}
@@ -389,6 +403,10 @@ export default function ViewObjectDefinitions({
 					objectFolderExternalReferenceCode={
 						selectedObjectFolder.externalReferenceCode
 					}
+					onAfterSubmit={() => {
+						setReloadFDS(true);
+					}}
+					reload={false}
 				/>
 			)}
 
@@ -441,6 +459,8 @@ export default function ViewObjectDefinitions({
 							})
 						);
 					}}
+					setObjectFolders={setObjectFolders}
+					setSelectedObjectFolder={setSelectedObjectFolder}
 				/>
 			)}
 
