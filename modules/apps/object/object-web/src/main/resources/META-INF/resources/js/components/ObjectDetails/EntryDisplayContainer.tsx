@@ -8,7 +8,7 @@ import {
 	SingleSelect,
 	getLocalizableLabel,
 } from '@liferay/object-js-components-web';
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 
 interface EntryDisplayContainerProps {
 	errors: FormError<ObjectDefinition>;
@@ -40,58 +40,53 @@ export function EntryDisplayContainer({
 					label,
 					name
 				),
-				name,
+				value: name,
 			};
 		});
 	}, [nonRelationshipObjectFieldsInfo, values.defaultLanguageId]);
 
-	const getEntryTitleObjectFieldValue = () => {
+	useEffect(() => {
 		const titleObjectField = objectFields.find(
 			(objectField) => objectField.name === values.titleObjectFieldName
 		);
 
-		if (titleFieldOptions) {
-			return getLocalizableLabel(
-				values.defaultLanguageId as Liferay.Language.Locale,
-				titleObjectField?.label,
-				titleObjectField?.name
-			);
+		if (!titleObjectField) {
+			const idField = objectFields.find((field) => field.name === 'id');
+
+			setValues({titleObjectFieldName: idField?.name});
 		}
+	}, []);
 
-		const idField = objectFields.find((field) => field.name === 'id');
-
-		setValues({titleObjectFieldName: idField?.name});
-
-		return getLocalizableLabel(
-			values.defaultLanguageId as Liferay.Language.Locale,
-			idField?.label,
-			idField?.name
-		);
-	};
+	console.log(titleFieldOptions);
+	console.log(values);
 
 	return (
-		<SingleSelect<{label: string; name: string}>
-			disabled={isLinkedObjectDefinition}
-			error={errors.titleObjectFieldId}
-			label={Liferay.Language.get('entry-title-field')}
-			onChange={(target: {label: string; name: string}) => {
-				const field = objectFields.find(
-					({name}) => name === target.name
-				);
+		<>
+			{values.titleObjectFieldName && (
+				<SingleSelect<LabelValueObject>
+					defaultSelectedKey={values.titleObjectFieldName}
+					disabled={isLinkedObjectDefinition}
+					error={errors.titleObjectFieldId}
+					label={Liferay.Language.get('entry-title-field')}
+					onSelectionChange={(itemKey) => {
+						const field = objectFields.find(
+							({name}) => name === itemKey
+						);
 
-				setValues({
-					titleObjectFieldName: field?.name,
-				});
+						setValues({
+							titleObjectFieldName: field?.name,
+						});
 
-				if (onSubmit) {
-					onSubmit({
-						...values,
-						titleObjectFieldName: field?.name,
-					});
-				}
-			}}
-			options={titleFieldOptions}
-			value={getEntryTitleObjectFieldValue()}
-		/>
+						if (onSubmit) {
+							onSubmit({
+								...values,
+								titleObjectFieldName: field?.name,
+							});
+						}
+					}}
+					options={titleFieldOptions}
+				/>
+			)}
+		</>
 	);
 }
