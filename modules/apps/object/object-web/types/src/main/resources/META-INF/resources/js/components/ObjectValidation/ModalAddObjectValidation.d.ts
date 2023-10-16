@@ -5,18 +5,14 @@
 
 /// <reference types="react" />
 
-import {IFDSTableProps} from '../../utils/fds';
-interface ValidationsProps extends IFDSTableProps {
+interface ModalAddObjectValidationProps {
+	apiURL: string;
 	objectValidationRuleEngines: LabelValueObject[];
+	setShowAddObjectRelationshipModal: (value: boolean) => void;
 }
-export default function Validations({
+export declare function ModalAddObjectValidation({
 	apiURL,
-	creationMenu,
-	formName,
-	id,
-	items,
 	objectValidationRuleEngines,
-	style,
-	url,
-}: ValidationsProps): JSX.Element;
+	setShowAddObjectRelationshipModal,
+}: ModalAddObjectValidationProps): JSX.Element;
 export {};
