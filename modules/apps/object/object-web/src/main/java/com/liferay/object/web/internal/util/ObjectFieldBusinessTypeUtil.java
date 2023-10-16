@@ -37,6 +37,8 @@ public class ObjectFieldBusinessTypeUtil {
 					objectFieldBusinessType.getDescription(locale)
 				).put(
 					"label", objectFieldBusinessType.getLabel(locale)
+				).put(
+					"value", objectFieldBusinessType.getName()
 				).build());
 		}
 

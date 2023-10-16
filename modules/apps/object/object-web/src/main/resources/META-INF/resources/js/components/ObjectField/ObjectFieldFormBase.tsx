@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {Option, Text} from '@clayui/core';
 import ClayForm from '@clayui/form';
 import {
 	API,
@@ -118,7 +119,7 @@ async function getObjectFieldSettingsByBusinessType(
 	objectRelationshipId: number,
 	setListTypeDefinitions: (value: ListTypeDefinition[]) => void,
 	setOneToManyObjectRelationship: (value: TObjectRelationship) => void,
-	setSelectedOutput: (value: string) => void,
+	setSelectedOutputValue: (value: string) => void,
 	values: Partial<ObjectField>
 ) {
 	const {businessType, objectFieldSettings} = values;
@@ -135,10 +136,10 @@ async function getObjectFieldSettingsByBusinessType(
 		);
 
 		if (output) {
-			setSelectedOutput(
+			setSelectedOutputValue(
 				FORMULA_OUTPUT_OPTIONS.find(
 					(formulaOption) => formulaOption.value === output?.value
-				)?.label as string
+				)?.value as string
 			);
 		}
 	}
@@ -183,17 +184,7 @@ export default function ObjectFieldFormBase({
 		oneToManyObjectRelationship,
 		setOneToManyObjectRelationship,
 	] = useState<TObjectRelationship>();
-	const [selectedOutput, setSelectedOutput] = useState<string>('');
-
-	const businessTypeMap = useMemo(() => {
-		const businessTypeMap = new Map<string, ObjectFieldType>();
-
-		objectFieldTypes.forEach((type) => {
-			businessTypeMap.set(type.businessType, type);
-		});
-
-		return businessTypeMap;
-	}, [objectFieldTypes]);
+	const [selectedOutputValue, setSelectedOutputValue] = useState<string>('');
 
 	const validListTypeDefinitionId =
 		values.listTypeDefinitionId !== undefined &&
@@ -213,29 +204,34 @@ export default function ObjectFieldFormBase({
 		);
 	}, [listTypeDefinitions, values.listTypeDefinitionExternalReferenceCode]);
 
-	const handleTypeChange = async (option: ObjectFieldType) => {
-		const objectFieldSettings: ObjectFieldSetting[] =
-			fieldSettingsMap.get(option.businessType) || [];
+	const handleTypeChange = async (selectedBusinessType: string) => {
+		const selectedObjectFieldType = objectFieldTypes.find(
+			(objectFieldType) =>
+				objectFieldType.businessType === selectedBusinessType
+		);
 
-		const indexed = option.businessType !== 'Encrypted';
+		const objectFieldSettings: ObjectFieldSetting[] =
+			fieldSettingsMap.get(selectedBusinessType) || [];
+
+		const indexed = selectedBusinessType !== 'Encrypted';
 
 		const isSearchableByText =
-			option.businessType === 'Attachment' ||
-			option.dbType === 'Clob' ||
-			option.dbType === 'String';
+			selectedBusinessType === 'Attachment' ||
+			selectedObjectFieldType?.dbType === 'Clob' ||
+			selectedObjectFieldType?.dbType === 'String';
 
 		const indexedAsKeyword = isSearchableByText && values.indexedAsKeyword;
 
 		const indexedLanguageId =
 			isSearchableByText && !values.indexedAsKeyword
 				? values.indexedLanguageId ?? defaultLanguageId
-				: null;
+				: '';
 
-		setSelectedOutput('');
+		setSelectedOutputValue('');
 
 		setValues({
-			DBType: option.dbType,
-			businessType: option.businessType,
+			DBType: selectedObjectFieldType?.dbType,
+			businessType: selectedObjectFieldType?.businessType,
 			indexed,
 			indexedAsKeyword,
 			indexedLanguageId,
@@ -248,8 +244,8 @@ export default function ObjectFieldFormBase({
 		if (onSubmit) {
 			onSubmit({
 				...values,
-				DBType: option.dbType,
-				businessType: option.businessType,
+				DBType: selectedObjectFieldType?.dbType,
+				businessType: selectedObjectFieldType?.businessType,
 				indexed,
 				indexedAsKeyword,
 				indexedLanguageId,
@@ -292,7 +288,7 @@ export default function ObjectFieldFormBase({
 				objectRelationshipId as number,
 				setListTypeDefinitions,
 				setOneToManyObjectRelationship,
-				setSelectedOutput,
+				setSelectedOutputValue,
 				values
 			);
 		};
@@ -376,7 +372,7 @@ export default function ObjectFieldFormBase({
 				objectRelationshipId as number,
 				setListTypeDefinitions,
 				setOneToManyObjectRelationship,
-				setSelectedOutput,
+				setSelectedOutputValue,
 				values
 			);
 		};
@@ -410,16 +406,35 @@ export default function ObjectFieldFormBase({
 			<SingleSelect<ObjectFieldType>
 				disabled={disabled}
 				error={errors.businessType}
-				label={Liferay.Language.get('type')}
-				onChange={handleTypeChange}
-				options={
+				items={
 					!Liferay.FeatureFlags['LPS-164948']
 						? applyFeatureFlag()
 						: objectFieldTypes
 				}
+				label={Liferay.Language.get('type')}
+				onSelectionChange={(value) => {
+					handleTypeChange(value as string);
+				}}
 				required
-				value={businessTypeMap.get(values.businessType ?? '')?.label}
-			/>
+				selectedKey={values.businessType}
+			>
+				{(item) => (
+					<Option
+						key={item.businessType}
+						textValue={item.businessType}
+					>
+						<div className="lfr-objects__object-field-form-base-object-field-type-option">
+							<Text size={3} weight="semi-bold">
+								{item.label}
+							</Text>
+
+							<Text aria-hidden color="secondary" size={2}>
+								{item.description}
+							</Text>
+						</div>
+					</Option>
+				)}
+			</SingleSelect>
 
 			{values.businessType === 'Attachment' && (
 				<AttachmentFormBase
@@ -431,6 +446,7 @@ export default function ObjectFieldFormBase({
 					}
 					onSubmit={onSubmit}
 					setValues={setValues}
+					values={values}
 				/>
 			)}
 
@@ -458,15 +474,9 @@ export default function ObjectFieldFormBase({
 			{values.businessType === 'Formula' && (
 				<SingleSelect<FormulaOutput>
 					error={errors.output}
+					items={FORMULA_OUTPUT_OPTIONS}
 					label={Liferay.Language.get('output')}
-					onBlur={(event) => {
-						event.stopPropagation();
-
-						if (onSubmit) {
-							onSubmit();
-						}
-					}}
-					onChange={({label, value}) => {
+					onSelectionChange={(value) => {
 						let newObjectFieldSettings: ObjectFieldSetting[] = [];
 
 						if (values.objectFieldSettings) {
@@ -486,15 +496,28 @@ export default function ObjectFieldFormBase({
 							],
 						});
 
-						setSelectedOutput(label);
+						if (onSubmit) {
+							onSubmit({
+								...values,
+								objectFieldSettings: [
+									...newObjectFieldSettings,
+									{
+										name: 'output',
+										value,
+									},
+								],
+							});
+						}
+
+						setSelectedOutputValue(
+							FORMULA_OUTPUT_OPTIONS.find(
+								(formulaFieldOption) =>
+									formulaFieldOption.value === value
+							)?.value as string
+						);
 					}}
-					options={FORMULA_OUTPUT_OPTIONS.filter(
-						(formulaOutput) =>
-							formulaOutput.value === 'Decimal' ||
-							formulaOutput.value === 'Integer'
-					)}
 					required
-					value={selectedOutput}
+					selectedKey={selectedOutputValue}
 				/>
 			)}
 
@@ -554,6 +577,7 @@ export default function ObjectFieldFormBase({
 					}
 					onSubmit={onSubmit}
 					setValues={setValues}
+					values={values}
 				/>
 			)}
 

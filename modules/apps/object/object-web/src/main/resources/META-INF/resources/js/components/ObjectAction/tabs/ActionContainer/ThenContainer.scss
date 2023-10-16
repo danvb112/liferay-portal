@@ -20,6 +20,16 @@
 		width: 320px;
 	}
 
+	&-notification-option {
+		align-items: center;
+		display: flex;
+		justify-content: space-between;
+
+		&-label {
+			width: min-content;
+		}
+	}
+
 	&-tooltip-icon {
 		color: $secondary-l1;
 	}

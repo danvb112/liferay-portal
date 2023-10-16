@@ -235,7 +235,7 @@ interface ObjectField {
 	id: number;
 	indexed: boolean;
 	indexedAsKeyword: boolean;
-	indexedLanguageId: Liferay.Language.Locale | null;
+	indexedLanguageId: Liferay.Language.Locale | string;
 	label: LocalizedValue<string>;
 	listTypeDefinitionExternalReferenceCode: string;
 	listTypeDefinitionId?: number;
@@ -441,11 +441,6 @@ interface PickList {
 	name: string;
 	name_i18n: LocalizedValue<string>;
 }
-
-type ObjectValidationType = {
-	label: string;
-	name: string;
-};
 
 interface PredefinedValue {
 	businessType: ObjectFieldBusinessType;
