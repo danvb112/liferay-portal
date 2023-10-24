@@ -792,6 +792,43 @@ public class ObjectEntryLocalServiceImpl
 	}
 
 	@Override
+	public String getNextAutoIncrementObjectEntryValue(ObjectField objectField)
+		throws PortalException {
+
+		Table table = _objectFieldLocalService.getTable(
+			objectField.getObjectDefinitionId(), objectField.getName());
+
+		List<Object> rows = objectEntryPersistence.dslQuery(
+			DSLQueryFactoryUtil.select(
+				DSLFunctionFactoryUtil.max(
+					table.getColumn(objectField.getDBColumnName())
+				).as(
+					"value"
+				)
+			).from(
+				table
+			));
+
+		if (ListUtil.isEmpty(rows) || (rows.get(0) == null)) {
+
+			return StringBundler.concat(
+				GetterUtil.getString(
+					ObjectFieldSettingUtil.getValue(
+						ObjectFieldSettingConstants.NAME_PREFIX, objectField)),
+				ObjectFieldSettingUtil.getValue(
+					ObjectFieldSettingConstants.NAME_INITIAL_VALUE,
+					objectField),
+				GetterUtil.getString(
+					ObjectFieldSettingUtil.getValue(
+						ObjectFieldSettingConstants.NAME_SUFFIX, objectField)));
+		}
+
+		// TODO Incrementar
+
+		return (String)rows.get(0);
+	}
+
+	@Override
 	public List<ObjectEntry> getObjectEntries(
 		long groupId, long objectDefinitionId, int start, int end) {
 
@@ -4368,6 +4405,62 @@ public class ObjectEntryLocalServiceImpl
 						 WorkflowConstants.ACTION_SAVE_DRAFT)) {
 
 				throw new ObjectEntryValuesException.Required(
+					objectField.getName());
+			}
+		}
+		else if (StringUtil.equals(
+					objectField.getBusinessType(),
+					ObjectFieldConstants.BUSINESS_TYPE_AUTO_INCREMENT)) {
+
+			String value = GetterUtil.getString(entry.getValue());
+
+			if (Validator.isNull(value)) {
+				return;
+			}
+
+			String prefix = ObjectFieldSettingUtil.getValue(
+				ObjectFieldSettingConstants.NAME_PREFIX, objectField);
+			String suffix = ObjectFieldSettingUtil.getValue(
+				ObjectFieldSettingConstants.NAME_SUFFIX, objectField);
+
+			if ((Validator.isNotNull(prefix) &&
+				 !StringUtil.startsWith(value, prefix)) ||
+				(Validator.isNotNull(suffix) &&
+				 !StringUtil.endsWith(value, suffix))) {
+
+				throw new ObjectEntryValuesException.InvalidValue(
+					objectField.getName());
+			}
+
+			value = StringUtil.removeLast(
+				StringUtil.removeFirst(value, prefix), suffix);
+
+			String initialValue = ObjectFieldSettingUtil.getValue(
+				ObjectFieldSettingConstants.NAME_INITIAL_VALUE, objectField);
+
+			if (Validator.isNull(value) ||
+				(value.length() < initialValue.length()) ||
+				((value.length() > initialValue.length()) &&
+				 StringUtil.startsWith(value, "0"))) {
+
+				throw new ObjectEntryValuesException.InvalidValue(
+					objectField.getName());
+			}
+
+			try {
+				BigDecimal bigDecimal = new BigDecimal(value);
+
+				if (bigDecimal.compareTo(new BigDecimal(initialValue)) < 0) {
+					throw new ObjectEntryValuesException.InvalidValue(
+						objectField.getName());
+				}
+			}
+			catch (NumberFormatException numberFormatException) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(numberFormatException);
+				}
+
+				throw new ObjectEntryValuesException.InvalidValue(
 					objectField.getName());
 			}
 		}

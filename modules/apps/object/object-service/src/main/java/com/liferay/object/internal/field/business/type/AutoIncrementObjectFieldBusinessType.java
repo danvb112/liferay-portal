@@ -11,11 +11,13 @@ import com.liferay.object.exception.ObjectFieldSettingValueException;
 import com.liferay.object.field.business.type.ObjectFieldBusinessType;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectFieldSetting;
+import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.extension.PropertyDefinition;
 
 import java.math.BigDecimal;
@@ -95,6 +97,22 @@ public class AutoIncrementObjectFieldBusinessType
 	}
 
 	@Override
+	public Object getValue(
+			ObjectField objectField, long userId, Map<String, Object> values)
+		throws PortalException {
+
+		Object value = values.get(objectField.getName());
+
+		if (Validator.isNull(value)) {
+			value =
+				_objectEntryLocalService.getNextAutoIncrementObjectEntryValue(
+					objectField);
+		}
+
+		return value;
+	}
+
+	@Override
 	public void validateObjectFieldSettings(
 			ObjectField objectField,
 			List<ObjectFieldSetting> objectFieldSettings)
@@ -132,5 +150,8 @@ public class AutoIncrementObjectFieldBusinessType
 
 	@Reference
 	private Language _language;
+
+	@Reference
+	private ObjectEntryLocalService _objectEntryLocalService;
 
 }

@@ -676,6 +676,7 @@ public class ObjectFieldLocalServiceImpl
 		_validateName(0, objectDefinition, name, system);
 		_validateReadOnlyAndReadOnlyConditionExpression(
 			businessType, readOnly, readOnlyConditionExpression);
+		_validateRequired(businessType, required);
 		_validateState(required, state);
 
 		ObjectField objectField = objectFieldPersistence.create(
@@ -1534,6 +1535,19 @@ public class ObjectFieldLocalServiceImpl
 
 		if (objectRelationship.isEdge() && !required) {
 			throw new ObjectFieldRequiredException();
+		}
+	}
+
+	private void _validateRequired(String businessType, boolean required)
+		throws PortalException {
+
+		if (StringUtil.equals(
+				businessType,
+				ObjectFieldConstants.BUSINESS_TYPE_AUTO_INCREMENT) &&
+			required) {
+
+			throw new ObjectFieldBusinessTypeException(
+				"AutoIncrement business type can not be required");
 		}
 	}
 

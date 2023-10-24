@@ -1580,7 +1580,9 @@ public class ObjectDefinitionLocalServiceImpl
 			else if (GetterUtil.getBoolean(
 						ObjectFieldSettingUtil.getValue(
 							ObjectFieldSettingConstants.NAME_UNIQUE_VALUES,
-							objectField))) {
+							objectField)) ||
+					 objectField.compareBusinessType(
+						 ObjectFieldConstants.BUSINESS_TYPE_AUTO_INCREMENT)) {
 
 				indexable = true;
 				unique = true;
