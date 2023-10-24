@@ -408,6 +408,15 @@ public class ObjectEntryLocalServiceWrapper
 			search);
 	}
 
+	@Override
+	public String getNextAutoIncrementObjectEntryValue(
+			com.liferay.object.model.ObjectField objectField)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _objectEntryLocalService.getNextAutoIncrementObjectEntryValue(
+			objectField);
+	}
+
 	/**
 	 * Returns a range of all the object entries.
 	 *

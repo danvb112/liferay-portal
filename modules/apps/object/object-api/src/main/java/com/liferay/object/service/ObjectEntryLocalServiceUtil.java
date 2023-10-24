@@ -359,6 +359,13 @@ public class ObjectEntryLocalServiceUtil {
 			search);
 	}
 
+	public static String getNextAutoIncrementObjectEntryValue(
+			com.liferay.object.model.ObjectField objectField)
+		throws PortalException {
+
+		return getService().getNextAutoIncrementObjectEntryValue(objectField);
+	}
+
 	/**
 	 * Returns a range of all the object entries.
 	 *
