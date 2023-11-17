@@ -29,6 +29,7 @@ function Select({
 	options,
 	placeholder,
 	predefinedValue,
+	id,
 	readOnly,
 	required,
 	selectedKey,
@@ -95,7 +96,7 @@ function Select({
 				aria-labelledby={name}
 				aria-required={required}
 				disabled={readOnly}
-				id="picker"
+				id={id}
 				items={[{items: options, label}]}
 				onSelectionChange={(itemKey: React.Key) => {
 					let newItemKey: React.Key | null = itemKey;
@@ -145,6 +146,7 @@ const Main = ({
 	multiple = false,
 	name,
 	onChange,
+	id,
 	onSelectionChange,
 	options = [],
 	placeholder = Liferay.Language.get('choose-an-option'),
@@ -255,6 +257,7 @@ const Main = ({
 						onChange={onChange}
 						onSelectionChange={onSelectionChange}
 						options={normalizedOptions}
+						id={id}
 						placeholder={placeholder}
 						predefinedValue={newPredefinedValue}
 						readOnly={readOnly}

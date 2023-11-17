@@ -86,6 +86,7 @@ function FieldOperator({
 					onSelectionChange={(itemKey) => {
 						setOperatorValue(itemKey);
 					}}
+					id='field-operator-id-test'
 					options={options}
 					readOnly={readOnly}
 					selectedKey={operatorValue}
@@ -151,10 +152,13 @@ function FieldLeft({
 				]}
 				onChange={onChange}
 				onSelectionChange={(itemKey) => {
-					setFieldLeftSelectedKey(itemKey);
 					setOperatorValue(undefined);
-					setReload(true);
+					if(itemKey !== fieldLeftSelectedKey) {
+						setReload(true);
+					}
+					setFieldLeftSelectedKey(itemKey);
 				}}
+				id='field-left-id-test'
 				options={fields}
 				placeholder={Liferay.Language.get('choose-an-option')}
 				selectedKey={fieldLeftSelectedKey}

@@ -23,6 +23,7 @@ interface MainProps {
 	localizedValue?: any;
 	localizedValueEdited?: any;
 	multiple?: boolean;
+	id?: string;
 	name: string;
 	onBlur?: any;
 	onChange: any;
