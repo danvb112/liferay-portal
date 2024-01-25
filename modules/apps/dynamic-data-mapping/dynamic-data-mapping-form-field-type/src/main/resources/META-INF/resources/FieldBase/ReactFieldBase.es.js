@@ -157,6 +157,9 @@ const Popover = ({tooltip}) => {
 	);
 };
 
+const FIELDSET_REGEX = /Fieldset\d+/g;
+const FIELDSET_REPEAT_NUMBERS_REGEX = /\$(\d+)(?:#|\$|$)/g;
+
 export function FieldBase({
 	accessible = true,
 	children,
@@ -174,7 +177,6 @@ export function FieldBase({
 	nestedFields,
 	onClick,
 	overMaximumRepetitionsLimit,
-	parentInstanceId,
 	readOnly,
 	repeatable,
 	required,
@@ -261,28 +263,58 @@ export function FieldBase({
 		columns: [{fields: [field], size: 12}],
 	}));
 
-	const checkRepetitions = () => {
-		let repetitionsCounter = 0;
+	const checkRepetitions = useMemo(() => {
+		const currentFieldFieldsets = name.match(FIELDSET_REGEX);
+		const currentFieldsetRepeatNumbers = name.match(
+			FIELDSET_REPEAT_NUMBERS_REGEX
+		);
+
+		if (currentFieldsetRepeatNumbers) {
+			currentFieldsetRepeatNumbers.pop();
+		}
 
 		const visitor = new PagesVisitor(pages);
 
-		const newParentInstanceId = parentInstanceId;
+		const repeatableFields = [];
 
-		visitor.mapFields(
-			(field) => {
-				if (
-					fieldReference === field.fieldReference &&
-					newParentInstanceId === field.parentInstanceId
-				) {
-					repetitionsCounter++;
-				}
-			},
-			true,
-			true
-		);
+		visitor.visitFields((field) => {
+			const fieldFieldsets = field.name.match(FIELDSET_REGEX);
+			const fieldsetRepeatNumber = field.name.match(
+				FIELDSET_REPEAT_NUMBERS_REGEX
+			);
 
-		return repetitionsCounter;
-	};
+			if (fieldsetRepeatNumber) {
+				fieldsetRepeatNumber.pop();
+			}
+
+			const isSameFieldset =
+				currentFieldFieldsets &&
+				fieldFieldsets &&
+				currentFieldsetRepeatNumbers &&
+				fieldsetRepeatNumber &&
+				currentFieldFieldsets.every(
+					(fieldFieldset, index) =>
+						fieldFieldset === fieldFieldsets[index]
+				) &&
+				currentFieldsetRepeatNumbers.every(
+					(fieldFieldset, index) =>
+						fieldFieldset === fieldsetRepeatNumber[index]
+				);
+
+			if (fieldReference === field.fieldReference && isSameFieldset) {
+				repeatableFields.push(field);
+			}
+
+			if (
+				!currentFieldFieldsets &&
+				fieldReference === field.fieldReference
+			) {
+				repeatableFields.push(field);
+			}
+		});
+
+		return repeatableFields.length;
+	}, [fieldReference, pages, name]);
 
 	return (
 		<ClayForm.Group
@@ -299,7 +331,7 @@ export function FieldBase({
 		>
 			{repeatable && (
 				<div className="lfr-ddm-form-field-repeatable-toolbar">
-					{checkRepetitions() > 1 && (
+					{checkRepetitions > 1 && (
 						<ClayButton
 							aria-label={sub(
 								Liferay.Language.get('remove-duplicate-field'),
