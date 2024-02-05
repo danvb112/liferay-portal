@@ -82,6 +82,7 @@ const Text = ({
 	onFocus,
 	onKeyDown,
 	placeholder,
+	repeatable,
 	setError,
 	shouldUpdateValue,
 	showCounter,
@@ -169,10 +170,14 @@ const Text = ({
 						maxLength={showCounter ? '' : maxLength}
 						name={name}
 						onBlur={(event) => {
+							if (repeatable) {
+								Liferay.fire('disableAddRepeatableButton');
+							}
+
 							onBlur(event);
 							handleChangeInput(event);
 						}}
-						onChange={handleChangeInput}
+						onChange={(event) => handleChangeInput(event)}
 						onFocus={onFocus}
 						onKeyDown={onKeyDown}
 						placeholder={placeholder}
@@ -459,6 +464,7 @@ const Main = ({
 	placeholder,
 	predefinedValue = '',
 	readOnly,
+	repeatable,
 	shouldUpdateValue = false,
 	syncDelay = true,
 	valid,
@@ -488,6 +494,7 @@ const Main = ({
 			localizedValue={localizedValue}
 			name={name}
 			readOnly={readOnly}
+			repeatable={repeatable}
 			valid={error.valid ?? valid}
 		>
 			<Component
@@ -529,6 +536,7 @@ const Main = ({
 				onKeyDown={onKeyDown}
 				options={optionsMemo}
 				placeholder={placeholder}
+				repeatable={repeatable}
 				setError={setError}
 				shouldUpdateValue={shouldUpdateValue}
 				showCounter={showCounter}

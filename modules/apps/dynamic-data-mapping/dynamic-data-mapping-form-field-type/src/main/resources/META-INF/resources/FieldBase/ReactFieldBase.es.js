@@ -19,7 +19,7 @@ import {
 } from 'data-engine-js-components-web';
 import {sub} from 'frontend-js-web';
 import moment from 'moment/min/moment-with-locales';
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 
 import './FieldBase.scss';
 
@@ -191,6 +191,10 @@ export function FieldBase({
 	warningMessage,
 }) {
 	const {editingLanguageId, pages} = useFormState();
+	const [
+		disableAddRepeatableButton,
+		setDisableAddRepeatableButton,
+	] = useState(false);
 	const dispatch = useForm();
 
 	const hasError = displayErrors && errorMessage && !valid;
@@ -318,6 +322,16 @@ export function FieldBase({
 		}
 	}, [fieldReference, name, pages, repeatable]);
 
+	useEffect(() => {
+		Liferay.on('disableAddRepeatableButton', () => {
+			setDisableAddRepeatableButton(true);
+
+			setTimeout(() => {
+				setDisableAddRepeatableButton(false);
+			}, 1000);
+		});
+	}, []);
+
 	return (
 		<ClayForm.Group
 			{...accessiblePropsGroup}
@@ -339,8 +353,13 @@ export function FieldBase({
 								Liferay.Language.get('remove-duplicate-field'),
 								label ? label : type
 							)}
-							className="ddm-form-field-repeatable-delete-button p-0"
-							disabled={readOnly}
+							className={classNames(
+								'ddm-form-field-repeatable-delete-button p-0',
+								{
+									'ddm-form-field-repeatable-add-button-disabled': disableAddRepeatableButton,
+								}
+							)}
+							disabled={readOnly || disableAddRepeatableButton}
 							onClick={() =>
 								dispatch({
 									payload: name,
@@ -363,17 +382,16 @@ export function FieldBase({
 						className={classNames(
 							'ddm-form-field-repeatable-add-button p-0',
 							{
-								hide: overMaximumRepetitionsLimit,
+								'ddm-form-field-repeatable-add-button-disabled': disableAddRepeatableButton,
+								'hide': overMaximumRepetitionsLimit,
 							}
 						)}
-						disabled={readOnly}
+						disabled={readOnly || disableAddRepeatableButton}
 						onClick={() =>
-							setTimeout(() => {
-								dispatch({
-									payload: name,
-									type: CORE_EVENT_TYPES.FIELD.REPEATED,
-								});
-							}, 200)
+							dispatch({
+								payload: name,
+								type: CORE_EVENT_TYPES.FIELD.REPEATED,
+							})
 						}
 						small
 						title={Liferay.Language.get('duplicate')}
