@@ -5,7 +5,20 @@
 
 import React from 'react';
 
-export default function OverviewChart() {
+export default function OverviewChart(
+	_accountIdParamName,
+	_APIBaseUrl,
+	_commerceAccountId,
+	_noAccountErrorMessage,
+	_noDataErrorMessage
+) {
+
+	// const [accountId, setAccountId] = useState(commerceAccountId);
+
+	// Liferay.on('accountSelected', ({accountId}) => setAccountId(accountId));
+
+	// useEffect(updateData, [accountId]);
+
 	return (
 		<div className="overview-chart-wrapper">
 			<div className="donut" style={{'--perc': 66}}>

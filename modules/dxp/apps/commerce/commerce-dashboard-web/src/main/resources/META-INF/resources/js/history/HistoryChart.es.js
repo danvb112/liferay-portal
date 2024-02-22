@@ -5,9 +5,15 @@
 
 import React from 'react';
 
-import ChartWrapper from './ChartWrapper';
+import ChartWrapper from '../ChartWrapper.es';
 
-export default function HistoryChart() {
+export default function HistoryChart({
+	_APIBaseUrl,
+	_accountIdParamName,
+	_commerceAccountId,
+	_noAccountErrorMessage,
+	noDataErrorMessage,
+}) {
 	const chartData = {
 		axis: {
 			x: {
@@ -58,7 +64,7 @@ export default function HistoryChart() {
 	return (
 		<ChartWrapper
 			data={chartData}
-			noDataErrorMessage={Liferay.Language.get('no-data-available')}
+			noDataErrorMessage={noDataErrorMessage}
 		/>
 	);
 }
