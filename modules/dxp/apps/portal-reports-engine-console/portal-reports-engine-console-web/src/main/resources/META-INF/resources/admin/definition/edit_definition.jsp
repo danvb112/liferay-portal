@@ -215,7 +215,7 @@ else {
 			"parameters", reportsEngineDisplayContext.getReportParameters()
 		).build()
 	%>'
-	module="{reportParameters} from portal-reports-engine-console-web"
+	module="admin/js/ReportParameters"
 />
 
 <aui:script>
