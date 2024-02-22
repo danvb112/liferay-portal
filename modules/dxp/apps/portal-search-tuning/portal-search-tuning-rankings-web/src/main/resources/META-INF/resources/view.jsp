@@ -94,7 +94,7 @@ RankingPortletDisplayContext rankingPortletDisplayContext = (RankingPortletDispl
 	filterDropdownItems="<%= rankingPortletDisplayContext.getFilterItemsDropdownItems() %>"
 	filterLabelItems="<%= rankingPortletDisplayContext.getFilterLabelItems() %>"
 	itemsTotal="<%= rankingPortletDisplayContext.getTotalItems() %>"
-	propsTransformer="{RankingPortletManagementToolbarPropsTransformer} from portal-search-tuning-rankings-web"
+	propsTransformer="js/RankingPortletManagementToolbarPropsTransformer"
 	searchActionURL="<%= rankingPortletDisplayContext.getSearchActionURL() %>"
 	searchContainerId="resultsRankingEntries"
 	searchFormName="fm"

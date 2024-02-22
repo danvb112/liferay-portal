@@ -51,7 +51,7 @@ renderResponse.setTitle(LanguageUtil.get(request, "customize-results"));
 		</div>
 
 		<react:component
-			module="{ResultRankingsApp} from portal-search-tuning-rankings-web"
+			module="js/ResultRankingsApp.es"
 			props="<%= editRankingDisplayContext.getData() %>"
 		/>
 	</div>
