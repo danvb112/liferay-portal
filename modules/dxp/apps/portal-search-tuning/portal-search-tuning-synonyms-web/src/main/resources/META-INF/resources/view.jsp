@@ -31,7 +31,7 @@ SynonymsDisplayContext synonymsDisplayContext = (SynonymsDisplayContext)request.
 	creationMenu="<%= synonymsDisplayContext.getCreationMenu() %>"
 	disabled="<%= synonymsDisplayContext.isDisabledManagementBar() %>"
 	itemsTotal="<%= synonymsDisplayContext.getItemsTotal() %>"
-	propsTransformer="{SynonymsManagementToolbarPropsTransformer} from portal-search-tuning-synonyms-web"
+	propsTransformer="js/SynonymsManagementToolbarPropsTransformer"
 	searchContainerId="synonymSetsEntries"
 	selectable="<%= true %>"
 	showCreationMenu="<%= true %>"
@@ -67,7 +67,7 @@ SynonymsDisplayContext synonymsDisplayContext = (SynonymsDisplayContext)request.
 				<clay:dropdown-actions
 					aria-label='<%= LanguageUtil.get(request, "show-actions") %>'
 					dropdownItems="<%= synonymSetDisplayContext.getDropdownItems() %>"
-					propsTransformer="{SynonymSetsDropdownDefaultPropsTransformer} from portal-search-tuning-synonyms-web"
+					propsTransformer="js/SynonymSetsDropdownDefaultPropsTransformer"
 				/>
 			</liferay-ui:search-container-column-text>
 		</liferay-ui:search-container-row>

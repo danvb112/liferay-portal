@@ -43,7 +43,7 @@ portletDisplay.setURLBackTitle(portletDisplay.getPortletDisplayName());
 		<span aria-hidden="true" class="loading-animation"></span>
 
 		<react:component
-			module="{SynonymSetsApp} from portal-search-tuning-synonyms-web"
+			module="js/SynonymSetsApp.es"
 			props="<%= editSynonymSetsDisplayContext.getData() %>"
 		/>
 	</liferay-frontend:edit-form-body>
