@@ -15,6 +15,7 @@ import com.liferay.analytics.reports.web.internal.constants.ProductNavigationCon
 import com.liferay.analytics.reports.web.internal.info.item.provider.util.AnalyticsReportsInfoItemObjectProviderRegistryUtil;
 import com.liferay.analytics.reports.web.internal.util.AnalyticsReportsUtil;
 import com.liferay.analytics.settings.rest.manager.AnalyticsSettingsManager;
+import com.liferay.frontend.js.loader.modules.extender.npm.NPMResolver;
 import com.liferay.frontend.taglib.clay.servlet.taglib.ButtonTag;
 import com.liferay.frontend.taglib.clay.servlet.taglib.IconTag;
 import com.liferay.info.item.ClassPKInfoItemIdentifier;
@@ -377,7 +378,8 @@ public class AnalyticsReportsProductNavigationControlMenuEntry
 
 			_reactRenderer.renderReact(
 				new ComponentDescriptor(
-					"{AnalyticsReportsApp} from analytics-reports-web"),
+					_npmResolver.resolveModuleName("analytics-reports-web") +
+						"/js/AnalyticsReportsApp"),
 				HashMapBuilder.<String, Object>put(
 					"context",
 					HashMapBuilder.<String, Object>put(
@@ -416,6 +418,9 @@ public class AnalyticsReportsProductNavigationControlMenuEntry
 
 	@Reference
 	private Language _language;
+
+	@Reference
+	private NPMResolver _npmResolver;
 
 	@Reference
 	private Portal _portal;
