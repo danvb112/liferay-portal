@@ -19,7 +19,7 @@
 			).build()
 		%>'
 		label="verify"
-		propsTransformer="{AuthenticationTransformer} from multi-factor-authentication-fido2-web"
+		propsTransformer="js/AuthenticationTransformer"
 	/>
 </aui:button-row>
 

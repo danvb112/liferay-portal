@@ -24,7 +24,7 @@ List<MFAFIDO2CredentialEntry> mfaIDO2CredentialEntries = MFAFIDO2CredentialEntry
 				%>'
 				displayType="primary"
 				label="register-a-fido2-authenticator"
-				propsTransformer="{RegistrationTransformer} from multi-factor-authentication-fido2-web"
+				propsTransformer="js/RegistrationTransformer"
 			/>
 		</aui:button-row>
 	</c:when>
