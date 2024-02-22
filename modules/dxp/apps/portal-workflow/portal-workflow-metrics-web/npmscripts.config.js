@@ -5,6 +5,22 @@
 
 module.exports = {
 	build: {
-		main: 'src/main/resources/META-INF/resources/js/index.js',
+		bundler: {
+			exclude: {
+				'*': [
+					'demo/**',
+					'example/**',
+					'rollup.*.js',
+					'src/**',
+					'test/**',
+				],
+				'commander': true,
+				'fbjs': ['flow/**'],
+				'iconv-lite': ['lib/extend-node.js', 'lib/streams.js'],
+				'rw': true,
+				'safer-buffer': ['tests.js'],
+			},
+			ignore: ['test/**'],
+		},
 	},
 };
