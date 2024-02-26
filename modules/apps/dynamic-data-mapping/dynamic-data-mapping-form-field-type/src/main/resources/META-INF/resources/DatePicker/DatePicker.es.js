@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import ClayAlert from '@clayui/alert';
 import ClayDatePicker from '@clayui/date-picker';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import {
@@ -36,6 +37,7 @@ export default function DatePicker({
 }) {
 	const inputRef = useRef(null);
 	const maskRef = useRef();
+	const [momentFormatInvalid, setMomentFormatInvalid] = useState(false);
 	const {
 		clayFormat,
 		firstDayOfWeek,
@@ -97,17 +99,15 @@ export default function DatePicker({
 	 * Updates the rawDate state whenever the prop value or localizedValue changes,
 	 * but it keep user's input case theres no language change.
 	 */
-	useEffect(
-		() =>
-			setDate(({formattedDate, name, predefinedValue, rawDate}) =>
-				name === date.name &&
-				predefinedValue === date.predefinedValue &&
-				rawDate === ''
-					? {...date, formattedDate}
-					: date
-			),
-		[date]
-	);
+	useEffect(() => {
+		setDate(({formattedDate, name, predefinedValue, rawDate}) =>
+			name === date.name &&
+			predefinedValue === date.predefinedValue &&
+			rawDate === ''
+				? {...date, formattedDate}
+				: date
+		);
+	}, [date]);
 
 	/**
 	 * Creates the input mask and update it whenever the format changes
@@ -144,15 +144,38 @@ export default function DatePicker({
 
 	const [expanded, setExpanded] = useState(false);
 
+	const handleBlur = () => {
+		onBlur?.();
+
+		if (!otherProps.required) {
+			const isFill = /\d/.test(formattedDate);
+
+			const isValidMomentFormat = moment(
+				formattedDate,
+				momentFormat,
+				true
+			).isValid();
+
+			if (!isFill || isValidMomentFormat) {
+				setMomentFormatInvalid(false);
+
+				return;
+			}
+
+			setMomentFormatInvalid(true);
+		}
+	};
+
 	const handleExpandedChange = (value) => {
 		if (value !== expanded) {
 			setExpanded(value);
 
 			if (value) {
 				onFocus?.();
+				setMomentFormatInvalid(false);
 			}
 			else {
-				onBlur?.();
+				handleBlur();
 			}
 		}
 	};
@@ -202,7 +225,7 @@ export default function DatePicker({
 						firstDayOfWeek={firstDayOfWeek}
 						id={name}
 						months={months}
-						onBlur={onBlur}
+						onBlur={handleBlur}
 						onChange={handleValueChange}
 						onExpandedChange={handleExpandedChange}
 						onFocus={onFocus}
@@ -216,6 +239,23 @@ export default function DatePicker({
 						years={years}
 						yearsCheck={false}
 					/>
+
+					{momentFormatInvalid && (
+						<div
+							className="error-container form-feedback-item mt-1"
+							role="alert"
+						>
+							<ClayAlert
+								className="inline-item inline-item-before"
+								displayType="danger"
+								variant="feedback"
+							>
+								{Liferay.Language.get(
+									'please-enter-a-valid-date'
+								)}
+							</ClayAlert>
+						</div>
+					)}
 
 					<input name={name} type="hidden" value={rawDate} />
 				</div>
