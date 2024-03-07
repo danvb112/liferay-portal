@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import ClayAlert from '@clayui/alert';
 import ClayDatePicker from '@clayui/date-picker';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import {
@@ -20,6 +19,8 @@ import {getTooltipTitle} from '../util/tooltip';
 export default function DatePicker({
 	defaultLanguageId = themeDisplay.getDefaultLanguageId(),
 	dir,
+	displayErrors,
+	errorMessage,
 	locale,
 	localizable,
 	localizedValue,
@@ -31,13 +32,18 @@ export default function DatePicker({
 	predefinedValue,
 	readOnly,
 	type,
+	valid,
 	value,
 	weekdaysShort,
 	...otherProps
 }) {
 	const inputRef = useRef(null);
 	const maskRef = useRef();
-	const [momentFormatInvalid, setMomentFormatInvalid] = useState(false);
+	const [validField, setValidField] = useState({
+		displayErrors,
+		errorMessage,
+		valid,
+	});
 	const {
 		clayFormat,
 		firstDayOfWeek,
@@ -157,12 +163,20 @@ export default function DatePicker({
 			).isValid();
 
 			if (!isFill || isValidMomentFormat) {
-				setMomentFormatInvalid(false);
+				setValidField({
+					displayErrors,
+					errorMessage,
+					valid,
+				});
 
 				return;
 			}
 
-			setMomentFormatInvalid(true);
+			setValidField({
+				displayErrors: true,
+				errorMessage: Liferay.Language.get('please-enter-a-valid-date'),
+				valid: false,
+			});
 		}
 	};
 
@@ -172,7 +186,12 @@ export default function DatePicker({
 
 			if (value) {
 				onFocus?.();
-				setMomentFormatInvalid(false);
+
+				setValidField({
+					displayErrors,
+					errorMessage,
+					valid,
+				});
 			}
 			else {
 				handleBlur();
@@ -190,10 +209,13 @@ export default function DatePicker({
 
 	return (
 		<FieldBase
+			displayErrors={validField.displayErrors}
+			errorMessage={validField.errorMessage}
 			localizedValue={localizedValue}
 			name={name}
 			readOnly={readOnly}
 			type="date"
+			valid={validField.valid}
 			{...otherProps}
 		>
 			<ClayTooltipProvider autoAlign>
@@ -239,23 +261,6 @@ export default function DatePicker({
 						years={years}
 						yearsCheck={false}
 					/>
-
-					{momentFormatInvalid && (
-						<div
-							className="error-container form-feedback-item mt-1"
-							role="alert"
-						>
-							<ClayAlert
-								className="inline-item inline-item-before"
-								displayType="danger"
-								variant="feedback"
-							>
-								{Liferay.Language.get(
-									'please-enter-a-valid-date'
-								)}
-							</ClayAlert>
-						</div>
-					)}
 
 					<input name={name} type="hidden" value={rawDate} />
 				</div>
