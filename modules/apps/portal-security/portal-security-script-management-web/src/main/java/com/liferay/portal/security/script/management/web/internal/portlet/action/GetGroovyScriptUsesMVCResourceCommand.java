@@ -79,7 +79,7 @@ public class GetGroovyScriptUsesMVCResourceCommand
 		JSONArray jsonArray = _jsonFactory.createJSONArray();
 
 		groovyScriptUses.sort(
-			Comparator.comparing(GroovyScriptUse::getCompanyWebId));
+			Comparator.comparing(GroovyScriptUse::getCompanyWebId).thenComparing(GroovyScriptUse::getSourceName));
 
 		for (GroovyScriptUse groovyScriptUse : groovyScriptUses) {
 			jsonArray.put(
