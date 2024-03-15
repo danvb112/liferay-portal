@@ -8,11 +8,11 @@
 import {GroovyScriptUseItem} from './ScriptManagementContainer';
 import './GroovyScriptUsesModal.scss';
 interface GroovyScriptUsesModalProps {
-	groovyScriptUsesItems: GroovyScriptUseItem[];
+	groovyScriptUses: GroovyScriptUseItem[];
 	handleOnClose: (value: boolean) => void;
 }
 export declare function GroovyScriptUsesModal({
-	groovyScriptUsesItems,
+	groovyScriptUses,
 	handleOnClose,
 }: GroovyScriptUsesModalProps): JSX.Element;
 export {};

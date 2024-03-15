@@ -14,16 +14,16 @@ import {GroovyScriptUsesModal} from './GroovyScriptUsesModal';
 
 import './ScriptManagementContainer.scss';
 
+export type GroovyScriptUseItem = {
+	companyWebId: string;
+	sourceName: string;
+	sourceURL: string;
+};
+
 interface ScriptManagementContainerProps {
 	allowScriptContentBeExecutedOrIncluded: boolean;
 	baseResourceURL: string;
 }
-
-export type GroovyScriptUseItem = {
-	companyWebId: string;
-	redirectURL: string;
-	scriptSource: string;
-};
 
 export default function ScriptManagementContainer({
 	allowScriptContentBeExecutedOrIncluded,
@@ -32,25 +32,47 @@ export default function ScriptManagementContainer({
 	const [allowScriptContent, setAllowScriptContent] = useState(
 		allowScriptContentBeExecutedOrIncluded
 	);
+	const [groovyScriptUses, setGroovyScriptUses] = useState<
+		GroovyScriptUseItem[]
+	>([]);
 	const [showGroovyScriptUsesModal, setShowGroovyScriptUsesModal] = useState<
 		boolean
 	>(false);
 
 	const handleSaveSystemConfiguration = async () => {
-		const response = await fetch(
+		const getGroovyScriptUsesResponse = await fetch(
 			createResourceURL(baseResourceURL, {
-				allowScriptContentBeExecutedOrIncluded: allowScriptContent,
-				p_p_resource_id:
-					'/system_settings/edit_script_management_configuration',
+				p_p_resource_id: '/system_settings/get_groovy_script_uses',
 			}).toString()
 		);
 
-		openToast({
-			message: response.ok
-				? Liferay.Language.get('your-request-completed-successfully')
-				: Liferay.Language.get('an-error-occurred'),
-			type: response.ok ? 'success' : 'danger',
-		});
+		const groovyScriptUsesResponse = (await getGroovyScriptUsesResponse.json()) as GroovyScriptUseItem[];
+
+		if (!groovyScriptUsesResponse.length) {
+			const editScriptManagementConfigurationResponse = await fetch(
+				createResourceURL(baseResourceURL, {
+					allowScriptContentBeExecutedOrIncluded: allowScriptContent,
+					p_p_resource_id:
+						'/system_settings/edit_script_management_configuration',
+				}).toString()
+			);
+
+			openToast({
+				message: editScriptManagementConfigurationResponse.ok
+					? Liferay.Language.get(
+							'your-request-completed-successfully'
+					  )
+					: Liferay.Language.get('an-error-occurred'),
+				type: editScriptManagementConfigurationResponse.ok
+					? 'success'
+					: 'danger',
+			});
+
+			return;
+		}
+
+		setGroovyScriptUses(groovyScriptUsesResponse);
+		setShowGroovyScriptUsesModal(true);
 	};
 
 	return (
@@ -92,8 +114,6 @@ export default function ScriptManagementContainer({
 					displayType="primary"
 					onClick={() => {
 						handleSaveSystemConfiguration();
-
-						setShowGroovyScriptUsesModal(true);
 					}}
 					type="submit"
 				>
@@ -114,8 +134,11 @@ export default function ScriptManagementContainer({
 
 			{showGroovyScriptUsesModal && (
 				<GroovyScriptUsesModal
-					groovyScriptUsesItems={[]}
-					handleOnClose={setShowGroovyScriptUsesModal}
+					groovyScriptUses={groovyScriptUses}
+					handleOnClose={(value) => {
+						setShowGroovyScriptUsesModal(value);
+						setGroovyScriptUses([]);
+					}}
 				/>
 			)}
 		</div>

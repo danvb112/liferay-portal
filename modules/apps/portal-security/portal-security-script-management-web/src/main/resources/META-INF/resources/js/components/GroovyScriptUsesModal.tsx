@@ -15,7 +15,7 @@ import {GroovyScriptUseItem} from './ScriptManagementContainer';
 import './GroovyScriptUsesModal.scss';
 
 interface GroovyScriptUsesModalProps {
-	groovyScriptUsesItems: GroovyScriptUseItem[];
+	groovyScriptUses: GroovyScriptUseItem[];
 	handleOnClose: (value: boolean) => void;
 }
 
@@ -31,7 +31,7 @@ const tableHeaderItems = [
 ];
 
 export function GroovyScriptUsesModal({
-	groovyScriptUsesItems,
+	groovyScriptUses,
 	handleOnClose,
 }: GroovyScriptUsesModalProps) {
 	const {observer, onClose} = useModal({
@@ -70,17 +70,17 @@ export function GroovyScriptUsesModal({
 						)}
 					</Head>
 
-					<Body defaultItems={groovyScriptUsesItems}>
+					<Body defaultItems={groovyScriptUses}>
 						{(row) => (
 							<Row>
 								<Cell expanded>
 									<ClayLink
 										displayType="tertiary"
-										href={row.redirectURL}
-										target="__blank"
+										href={row.sourceURL}
+										target="_blank"
 										weight="semi-bold"
 									>
-										{row.scriptSource}
+										{row.sourceName}
 									</ClayLink>
 								</Cell>
 
@@ -89,9 +89,9 @@ export function GroovyScriptUsesModal({
 								<Cell>
 									<ClayLink
 										displayType="secondary"
-										href={row.redirectURL}
+										href={row.sourceURL}
 										role="button"
-										target="__blank"
+										target="_blank"
 										weight="semi-bold"
 									>
 										<ClayIcon
