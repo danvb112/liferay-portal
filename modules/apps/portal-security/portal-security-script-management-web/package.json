@@ -13,6 +13,14 @@
 	"main": "js/index.ts",
 	"name": "@liferay/portal-security-script-management-web",
 	"private": true,
+	"jest": {
+		"setupFiles": [
+			"<rootDir>/jest-setup.config.js"
+		],
+		"testMatch": [
+			"<rootDir>/src/main/resources/META-INF/resources/js/tests/**/*.spec.tsx"
+		]
+	},
 	"scripts": {
 		"build": "liferay-npm-scripts build",
 		"checkFormat": "liferay-npm-scripts check",

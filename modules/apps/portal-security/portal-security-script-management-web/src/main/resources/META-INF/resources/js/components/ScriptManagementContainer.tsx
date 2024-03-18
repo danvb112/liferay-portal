@@ -7,10 +7,11 @@ import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import {Text} from '@clayui/core';
 import {ClayCheckbox} from '@clayui/form';
+import ClayModal, {useModal} from '@clayui/modal';
 import {createResourceURL, fetch, openToast} from 'frontend-js-web';
 import React, {useState} from 'react';
 
-import {GroovyScriptUsesModal} from './GroovyScriptUsesModal';
+import {GroovyScriptUsesModalContent} from './GroovyScriptUsesModalContent';
 
 import './ScriptManagementContainer.scss';
 
@@ -38,6 +39,13 @@ export default function ScriptManagementContainer({
 	const [showGroovyScriptUsesModal, setShowGroovyScriptUsesModal] = useState<
 		boolean
 	>(false);
+
+	const {observer, onClose} = useModal({
+		onClose: () => {
+			setShowGroovyScriptUsesModal(false);
+			setGroovyScriptUses([]);
+		},
+	});
 
 	const handleSaveSystemConfiguration = async () => {
 		const getGroovyScriptUsesResponse = await fetch(
@@ -133,13 +141,17 @@ export default function ScriptManagementContainer({
 			</ClayButton.Group>
 
 			{showGroovyScriptUsesModal && (
-				<GroovyScriptUsesModal
-					groovyScriptUses={groovyScriptUses}
-					handleOnClose={(value) => {
-						setShowGroovyScriptUsesModal(value);
-						setGroovyScriptUses([]);
-					}}
-				/>
+				<ClayModal
+					center
+					observer={observer}
+					size="lg"
+					status="warning"
+				>
+					<GroovyScriptUsesModalContent
+						groovyScriptUses={groovyScriptUses}
+						handleOnClose={onClose}
+					/>
+				</ClayModal>
 			)}
 		</div>
 	);

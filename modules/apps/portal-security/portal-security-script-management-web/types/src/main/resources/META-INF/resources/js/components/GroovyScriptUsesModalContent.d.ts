@@ -6,12 +6,12 @@
 /// <reference types="react" />
 
 import {GroovyScriptUseItem} from './ScriptManagementContainer';
-import './GroovyScriptUsesModal.scss';
+import './GroovyScriptUsesModalContent.scss';
 interface GroovyScriptUsesModalProps {
 	groovyScriptUses: GroovyScriptUseItem[];
-	handleOnClose: (value: boolean) => void;
+	handleOnClose: () => void;
 }
-export declare function GroovyScriptUsesModal({
+export declare function GroovyScriptUsesModalContent({
 	groovyScriptUses,
 	handleOnClose,
 }: GroovyScriptUsesModalProps): JSX.Element;

@@ -7,16 +7,16 @@ import ClayButton from '@clayui/button';
 import {Body, Cell, Head, Row, Table, Text} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
 import ClayLink from '@clayui/link';
-import ClayModal, {useModal} from '@clayui/modal';
+import ClayModal from '@clayui/modal';
 import React from 'react';
 
 import {GroovyScriptUseItem} from './ScriptManagementContainer';
 
-import './GroovyScriptUsesModal.scss';
+import './GroovyScriptUsesModalContent.scss';
 
 interface GroovyScriptUsesModalProps {
 	groovyScriptUses: GroovyScriptUseItem[];
-	handleOnClose: (value: boolean) => void;
+	handleOnClose: () => void;
 }
 
 const tableHeaderItems = [
@@ -30,18 +30,12 @@ const tableHeaderItems = [
 	},
 ];
 
-export function GroovyScriptUsesModal({
+export function GroovyScriptUsesModalContent({
 	groovyScriptUses,
 	handleOnClose,
 }: GroovyScriptUsesModalProps) {
-	const {observer, onClose} = useModal({
-		onClose: () => {
-			handleOnClose(false);
-		},
-	});
-
 	return (
-		<ClayModal center observer={observer} size="lg" status="warning">
+		<>
 			<ClayModal.Header>
 				{Liferay.Language.get('setting-cannot-be-deactivated')}
 			</ClayModal.Header>
@@ -108,11 +102,14 @@ export function GroovyScriptUsesModal({
 
 			<ClayModal.Footer
 				last={
-					<ClayButton displayType="warning" onClick={() => onClose()}>
+					<ClayButton
+						displayType="warning"
+						onClick={() => handleOnClose()}
+					>
 						{Liferay.Language.get('done')}
 					</ClayButton>
 				}
 			/>
-		</ClayModal>
+		</>
 	);
 }
