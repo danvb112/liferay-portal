@@ -3,11 +3,15 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, {useContext} from 'react';
 
+import {DefinitionBuilderContext} from '../../../DefinitionBuilderContext';
 import {defaultLanguageId} from '../../../constants';
 import BaseNode from './BaseNode';
+
+import './ConditionNode.scss';
 
 export default function ConditionNode({
 	data: {
@@ -23,6 +27,11 @@ export default function ConditionNode({
 	id,
 	...otherProps
 }) {
+	const {
+		allowScriptContentToBeExecutedOrIncluded,
+		hadGroovyScriptBefore,
+	} = useContext(DefinitionBuilderContext);
+
 	if (!label || !label[defaultLanguageId]) {
 		label = {
 			[defaultLanguageId]: Liferay.Language.get('condition-node'),
@@ -42,7 +51,12 @@ export default function ConditionNode({
 			id={id}
 			label={label}
 			newNode={newNode}
-			nodeTypeClassName="condition-node"
+			nodeTypeClassName={classNames('condition-node', {
+				'condition-node-disabled':
+					Liferay.FeatureFlags['LPD-11179'] &&
+					!allowScriptContentToBeExecutedOrIncluded &&
+					!hadGroovyScriptBefore,
+			})}
 			notifications={notifications}
 			script={script}
 			scriptLanguage={scriptLanguage}
