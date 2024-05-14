@@ -26,6 +26,7 @@ export const test = mergeTests(
 	loginTest(),
 	pageEditorPagesTest
 );
+
 test.describe('Manage object entries through page templates', () => {
 	test('filters object definition entries of boolean type on an collection display page', async ({
 		apiHelpers,
@@ -151,4 +152,67 @@ test.describe('Manage object entries through page templates', () => {
 			objectDefinition.id
 		);
 	});
+
+	test('can see date object field entry in page Heading fragment', async ({
+		apiHelpers,
+		page,
+		pageEditorPage,
+		site,
+	}) => {
+		const objectDefinition =
+		await apiHelpers.objectAdmin.postObjectDefinition({
+			active: true,
+			externalReferenceCode: 'customObjectERC',
+			label: {
+				en_US: 'customobject',
+			},
+			name: 'CustomObject',
+			objectFields: [
+				{
+					DBType: 'Date',
+					businessType: 'Date',
+					externalReferenceCode: 'customDate',
+					indexed: true,
+					indexedAsKeyword: false,
+					indexedLanguageId: '',
+					label: {en_US: 'customDate'},
+					listTypeDefinitionId: 0,
+					name: 'customDate',
+					required: false,
+					system: false,
+					type: 'Date',
+				},
+			],
+			pluralLabel: {
+				en_US: 'customobjects',
+			},
+			portlet: true,
+			scope: 'company',
+			status: {
+				code: 0,
+			},
+		});
+
+
+		const headingId = getRandomString()
+		const headingDefinition = getFragmentDefinition(
+			headingId,
+			'BASIC_COMPONENT-heading'
+		);
+
+		const layout = await apiHelpers.headlessDelivery.createSitePage({
+			pageDefinition: getPageDefinition([
+				headingDefinition,
+			]),
+			siteId: site.id,
+			title: 'Collection Display filtered by boolean type',
+		});
+
+		await pageEditorPage.goToEditMode(layout, site.friendlyUrlPath);
+
+		await pageEditorPage.selectFragment(headingDefinition.id);
+
+		
+
+	})
 });
