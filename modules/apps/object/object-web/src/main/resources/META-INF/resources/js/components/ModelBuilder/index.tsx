@@ -6,6 +6,7 @@
 import {ILearnResourceContext} from 'frontend-js-components-web';
 import React from 'react';
 import {ReactFlowProvider} from 'react-flow-renderer';
+import {App} from './bpmmjsTest/index';
 
 import {Scope} from '../ObjectDetails/EditObjectDetails';
 import EditObjectFolder from './EditObjectFolder';
@@ -45,30 +46,6 @@ export default function CustomObjectFolderWrapper({
 	workflowStatuses,
 }: CustomObjectFolderWrapperProps) {
 	return (
-		<ReactFlowProvider>
-			<ObjectFolderContextProvider
-				value={{
-					baseResourceURL,
-					editObjectDefinitionURL,
-					filterOperators,
-					forbiddenChars,
-					forbiddenLastChars,
-					forbiddenNames,
-					learnResourceContext,
-					objectDefinitionPermissionsURL,
-					objectDefinitionsStorageTypes,
-					workflowStatuses,
-				}}
-			>
-				<EditObjectFolder
-					companies={companies}
-					objectRelationshipDeletionTypes={
-						objectRelationshipDeletionTypes
-					}
-					sites={sites}
-					viewObjectDefinitionsURL={viewObjectDefinitionsURL}
-				/>
-			</ObjectFolderContextProvider>
-		</ReactFlowProvider>
+		<App />
 	);
 }
