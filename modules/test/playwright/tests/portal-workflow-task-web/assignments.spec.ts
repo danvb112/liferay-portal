@@ -8,6 +8,7 @@ import {readFileSync} from 'fs';
 import path from 'path';
 
 import {apiHelpersTest} from '../../fixtures/apiHelpersTest';
+import {featureFlagsTest} from '../../fixtures/featureFlagsTest';
 import {isolatedSiteTest} from '../../fixtures/isolatedSiteTest';
 import {loginTest} from '../../fixtures/loginTest';
 import {messageBoardsPagesTest} from '../../fixtures/messageBoardsTest';
@@ -27,6 +28,9 @@ import getWidgetDefinition from '../layout-content-page-editor-web/utils/getWidg
 export const test = mergeTests(
 	apiHelpersTest,
 	blogsPagesTest,
+	featureFlagsTest({
+		'LPS-178052': true,
+	}),
 	isolatedSiteTest,
 	loginTest(),
 	messageBoardsPagesTest,
