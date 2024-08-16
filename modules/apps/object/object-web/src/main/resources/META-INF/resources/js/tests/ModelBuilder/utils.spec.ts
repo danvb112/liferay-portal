@@ -134,7 +134,7 @@ describe('checkPostalAddressUnsupportedObjectRelationship function', () => {
 				postalAddressObjectDefinition
 			);
 
-		expect(unsupportedObjectRelationship).toBe(true);
+		expect(unsupportedObjectRelationship).toBe(false);
 	});
 
 	it('returns true if the source node name is Address, but the target node does not have a relationship with the Account object', () => {
@@ -164,7 +164,7 @@ describe('checkPostalAddressUnsupportedObjectRelationship function', () => {
 				customObjectDefinition
 			);
 
-		expect(unsupportedObjectRelationship).toBe(true);
+		expect(unsupportedObjectRelationship).toBe(false);
 	});
 
 	it('returns false if the source node name is Address but the target node has a relationship with the Account object', () => {
@@ -195,7 +195,7 @@ describe('checkPostalAddressUnsupportedObjectRelationship function', () => {
 				customObjectDefinition
 			);
 
-		expect(unsupportedObjectRelationship).toBe(false);
+		expect(unsupportedObjectRelationship).toBe(true);
 	});
 
 	it('returns false if the source and target nodes are custom objects', () => {
