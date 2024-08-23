@@ -35,6 +35,7 @@ const LocalizableText = ({
 	editingLocale = INITIAL_EDITING_LOCALE,
 	fieldName,
 	id,
+	label,
 	name,
 	onFieldBlurred,
 	onFieldChanged = () => {},
@@ -120,6 +121,7 @@ const LocalizableText = ({
 				fieldName={fieldName}
 				id={id}
 				inputValue={inputValue}
+				label={label}
 				name={name}
 				onFieldBlurred={onFieldBlurred}
 				onFieldChanged={(event) => {
@@ -199,6 +201,7 @@ const Main = ({
 	editingLocale,
 	fieldName,
 	id,
+	label,
 	name,
 	onBlur,
 	onChange,
@@ -221,6 +224,7 @@ const Main = ({
 			editingLocale={editingLocale}
 			fieldName={fieldName}
 			id={id}
+			label={label}
 			name={name}
 			onFieldBlurred={onBlur}
 			onFieldChanged={({event, value}) => onChange(event, value)}
