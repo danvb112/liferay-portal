@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import React from 'react';
 import {useStore} from 'react-flow-renderer';
 
-import {getBusinessTypeLabel} from '../../../utils/businessTypeLabel';
+import {getObjectFieldBusinessTypeLabel} from '../../../utils/getObjectFieldBusinessTypeLabel';
 import {useObjectFolderContext} from '../ModelBuilderContext/objectFolderContext';
 import {TYPES} from '../ModelBuilderContext/typesEnum';
 
@@ -51,7 +51,10 @@ export function ObjectDefinitionNodeFields({
 	return (
 		<>
 			{objectFields.map((objectField, index) => {
-				if (index < 5 || showAllObjectFields) {
+				if (
+					objectField.businessType &&
+					(index < 5 || showAllObjectFields)
+				) {
 					return (
 						<div
 							className={classNames(
@@ -76,8 +79,8 @@ export function ObjectDefinitionNodeFields({
 
 							<div className="lfr-objects__model-builder-node-field-business-type">
 								<span>
-									{getBusinessTypeLabel(
-										objectField.businessType as string
+									{getObjectFieldBusinessTypeLabel(
+										objectField.businessType
 									)}
 								</span>
 							</div>
