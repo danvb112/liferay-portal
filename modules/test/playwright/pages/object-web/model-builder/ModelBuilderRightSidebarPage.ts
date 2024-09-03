@@ -5,13 +5,13 @@
 
 import {Locator, Page} from '@playwright/test';
 
-import {ModelBuilderPage} from './ModelBuilderPage';
+import {ModelBuilderLeftSidebarPage} from './ModelBuilderLeftSidebarPage';
 
 export class ModelBuilderRightSidebarPage {
 	readonly deleteButton: Locator;
 	readonly deleteObjectRelationshipButton: Locator;
 	readonly deleteTrashButton: Locator;
-	readonly modelBuilderPage: ModelBuilderPage;
+	readonly modelBuilderLeftSidebarPage: ModelBuilderLeftSidebarPage;
 	readonly modalDeleteObjectRelationshipTextField: Locator;
 	readonly modalDeleteObjectRelationshipConfirmationButton: Locator;
 	readonly rightSidebar: Locator;
@@ -35,7 +35,9 @@ export class ModelBuilderRightSidebarPage {
 		this.deleteTrashButton = page
 			.getByRole('tabpanel')
 			.getByTitle('Delete');
-		this.modelBuilderPage = new ModelBuilderPage(page);
+		this.modelBuilderLeftSidebarPage = new ModelBuilderLeftSidebarPage(
+			page
+		);
 		this.modalDeleteObjectRelationshipTextField = page.getByPlaceholder(
 			'Confirm Relationship Name'
 		);
@@ -44,7 +46,8 @@ export class ModelBuilderRightSidebarPage {
 			{exact: true, name: 'Delete'}
 		);
 		this.rightSidebar = page.getByRole('tabpanel').filter({
-			hasNot: this.modelBuilderPage.createNewObjectDefinitionButton,
+			hasNot: this.modelBuilderLeftSidebarPage
+				.createNewObjectDefinitionButton,
 		});
 		this.rightSidebarObjectDefinitionActivateObject =
 			page.getByLabel('Activate Object');
