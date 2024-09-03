@@ -9,7 +9,7 @@ import {PORTLET_URLS} from '../../../utils/portletUrls';
 import {ViewObjectDefinitionsPage} from '../ViewObjectDefinitionsPage';
 import {ModelBuilderLeftSidebarPage} from './ModelBuilderLeftSidebarPage';
 
-export class ModelBuilderPage {
+export class ModelBuilderDiagramPage {
 	readonly deletionNotAllowed: Locator;
 	readonly diagramArea: Locator;
 	readonly editInPageViewOption: Locator;
@@ -111,11 +111,11 @@ export class ModelBuilderPage {
 		return this.page.getByTitle(`ERC: ${objectFolderERC}`);
 	}
 
-	getObjectFolderLabelHeaderLocator = (objectFolderLabel: string) => {
+	getObjectFolderLabelHeaderLocator(objectFolderLabel: string) {
 		return this.page.getByTitle(
 			`Object Folder Label: ${objectFolderLabel}`
 		);
-	};
+	}
 
 	async goto({
 		objectFolderName,
