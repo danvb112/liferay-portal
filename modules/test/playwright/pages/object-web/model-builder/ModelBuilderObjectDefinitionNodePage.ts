@@ -125,6 +125,14 @@ export class ModelBuilderObjectDefinitionNodePage {
 		await this.newObjectFieldLabel.fill(objectFieldLabel);
 	}
 
+	getLinkedObjectDefinitionIconLocator(objectDefinitionLabel: string) {
+		return this.modelBuilderPage.objectDefinitionNodes
+			.filter({
+				hasText: objectDefinitionLabel,
+			})
+			.locator('svg.lexicon-icon-link');
+	}
+
 	async openAddNewObjectFieldModal(objectDefinitionName: string) {
 		await this.modelBuilderLeftSidebarPage.leftSidebarItems
 			.filter({hasText: objectDefinitionName})
