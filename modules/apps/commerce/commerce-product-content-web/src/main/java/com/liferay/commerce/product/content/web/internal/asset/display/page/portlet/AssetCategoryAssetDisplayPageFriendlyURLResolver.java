@@ -43,6 +43,7 @@ import com.liferay.portal.kernel.util.FriendlyURLNormalizer;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.HttpComponentsUtil;
+import com.liferay.portal.kernel.util.InheritableMap;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
@@ -264,6 +265,17 @@ public class AssetCategoryAssetDisplayPageFriendlyURLResolver
 			groupId, privateLayout, assetCategory.getCategoryId());
 
 		String layoutActualURL = _portal.getLayoutActualURL(layout, mainPath);
+
+		InheritableMap<String, String[]> actualParams = new InheritableMap<>();
+
+		if (params != null) {
+			actualParams.setParentMap(params);
+		}
+
+		actualParams.put(
+			"p_p_id", new String[] {CPPortletKeys.CP_CATEGORY_CONTENT_WEB});
+		actualParams.put("p_p_lifecycle", new String[] {"0"});
+		actualParams.put("p_p_mode", new String[] {"view"});
 
 		HttpServletRequest httpServletRequest =
 			(HttpServletRequest)requestContext.get("request");

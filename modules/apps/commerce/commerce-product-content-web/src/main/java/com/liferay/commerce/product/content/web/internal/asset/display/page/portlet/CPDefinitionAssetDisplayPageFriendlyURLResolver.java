@@ -69,6 +69,7 @@ import com.liferay.portal.kernel.settings.GroupServiceSettingsLocator;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HttpComponentsUtil;
+import com.liferay.portal.kernel.util.InheritableMap;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
@@ -320,6 +321,15 @@ public class CPDefinitionAssetDisplayPageFriendlyURLResolver
 			groupId, privateLayout, cpCatalogEntry.getCPDefinitionId());
 
 		String layoutActualURL = _portal.getLayoutActualURL(layout, mainPath);
+
+		InheritableMap<String, String[]> actualParams = new InheritableMap<>();
+
+		if (params != null) {
+			actualParams.setParentMap(params);
+		}
+
+		actualParams.put("p_p_lifecycle", new String[] {"0"});
+		actualParams.put("p_p_mode", new String[] {"view"});
 
 		String queryString = HttpComponentsUtil.parameterMapToString(
 			HashMapBuilder.put(
