@@ -226,10 +226,6 @@ public class DefaultAssetDisplayPageFriendlyURLResolver
 
 		InheritableMap<String, String[]> actualParams = new InheritableMap<>();
 
-		if (params != null) {
-			actualParams.setParentMap(params);
-		}
-
 		UnicodeProperties typeSettingsUnicodeProperties =
 			layout.getTypeSettingsProperties();
 

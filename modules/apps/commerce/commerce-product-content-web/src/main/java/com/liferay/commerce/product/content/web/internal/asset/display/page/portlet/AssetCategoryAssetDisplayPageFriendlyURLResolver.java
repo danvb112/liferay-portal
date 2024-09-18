@@ -268,10 +268,6 @@ public class AssetCategoryAssetDisplayPageFriendlyURLResolver
 
 		InheritableMap<String, String[]> actualParams = new InheritableMap<>();
 
-		if (params != null) {
-			actualParams.setParentMap(params);
-		}
-
 		actualParams.put(
 			"p_p_id", new String[] {CPPortletKeys.CP_CATEGORY_CONTENT_WEB});
 		actualParams.put("p_p_lifecycle", new String[] {"0"});

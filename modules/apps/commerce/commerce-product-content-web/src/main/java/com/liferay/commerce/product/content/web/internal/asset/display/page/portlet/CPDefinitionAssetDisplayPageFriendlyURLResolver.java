@@ -324,10 +324,6 @@ public class CPDefinitionAssetDisplayPageFriendlyURLResolver
 
 		InheritableMap<String, String[]> actualParams = new InheritableMap<>();
 
-		if (params != null) {
-			actualParams.setParentMap(params);
-		}
-
 		actualParams.put("p_p_lifecycle", new String[] {"0"});
 		actualParams.put("p_p_mode", new String[] {"view"});
 
